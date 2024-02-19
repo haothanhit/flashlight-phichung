@@ -1,4 +1,4 @@
-package flashlight.phichung.com.torch
+package flashlight.phichung.com.torch.ui.screen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

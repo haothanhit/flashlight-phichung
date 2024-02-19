@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.Flashlight" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
+        ...
+        <!-- Set a white background behind the splash screen icon. -->
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/white</item>
+    </style>
 </resources>
