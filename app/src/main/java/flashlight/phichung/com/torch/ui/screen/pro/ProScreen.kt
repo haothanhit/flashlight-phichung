@@ -1,4 +1,4 @@
-package flashlight.phichung.com.torch.ui.screen.settings
+package flashlight.phichung.com.torch.ui.screen.pro
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -18,32 +18,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import flashlight.phichung.com.torch.ui.screen.camera.CameraViewModel
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
 
-object SettingsNavigation {
+object ProNavigation {
 
-    const val titleScreen = "Settings"
-    const val route = "settings"
+    const val titleScreen = "Pro"
+    const val route = "pro"
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    viewModel: CameraViewModel = hiltViewModel<CameraViewModel>(),
+fun ProScreen(
+    viewModel: ProViewModel = hiltViewModel<ProViewModel>(),
     navController: NavHostController = rememberNavController()
 ) {
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(), topBar = {
-            TopAppBar(title = {
-                Text(text = SettingsNavigation.titleScreen, textAlign = TextAlign.Center, style = MaterialTheme.typography.headlineMedium, color = TextWhiteColor)
-            },
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = ProNavigation.titleScreen,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = TextWhiteColor
+                    )
+                },
                 navigationIcon = {
-                    IconButton(onClick = {navController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
                     }
                 }, colors = TopAppBarDefaults.topAppBarColors(
@@ -57,12 +63,7 @@ fun SettingsScreen(
 
         }),
 
-    )
+        )
 
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun SettingsScreenPreview() {
-//    flashlight.phichung.com.torch.ui.screen.brightness.SettingsScreen()
-//}

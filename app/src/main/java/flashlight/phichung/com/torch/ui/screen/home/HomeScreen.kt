@@ -11,25 +11,13 @@ import androidx.navigation.compose.rememberNavController
 
 object HomeNavigation {
 
-   // const val addressArg = "parametersArg"
     const val route = "home"
-
-//    fun createRoute(addresses: Address): String {
-//        val encoded = Uri.encode(addresses.toString())
-//        val route = "addressBook?${addressArg}=$encoded"
-//        Log.e("frank", "route $route")
-//        return route
-//    }
-//
-//    fun fromNav(navBackStackEntry: NavBackStackEntry): Address? {
-//        return navBackStackEntry.arguments?.getParcelable(addressArg)
-//    }
 
 }
 
 @Composable
-fun  HomeScreen(
-    viewModel: HomeViewModel =  hiltViewModel<HomeViewModel>(),
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
     navController: NavHostController = rememberNavController(),
     openSkinAction: () -> Unit,
     openSettingsAction: () -> Unit,
@@ -38,7 +26,7 @@ fun  HomeScreen(
     openMorseAction: () -> Unit,
     openRemoveAdsAction: () -> Unit,
     openCameraAction: () -> Unit,
-    ) {
+) {
 
 
     Column {
@@ -47,7 +35,46 @@ fun  HomeScreen(
         }) {
             Text(text = "Go to Settings")
         }
+
+        Button(onClick = {
+            openCameraAction()
+        }) {
+            Text(text = "Go to Camera")
+        }
+
+        Button(onClick = {
+            openMorseAction()
+        }) {
+            Text(text = "Go to Morse")
+        }
+
+        Button(onClick = {
+            openSkinAction()
+        }) {
+            Text(text = "Go to Skin")
+        }
+
+        Button(onClick = {
+            openColorAction()
+        }) {
+            Text(text = "Go to brightness")
+        }
+
+        Button(onClick = {
+            openRemoveAdsAction()
+        }) {
+            Text(text = "Go to Pro")
+        }
+
+        Button(onClick = {
+            openCompassAction()
+        }) {
+            Text(text = "Go to Compass")
+
+        }
     }
+
+
 
 
 }

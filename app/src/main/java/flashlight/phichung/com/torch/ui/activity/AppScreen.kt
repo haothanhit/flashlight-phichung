@@ -5,10 +5,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import flashlight.phichung.com.torch.ui.screen.brightness.BrightnessNavigation
+import flashlight.phichung.com.torch.ui.screen.brightness.BrightnessScreen
+import flashlight.phichung.com.torch.ui.screen.camera.CameraNavigation
+import flashlight.phichung.com.torch.ui.screen.camera.CameraScreen
+import flashlight.phichung.com.torch.ui.screen.compass.CompassNavigation
+import flashlight.phichung.com.torch.ui.screen.compass.CompassScreen
 import flashlight.phichung.com.torch.ui.screen.home.HomeNavigation
 import flashlight.phichung.com.torch.ui.screen.home.HomeScreen
+import flashlight.phichung.com.torch.ui.screen.morse.MorseNavigation
+import flashlight.phichung.com.torch.ui.screen.morse.MorseScreen
+import flashlight.phichung.com.torch.ui.screen.pro.ProNavigation
+import flashlight.phichung.com.torch.ui.screen.pro.ProScreen
 import flashlight.phichung.com.torch.ui.screen.settings.SettingsNavigation
 import flashlight.phichung.com.torch.ui.screen.settings.SettingsScreen
+import flashlight.phichung.com.torch.ui.screen.skin.SkinNavigation
+import flashlight.phichung.com.torch.ui.screen.skin.SkinScreen
 
 
 @Composable
@@ -21,19 +33,53 @@ fun FlashlightApp(
     ) {
         composable(HomeNavigation.route) {
             HomeScreen(
-                openSkinAction = { -> },
+                openSkinAction = { ->
+                    navController.navigate(SkinNavigation.route)
+
+                },
                 openSettingsAction = { ->
                     navController.navigate(SettingsNavigation.route)
                 },
-                openColorAction = { -> },
-                openCompassAction = { -> },
-                openMorseAction = { -> },
-                openRemoveAdsAction = { -> },
-                openCameraAction = { -> })
+                openColorAction = { ->
+                    navController.navigate(BrightnessNavigation.route)
+
+                },
+                openCompassAction = { ->
+                    navController.navigate(CompassNavigation.route)
+
+                },
+                openMorseAction = { ->
+                    navController.navigate(MorseNavigation.route)
+                },
+                openRemoveAdsAction = { ->
+                    navController.navigate(ProNavigation.route)
+
+                },
+                openCameraAction = { ->
+                    navController.navigate(CameraNavigation.route)
+                })
         }
 
         composable(SettingsNavigation.route) {
-            SettingsScreen()
+            SettingsScreen(navController = navController)
+        }
+        composable(BrightnessNavigation.route) {
+            BrightnessScreen(navController = navController)
+        }
+        composable(CameraNavigation.route) {
+            CameraScreen(navController = navController)
+        }
+        composable(CompassNavigation.route) {
+            CompassScreen(navController = navController)
+        }
+        composable(MorseNavigation.route) {
+            MorseScreen(navController = navController)
+        }
+        composable(ProNavigation.route) {
+            ProScreen(navController = navController)
+        }
+        composable(SkinNavigation.route) {
+            SkinScreen(navController = navController)
         }
     }
 }
