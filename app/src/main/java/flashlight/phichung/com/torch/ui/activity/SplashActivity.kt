@@ -1,4 +1,4 @@
-package flashlight.phichung.com.torch.ui.screen
+package flashlight.phichung.com.torch.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent

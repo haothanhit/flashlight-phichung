@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -38,6 +40,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -48,7 +52,10 @@ android {
         }
     }
 }
-
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
 dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -69,7 +76,16 @@ dependencies {
 
     //splashscreen
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
-    
+
+    //navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    // logging
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 
 
 }
