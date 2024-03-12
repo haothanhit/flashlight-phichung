@@ -1,18 +1,19 @@
 package flashlight.phichung.com.torch.ui.screen.brightness
 
+import android.app.Activity
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,21 +21,32 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +57,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.flask.colorpicker.ColorPickerView
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import flashlight.phichung.com.torch.utils.hexToColor
@@ -66,10 +79,12 @@ fun BrightnessScreen(
 ) {
     var stateIsShowUi by remember { mutableStateOf(true) }
     var stateColorCurrent by remember { mutableStateOf("#191919") }
+    val uiIsBlinkState by viewModel.uiIsBlinkState.collectAsState()
+
 
     if (!stateIsShowUi) {
         Scaffold(
-            containerColor = hexToColor(stateColorCurrent),
+            containerColor = if(!uiIsBlinkState) hexToColor(stateColorCurrent) else Color.Black,
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
@@ -97,9 +112,10 @@ fun BrightnessScreen(
 
             )
     } else {
-        Scaffold(
-            containerColor = hexToColor(stateColorCurrent),
 
+
+        Scaffold(
+            containerColor = if(!uiIsBlinkState) hexToColor(stateColorCurrent) else Color.Black,
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
@@ -135,33 +151,49 @@ fun BrightnessScreen(
                 Column(
                     Modifier.fillMaxSize(),
                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
                 ) {
 //                   Spacer(modifier = Modifier.fillMaxWidth().size(1.dp).shadow(1.dp))
-                    AndroidView(
-                        modifier = Modifier.size(150.dp),
-                        factory = { context ->
-                            // Inflate your custom view here
-                            val customView = ColorPickerView(context)
-                            customView.addOnColorChangedListener {
-                                Timber.i(
-                                    "ColorPickerView addOnColorChangedListener: ${
-                                        Integer.toHexString(
-                                            it
-                                        )
-                                    }"
-                                )
 
-                                stateColorCurrent = "#${Integer.toHexString(it).substring(2)}"
-                            }
-                            customView
+                    Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Canvas(modifier = Modifier.size(160.dp).aspectRatio(1f)) {
+                            drawCircle(
+                                color = GrayColor,
+                                style = Stroke(2.dp.toPx()),
+                                center = Offset(size.width / 2, size.height / 2),
+                                radius = size.width / 2 - 2 / 2,
+                                alpha = 0.2f
+                            )
                         }
-                    )
+                        AndroidView(
+                            modifier = Modifier.size(150.dp).aspectRatio(1f),
+                            factory = { context ->
+                                // Inflate your custom view here
+                                val customView = ColorPickerView(context)
+                                customView.addOnColorChangedListener {
+                                    Timber.i(
+                                        "ColorPickerView addOnColorChangedListener: ${
+                                            Integer.toHexString(
+                                                it
+                                            )
+                                        }"
+                                    )
+
+                                    stateColorCurrent = "#${Integer.toHexString(it).substring(2)}"
+                                }
+                                customView
+                            }
+                        )
+                    }
+
+
                     Row {
                         SliderBrightness(modifier = Modifier.weight(1f))
-
-                        SliderBlink(modifier = Modifier.weight(1f))
+                        SliderBlink(viewModel = viewModel,modifier = Modifier.weight(1f))
 
                     }
+                    Spacer(modifier = Modifier.size(15.dp))
+
                 }
 
             }),
@@ -178,26 +210,43 @@ fun BrightnessScreen(
 
 
 
-@Preview
 @Composable
 fun SliderBrightness(modifier: Modifier= Modifier) {
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
-    Column(modifier=modifier.fillMaxWidth()) {
+    val view = LocalView.current
+    val window = (view.context as Activity).window
+    val valueCurrent = window?.attributes?.screenBrightness
 
+    val brightness = if (valueCurrent == -1f) 0.5f else valueCurrent?.toFloat()?:0f
+
+
+    var sliderPosition by remember { mutableFloatStateOf(brightness) }
+    Column(modifier=modifier.fillMaxWidth(),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
 
         Slider(
             value = sliderPosition,
-            onValueChange = { sliderPosition = it },
+            onValueChange = { sliderPosition = it
+                val layoutParams = window?.attributes // Get Params
+                layoutParams?.screenBrightness = sliderPosition // Set Value
+                window?.attributes = layoutParams // Set params
+                            },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
-                activeTrackColor = MaterialTheme.colorScheme.secondary,
+                activeTrackColor = Color.Transparent,
                 inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                activeTickColor = Color.Transparent,
+                inactiveTickColor = Color.Transparent
             ),
             steps = 9,
-            valueRange = 0f..10f,
-            modifier = Modifier.rotate(270f)
+            valueRange = 0f..1f,
+            modifier = Modifier
+                .rotate(270f)
+                .size(150.dp)
 
         )
+        Spacer(modifier = Modifier.size(10.dp))
+
         Text(text = "Brightness", style = MaterialTheme.typography.titleLarge, color = TextWhiteColor)
 
     }
@@ -205,23 +254,53 @@ fun SliderBrightness(modifier: Modifier= Modifier) {
 
 @Preview
 @Composable
-fun SliderBlink(modifier: Modifier= Modifier) {
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
-    Column(modifier=modifier.fillMaxWidth().padding(15.dp)) {
+fun SliderBlink(
+    viewModel: BrightnessViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val uiBlinkState by viewModel.uiBlinkFloatState.collectAsState()
+
+    var sliderPosition by remember { mutableFloatStateOf(uiBlinkState) }
+    Column(modifier= modifier
+        .fillMaxWidth()
+        , verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
 
         Slider(
             value = sliderPosition,
-            onValueChange = { sliderPosition = it },
+            onValueChange = { sliderPosition = it
+
+
+                            },
+            onValueChangeFinished = {
+
+                viewModel.setBlinkState(sliderPosition)
+                if(sliderPosition==0f){
+                    viewModel.stopBlinking()
+                    viewModel.setIsBlinkState(false) // turn off blink
+                }else{
+
+                    viewModel.toggleBlinkStateWithDelay(sliderPosition)
+                }
+
+            },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
-                activeTrackColor = MaterialTheme.colorScheme.secondary,
+                activeTrackColor = Color.Transparent,
                 inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                activeTickColor = Color.Transparent,
+                inactiveTickColor = Color.Transparent
             ),
-            steps = 9,
-            valueRange = 0f..10f,
-            modifier = Modifier.rotate(270f)
+            steps = 8,
+            valueRange = 0f..9f,
+            modifier = Modifier
+                .rotate(270f)
+                .size(150.dp)
 
         )
+        Spacer(modifier = Modifier.size(10.dp))
+
         Text(text = "Blink", style = MaterialTheme.typography.titleLarge, color = TextWhiteColor)
 
     }
