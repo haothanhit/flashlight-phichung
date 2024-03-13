@@ -15,6 +15,7 @@ val PrimaryColor = Color(0xFF191919)
 
 val TextWhiteColor= Color(0xFFFFFFFF)
 val IconWhiteColor= Color(0xFFFFFFFF)
+val TextSOSColor= Color(0xFFFF0000)
 
 
 val GrayColor= Color(0xFF313035)

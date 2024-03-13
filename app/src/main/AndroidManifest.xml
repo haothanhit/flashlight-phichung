@@ -16,7 +16,6 @@
         <activity
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:name=".ui.activity.MainActivity"
-            android:theme="@style/Theme.Flashlight"
             android:windowSoftInputMode="adjustResize"/>
 
         <activity

@@ -1,8 +1,8 @@
 package flashlight.phichung.com.torch.ui.screen.home
 
-import android.widget.ImageButton
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,43 +12,40 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.unit.sp
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
+import flashlight.phichung.com.torch.ui.theme.TextSOSColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
 
@@ -79,15 +76,16 @@ fun HomeScreen(
             contentDescription = "background home",
             contentScale = ContentScale.FillBounds
         )
-        Scaffold( modifier = Modifier.fillMaxSize(), containerColor = Color.Transparent, content =({
-            Column (modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp)){
-                Spacer(modifier = Modifier.size(15.dp))
+        Scaffold(modifier = Modifier.fillMaxSize(), containerColor = Color.Transparent, content = ({
+            Column {
+                Spacer(modifier = Modifier.size(55.dp))
                 SliderFlash()
                 ButtonPower(modifier = Modifier.weight(1f))
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+                ) {
 
                     ButtonChild(
                         icon = R.drawable.ic_brightness,
@@ -110,7 +108,10 @@ fun HomeScreen(
                 }
                 Spacer(modifier = Modifier.size(15.dp))
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+                ) {
 
                     ButtonChild(
                         icon = R.drawable.ic_volume_off,
@@ -141,44 +142,87 @@ fun HomeScreen(
     }
 
 
-
-
-
-
-
 }
-
 
 
 @Preview
 @Composable
-fun SliderFlash(modifier: Modifier= Modifier) {
+fun SliderFlash(modifier: Modifier = Modifier) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
-    Column {
+    var lisText = listOf("SOS", "1", "2", "3", "4", "5", "6", "7", "8", "9")
 
-        Text(text = if(sliderPosition==0f) "S0S" else sliderPosition.toString(), style = MaterialTheme.typography.titleLarge, color = TextWhiteColor)
+    Box(contentAlignment = Alignment.Center) {
+        VerticalLines(lisText)
         Slider(
+            modifier = Modifier.padding(horizontal = 15.dp),
             value = sliderPosition,
             onValueChange = { sliderPosition = it },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
-                activeTrackColor = MaterialTheme.colorScheme.secondary,
-                inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                activeTrackColor = Color.Transparent,
+                inactiveTrackColor = Color.Transparent,
+                activeTickColor = Color.Transparent,
+                inactiveTickColor = Color.Transparent,
             ),
-            steps = 9,
-            valueRange = 0f..10f,
+            steps = 8,
+            valueRange = 0f..9f,
 
-        )
+            )
+    }
+
+}
+
+@Composable
+fun VerticalLines(dates: List<String>) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(30.dp)
+    ) {
+        val drawPadding: Float = with(LocalDensity.current) { 10.dp.toPx() + 15.dp.toPx()}
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val yStart = 0f
+            val yEnd = size.height/2
+            val distance: Float = (size.width.minus(2 * drawPadding)).div(dates.size.minus(1))
+            dates.forEachIndexed { index, step ->
+                drawLine(
+                    color = GrayColor,
+                    start = Offset(x = drawPadding + index.times(distance), y = yStart),
+                    end = Offset(x = drawPadding + index.times(distance), y = yEnd),
+                    strokeWidth = 5f
+                )
+                drawLine(
+                    color = GrayColor,
+                    start = Offset(0f, yEnd),
+                    end = Offset(size.width , yEnd),
+                    strokeWidth = 15f
+                )
+                // Draw text above each line
+                drawIntoCanvas { canvas ->
+                    val textPaint =
+                        android.graphics.Paint().apply {
+                        color = if(index == 0) TextSOSColor.toArgb() else TextWhiteColor.toArgb() // Set text color
+                            textSize=16.sp.toPx()
+
+                    }
+                    val text = dates[index] // Text to display
+                    val textWidth = textPaint.measureText(text)
+                    val xPosition = drawPadding + index.times(distance) - textWidth/2
+                    val yPosition = yStart - 60 // Adjust the y-coordinate for text placement
+                    canvas.nativeCanvas.drawText(text, xPosition, yPosition, textPaint)
+                }
+            }
+        }
     }
 }
 
 @Preview
 @Composable
-fun ButtonPower(modifier: Modifier= Modifier) {
+fun ButtonPower(modifier: Modifier = Modifier) {
 
 
     Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        Image (
+        Image(
             painter = painterResource(id = R.drawable.ic_power),
             contentDescription = "Button Power",
             contentScale = ContentScale.Crop,
@@ -195,13 +239,17 @@ fun ButtonPower(modifier: Modifier= Modifier) {
 }
 
 
-@Preview
 @Composable
-fun ButtonChild(modifier: Modifier?= Modifier,@DrawableRes icon: Int,clickAction: () -> Unit = {}) {
+fun ButtonChild(
+    modifier: Modifier = Modifier,
+    @DrawableRes icon: Int,
+    clickAction: () -> Unit = {}
+) {
 
     Box(modifier = Modifier
         .size(50.dp)
-        .clickable { clickAction.invoke() }, contentAlignment = Alignment.Center) {
+        .clickable { clickAction.invoke() }, contentAlignment = Alignment.Center
+    ) {
         Image(
             painter = painterResource(id = icon),
             contentDescription = "",
@@ -217,8 +265,6 @@ fun ButtonChild(modifier: Modifier?= Modifier,@DrawableRes icon: Int,clickAction
                 .clip(CircleShape)
         )
     }
-
-
 
 
 }
