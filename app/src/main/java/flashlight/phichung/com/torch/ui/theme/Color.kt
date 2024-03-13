@@ -19,3 +19,9 @@ val TextSOSColor= Color(0xFFFF0000)
 
 
 val GrayColor= Color(0xFF313035)
+
+val PowerOffColor= Color(0xFF313035)
+
+
+val PowerOnColor= Color(0xFF00FFFF)
+

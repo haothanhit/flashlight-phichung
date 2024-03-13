@@ -151,7 +151,7 @@ fun BrightnessScreen(
                 Column(
                     Modifier.fillMaxSize(),
                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 //                   Spacer(modifier = Modifier.fillMaxWidth().size(1.dp).shadow(1.dp))
 
@@ -222,7 +222,7 @@ fun SliderBrightness(modifier: Modifier= Modifier) {
     var sliderPosition by remember { mutableFloatStateOf(brightness) }
     Column(modifier=modifier.fillMaxWidth(),
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally) {
 
         Slider(
             value = sliderPosition,
@@ -258,14 +258,13 @@ fun SliderBlink(
     viewModel: BrightnessViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val uiBlinkState by viewModel.uiBlinkFloatState.collectAsState()
 
     var sliderPosition by remember { mutableFloatStateOf(uiBlinkState) }
     Column(modifier= modifier
         .fillMaxWidth()
         , verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally) {
 
         Slider(
             value = sliderPosition,

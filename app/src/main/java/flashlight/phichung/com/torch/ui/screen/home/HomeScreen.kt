@@ -1,5 +1,6 @@
 package flashlight.phichung.com.torch.ui.screen.home
 
+import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -21,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +34,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
@@ -42,12 +43,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextSOSColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
+import android.hardware.camera2.CameraManager
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
+import flashlight.phichung.com.torch.ui.theme.PowerOffColor
+import flashlight.phichung.com.torch.ui.theme.PowerOnColor
+import timber.log.Timber
 
 object HomeNavigation {
 
@@ -57,8 +68,8 @@ object HomeNavigation {
 
 @Composable
 fun HomeScreen(
-//    viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
-//    navController: NavHostController = rememberNavController(),
+    viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
+    navController: NavHostController = rememberNavController(),
     openSkinAction: () -> Unit,
     openSettingsAction: () -> Unit,
     openColorAction: () -> Unit,
@@ -67,7 +78,39 @@ fun HomeScreen(
     openRemoveAdsAction: () -> Unit,
     openCameraAction: () -> Unit,
 ) {
+    val context = LocalContext.current
+    var camManager by remember { mutableStateOf<CameraManager?>(null) }
+    var cameraId by remember { mutableStateOf<String?>(null) }
 
+    DisposableEffect(Unit) {   //register torch callback
+        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        camManager = cameraManager
+        try {
+            if (camManager != null) {
+                cameraId = camManager!!.cameraIdList[0]
+            }
+        } catch (e: Exception) {
+            // Handle exception
+        }
+
+        val torchCallback = object : CameraManager.TorchCallback() {
+            override fun onTorchModeUnavailable(cameraId: String) {
+                // Handle torch mode unavailable
+            }
+
+            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                // Handle torch mode changed
+            }
+        }
+
+        camManager?.registerTorchCallback(torchCallback, null)
+
+        onDispose {
+            camManager?.unregisterTorchCallback(torchCallback)
+            viewModel.setPowerState(false)
+            viewModel.toggleBlinkStateWithDelay(camManager=camManager,cameraId=cameraId)
+        }
+    }
 
     Box {
         Image(
@@ -79,8 +122,8 @@ fun HomeScreen(
         Scaffold(modifier = Modifier.fillMaxSize(), containerColor = Color.Transparent, content = ({
             Column {
                 Spacer(modifier = Modifier.size(55.dp))
-                SliderFlash()
-                ButtonPower(modifier = Modifier.weight(1f))
+                SliderFlash(viewModel=viewModel, cameraId = cameraId, camManager = camManager)
+                ButtonPower(modifier = Modifier.weight(1f),viewModel=viewModel, cameraId = cameraId, camManager = camManager)
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -145,18 +188,33 @@ fun HomeScreen(
 }
 
 
-@Preview
+
 @Composable
-fun SliderFlash(modifier: Modifier = Modifier) {
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
+fun SliderFlash(modifier: Modifier = Modifier,viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(), camManager: CameraManager?,
+                cameraId: String?) {
+
     var lisText = listOf("SOS", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    val uiBlinkState by viewModel.uiFlashFloatBlinkState.collectAsState()
+    var sliderPosition by remember { mutableFloatStateOf(uiBlinkState) }
+
+
+//    val uiIsBlinkState by viewModel.uiIsBlinkState.collectAsState()
 
     Box(contentAlignment = Alignment.Center) {
         VerticalLines(lisText)
         Slider(
             modifier = Modifier.padding(horizontal = 15.dp),
             value = sliderPosition,
-            onValueChange = { sliderPosition = it },
+            onValueChange = { sliderPosition = it
+
+                Timber.i("sliderPosition: $sliderPosition")
+
+                viewModel.setValueFlashFloatBlinkState(sliderPosition)
+                viewModel.toggleBlinkStateWithDelay(camManager,cameraId)
+
+
+            },
+
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
                 activeTrackColor = Color.Transparent,
@@ -165,7 +223,7 @@ fun SliderFlash(modifier: Modifier = Modifier) {
                 inactiveTickColor = Color.Transparent,
             ),
             steps = 8,
-            valueRange = 0f..9f,
+            valueRange = 0.1f..9f,
 
             )
     }
@@ -218,22 +276,29 @@ fun VerticalLines(dates: List<String>) {
 
 @Preview
 @Composable
-fun ButtonPower(modifier: Modifier = Modifier) {
+fun ButtonPower(modifier: Modifier = Modifier,viewModel: HomeViewModel = hiltViewModel(),camManager: CameraManager?,
+                cameraId: String?) {
+    val uiPowerState by viewModel.uiPowerState.collectAsState()
 
 
     Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Image(
             painter = painterResource(id = R.drawable.ic_power),
+            colorFilter = if(uiPowerState) ColorFilter.tint(PowerOnColor) else ColorFilter.tint(PowerOffColor),
             contentDescription = "Button Power",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(150.dp)
                 .shadow(10.dp, CircleShape)
                 .border(
-                    BorderStroke(4.dp, Color.Yellow),
+                    BorderStroke(4.dp, if(uiPowerState) PowerOnColor else PowerOffColor),
                     CircleShape
                 )
                 .clip(CircleShape)
+                .clickable {
+                    viewModel.setPowerState(!uiPowerState)
+                    viewModel.toggleBlinkStateWithDelay(camManager=camManager,cameraId=cameraId)
+                }
         )
     }
 }
