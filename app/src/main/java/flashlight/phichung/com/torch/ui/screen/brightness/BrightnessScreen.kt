@@ -252,7 +252,6 @@ fun SliderBrightness(modifier: Modifier= Modifier) {
     }
 }
 
-@Preview
 @Composable
 fun SliderBlink(
     viewModel: BrightnessViewModel,
@@ -270,20 +269,10 @@ fun SliderBlink(
             value = sliderPosition,
             onValueChange = { sliderPosition = it
 
+                viewModel.toggleBlinkStateWithDelay(sliderPosition)
 
                             },
-            onValueChangeFinished = {
 
-                viewModel.setBlinkState(sliderPosition)
-                if(sliderPosition==0f){
-                    viewModel.stopBlinking()
-                    viewModel.setIsBlinkState(false) // turn off blink
-                }else{
-
-                    viewModel.toggleBlinkStateWithDelay(sliderPosition)
-                }
-
-            },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
                 activeTrackColor = Color.Transparent,

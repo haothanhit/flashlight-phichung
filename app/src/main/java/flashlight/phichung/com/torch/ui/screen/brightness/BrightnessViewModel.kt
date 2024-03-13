@@ -5,10 +5,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import flashlight.phichung.com.torch.base.BaseViewModel
 import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.utils.CoroutineContextProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,7 +32,8 @@ class BrightnessViewModel @Inject constructor(
     private val _uiIsBlinkState = MutableStateFlow(false)
     val uiIsBlinkState: StateFlow<Boolean> = _uiIsBlinkState.asStateFlow()
 
-    private var isBlinking = false // Flag to control the blinking loop
+    var job: Job? = null
+
 
     fun setBlinkState(blinkState: Float) {
         _uiBlinkFloatState.value = blinkState
@@ -41,11 +46,16 @@ class BrightnessViewModel @Inject constructor(
 
     fun toggleBlinkStateWithDelay(sliderPosition: Float) {
 
-        launchCoroutineIO {
-            Timber.d("sliderPosition: $sliderPosition")
-            isBlinking = true
-            val delayMs = ((10 - sliderPosition.toInt()) * 150L) // Adjust as needed
-            while (isBlinking) {
+        job?.cancel() // Cancel the previous coroutine if it exists
+        if(sliderPosition==0f){
+            setIsBlinkState(false) // turn off blink
+            return
+        }
+
+        job = CoroutineScope(Dispatchers.IO).launch {
+
+            val delayMs = ((10 - sliderPosition.toInt()) * 120L) // Adjust as needed
+            while (true) {
                 setIsBlinkState(true)
                 delay(delayMs)
                 setIsBlinkState(false)
@@ -54,9 +64,9 @@ class BrightnessViewModel @Inject constructor(
             }
 
         }
+
+
     }
 
-    fun stopBlinking() {
-        isBlinking = false
-    }
+
 }
