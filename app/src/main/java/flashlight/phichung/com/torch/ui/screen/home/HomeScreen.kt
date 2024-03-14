@@ -155,11 +155,14 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
                 ) {
+                    var stateSound by remember { mutableStateOf(viewModel.getSoundState()) }
 
                     ButtonChild(
-                        icon = R.drawable.ic_volume_off,
+                        icon = if(stateSound) R.drawable.ic_volume_off else R.drawable.ic_volume_on,
                         clickAction = {
-
+                            val valueSet=!stateSound
+                            stateSound=valueSet
+                            viewModel.setSoundState(valueSet)
                         }
                     )
                     ButtonChild(
@@ -274,7 +277,6 @@ fun VerticalLines(dates: List<String>) {
     }
 }
 
-@Preview
 @Composable
 fun ButtonPower(modifier: Modifier = Modifier,viewModel: HomeViewModel = hiltViewModel(),camManager: CameraManager?,
                 cameraId: String?) {

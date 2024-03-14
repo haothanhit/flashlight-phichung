@@ -9,6 +9,7 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
     companion object {
         private const val PREF_PACKAGE_NAME = "flashlight.phichung.com.torch.preferences"
         private const val PREF_KEY_LANGUAGE_APP = "language_app"
+        private const val PREF_KEY_SOUND = "sound_on_of_app"
 
 
     }
@@ -21,6 +22,11 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
     var languageApp: String
         get() = preferences.getString(PREF_KEY_LANGUAGE_APP, "").toString()
         set(token) = preferences.edit().putString(PREF_KEY_LANGUAGE_APP, token).apply()
+
+
+    var stateSound: Boolean
+        get() = preferences.getBoolean(PREF_KEY_SOUND, true)
+        set(token) = preferences.edit().putBoolean(PREF_KEY_SOUND, token).apply()
 
 
     fun clearCache() {
