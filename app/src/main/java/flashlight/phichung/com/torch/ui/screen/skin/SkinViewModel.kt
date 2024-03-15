@@ -41,7 +41,7 @@ class SkinViewModel @Inject constructor(
 
      private fun getListSkin(): List<Skin> {
 
-        val listSkinSelect = listSkin.toList()
+        val listSkinSelect = listSkin.map { it.copy() }
         val skinLocal = preferencesHelper.skin
 
         if (skinLocal != null) {
