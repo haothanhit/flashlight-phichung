@@ -8,7 +8,9 @@ import flashlight.phichung.com.torch.MyApplication
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.base.BaseViewModel
 import flashlight.phichung.com.torch.data.CachePreferencesHelper
+import flashlight.phichung.com.torch.data.model.Skin
 import flashlight.phichung.com.torch.utils.CoroutineContextProvider
+import flashlight.phichung.com.torch.utils.listSkin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -51,6 +53,10 @@ class HomeViewModel @Inject constructor(
         _uiFlashFloatBlinkState.value = blinkState
     }
 
+
+    fun getSkinCurrent(): Skin {
+        return preferencesHelper.skin?: listSkin[0]
+    }
 
 
 
