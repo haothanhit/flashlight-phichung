@@ -25,3 +25,22 @@ val PowerOffColor= Color(0xFF313035)
 
 val PowerOnColor= Color(0xFF00FFFF)
 
+
+
+val Skin1Color= Color(0xFF00FFFF)
+val Skin2Color= Color(0xFF1DB9FF)
+val Skin3Color= Color(0xFF2482CE)
+val Skin4Color= Color(0xFF3853E7)
+val Skin5Color= Color(0xFF673AB7)
+val Skin6Color= Color(0xFF9C27B0)
+val Skin7Color= Color(0xFFE91E63)
+val Skin8Color= Color(0xFFF44336)
+val Skin9Color= Color(0xFFFF5722)
+val Skin10Color= Color(0xFFFF9800)
+val Skin11Color= Color(0xFFFFE500)
+val Skin12Color= Color(0xFFBCC55E)
+val Skin13Color= Color(0xFF8BC34A)
+val Skin14Color= Color(0xFF4CAF50)
+val Skin15Color= Color(0xFF009688)
+val Skin16Color= Color(0xFF008871)
+

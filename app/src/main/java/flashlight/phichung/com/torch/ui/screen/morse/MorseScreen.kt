@@ -1,6 +1,8 @@
 package flashlight.phichung.com.torch.ui.screen.morse
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,8 +61,13 @@ fun MorseScreen(
 
             )
         },
-        content = ({
+        content = ({ innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding),
+            ) {
 
+            }
         }),
 
         )
