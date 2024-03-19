@@ -44,3 +44,8 @@ val Skin14Color= Color(0xFF4CAF50)
 val Skin15Color= Color(0xFF009688)
 val Skin16Color= Color(0xFF008871)
 
+val uncheckedThumbColor = Color(0xFF8c8c8c)
+val checkedThumbColor = Color(0xFFFFFFFF)
+val uncheckedTrackColor = Color(0xFFcdcdcd)
+val checkedTrackColor = Color(0xFF03FF72)
+
