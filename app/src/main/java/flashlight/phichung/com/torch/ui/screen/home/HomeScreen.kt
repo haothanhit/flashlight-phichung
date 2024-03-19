@@ -2,11 +2,9 @@ package flashlight.phichung.com.torch.ui.screen.home
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -51,10 +48,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.data.model.Skin
+import flashlight.phichung.com.torch.ui.components.ButtonChild
 import flashlight.phichung.com.torch.ui.theme.GrayColor
-import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.PowerOffColor
-import flashlight.phichung.com.torch.ui.theme.PowerOnColor
 import flashlight.phichung.com.torch.ui.theme.TextSOSColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import timber.log.Timber
@@ -81,7 +77,7 @@ fun HomeScreen(
     var camManager by remember { mutableStateOf<CameraManager?>(null) }
     var cameraId by remember { mutableStateOf<String?>(null) }
 
-    var skinCurrent=viewModel.getSkinCurrent()
+    var skinCurrent = viewModel.getSkinCurrent()
 
     DisposableEffect(Unit) {   //register torch callback
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -128,7 +124,12 @@ fun HomeScreen(
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     Spacer(modifier = Modifier.size(55.dp))
-                    SliderFlash(viewModel = viewModel, cameraId = cameraId, camManager = camManager,skinCurrent = skinCurrent)
+                    SliderFlash(
+                        viewModel = viewModel,
+                        cameraId = cameraId,
+                        camManager = camManager,
+                        skinCurrent = skinCurrent
+                    )
                     ButtonPower(
                         modifier = Modifier.weight(1f),
                         viewModel = viewModel,
@@ -337,33 +338,4 @@ fun ButtonPower(
 }
 
 
-@Composable
-fun ButtonChild(
-    modifier: Modifier = Modifier,
-    @DrawableRes icon: Int,
-    clickAction: () -> Unit = {}
-) {
 
-    Box(
-        modifier = Modifier
-            .size(50.dp)
-            .clickable { clickAction.invoke() }, contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = "",
-//            contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(IconWhiteColor),
-            modifier = Modifier
-                .size(50.dp)
-                .border(
-                    BorderStroke(2.dp, GrayColor),
-                    CircleShape
-                )
-                .padding(10.dp)
-                .clip(CircleShape)
-        )
-    }
-
-
-}

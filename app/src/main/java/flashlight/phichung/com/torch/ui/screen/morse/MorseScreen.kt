@@ -1,8 +1,21 @@
 package flashlight.phichung.com.torch.ui.screen.morse
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,12 +27,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.morse.SoundTypes
+import flashlight.phichung.com.torch.ui.components.ButtonChild
+import flashlight.phichung.com.torch.ui.theme.GrayColor
+import flashlight.phichung.com.torch.ui.theme.HintTextColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
@@ -31,15 +62,21 @@ object MorseNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MorseScreen(
     viewModel: MorseViewModel = hiltViewModel<MorseViewModel>(),
     navController: NavHostController = rememberNavController()
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current  // help hide soft keyboard
+
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+                keyboardController?.hide()
+            },
         topBar = {
             TopAppBar(
                 title = {
@@ -64,8 +101,154 @@ fun MorseScreen(
         content = ({ innerPadding ->
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .padding(innerPadding),
             ) {
+
+
+                var valueInputMorse by remember { mutableStateOf("") }
+                var isHintDisplayed by remember { mutableStateOf(true) }
+                var isLightOn by remember { mutableStateOf(true) }
+                val uiMorseCodeState by viewModel.uiMorseCodeState.collectAsState()
+                val uiPlayState by viewModel.uiPlayState.collectAsState()
+
+                var skinCurrent = viewModel.getSkinCurrent()
+
+
+
+
+                Spacer(modifier = Modifier.size(15.dp))
+                Text(
+                    modifier = Modifier.padding(horizontal = 15.dp),
+                    text = "Your Text",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextWhiteColor
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                        .weight(1f)
+                        .border(
+                            width = 2.dp,
+                            color = GrayColor,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .shadow(4.dp, RoundedCornerShape(8.dp))
+                ) {
+                    BasicTextField(
+                        cursorBrush = SolidColor(TextWhiteColor),
+                        enabled = !uiPlayState,
+                        value = valueInputMorse,
+                        onValueChange = {
+                            valueInputMorse = it
+                            isHintDisplayed = it.isEmpty()
+                            viewModel.generateTextMorse(it)
+
+                        },
+
+                        textStyle = TextStyle(color = TextWhiteColor),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(15.dp)
+                            .background(Color.Transparent),
+                        decorationBox = { innerTextField ->
+                            if (isHintDisplayed) {
+                                Text(
+                                    text = " Enter your text here",
+                                    color = HintTextColor,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                            innerTextField()
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Default
+                        ),
+
+
+                        //   keyboardActions = KeyboardActions(onDone = { /* Handle Done action */ }),
+
+
+                    )
+
+                }
+
+
+
+
+                Text(
+                    modifier = Modifier.padding(horizontal = 15.dp),
+                    text = "Morse Code",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextWhiteColor
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                        .weight(1f)
+                        .border(
+                            width = 2.dp,
+                            color = GrayColor,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .shadow(4.dp, RoundedCornerShape(8.dp))
+                ) {
+                    Text(
+                        text = uiMorseCodeState.joinToString(separator = "") {
+                            when (it) {
+                                SoundTypes.DIT -> "."
+                                SoundTypes.DAH -> "-"
+                                SoundTypes.LETTER_SPACE -> " "
+                                SoundTypes.WORD_SPACE -> "  "
+                                SoundTypes.UNDEFINED -> "*"
+                            }
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextWhiteColor,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(15.dp).verticalScroll(rememberScrollState())
+
+                    )
+
+
+                }
+
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+                )
+                {
+
+                    ButtonChild(
+                        icon = R.drawable.ic_volume_on,
+                        clickAction = {
+
+                        }
+                    )
+
+                    ButtonChild(
+                        icon = if(uiPlayState) R.drawable.ic_pause else R.drawable.ic_play,
+                        clickAction = {
+                            viewModel.setValuePlayState(!uiPlayState)
+
+                        }
+                    )
+
+                    ButtonChild(
+                        icon = R.drawable.ic_light_on,
+                        clickAction = {
+
+                        }
+                    )
+                }
+                Spacer(modifier = Modifier.size(15.dp))
 
             }
         }),
