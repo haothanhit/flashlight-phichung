@@ -36,7 +36,7 @@ fun FlashlightApp(
 ) {
     NavHost(
         navController = navController,
-        startDestination = CameraNavigation.route
+        startDestination = HomeNavigation.route
     ) {
         composable(HomeNavigation.route) {
             HomeScreen(
