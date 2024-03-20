@@ -105,7 +105,7 @@ fun HomeScreen(
         onDispose {
             camManager?.unregisterTorchCallback(torchCallback)
             viewModel.setPowerState(false)
-            viewModel.toggleBlinkStateWithDelay(camManager = camManager, cameraId = cameraId)
+        //    viewModel.toggleBlinkStateWithDelay(camManager = camManager, cameraId = cameraId)
         }
     }
 
