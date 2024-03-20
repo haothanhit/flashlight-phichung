@@ -91,7 +91,18 @@ dependencies {
     implementation ("com.github.QuadFlask:colorpicker:0.0.15")
 
     //Gson
-    implementation("com.google.code.gson:gson:2.10")
+    implementation("com.google.code.gson:gson:2.10.1")
 
+    //lib for camera
+    implementation(project(":camposer"))
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("io.coil-kt:coil-video:2.5.0")
+
+
+
+    //request permission
+    implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
 
 }

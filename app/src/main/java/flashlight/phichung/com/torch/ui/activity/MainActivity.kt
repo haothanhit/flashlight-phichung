@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
-import flashlight.phichung.com.torch.ui.screen.home.HomeScreen
+import flashlight.phichung.com.torch.FlashlightApp
 import flashlight.phichung.com.torch.ui.theme.FlashlightTheme
 
 

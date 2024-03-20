@@ -10,5 +10,8 @@
     <string name="str_camera">Camera</string>
 
 
+    <string name="request_allow_permissions">Please allow camera and storage access to use %s</string>
+    <string name="gallery">gallery</string>
+    <string name="gallery_empty_description">you don\'t have any photos or videos yet</string>
 
 </resources>
