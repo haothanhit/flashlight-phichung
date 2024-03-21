@@ -1,6 +1,8 @@
 package flashlight.phichung.com.torch.ui.screen.settings
 
+import android.app.Activity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,12 +30,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -51,6 +56,9 @@ import flashlight.phichung.com.torch.ui.theme.checkedThumbColor
 import flashlight.phichung.com.torch.ui.theme.checkedTrackColor
 import flashlight.phichung.com.torch.ui.theme.uncheckedThumbColor
 import flashlight.phichung.com.torch.ui.theme.uncheckedTrackColor
+import flashlight.phichung.com.torch.utils.feedback
+import flashlight.phichung.com.torch.utils.getVersionApp
+import flashlight.phichung.com.torch.utils.shareApp
 
 
 object SettingsNavigation {
@@ -93,18 +101,23 @@ fun SettingsScreen(
             )
         },
         content = ({ padding ->
-            CustomOptionUI(padding)
+            CustomOptionUI(padding,viewModel)
         }),
     )
 }
 
 @Composable
-fun CustomOptionUI(padding: PaddingValues) {
+fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
     Column(
         modifier = Modifier
             .padding(padding)
             .padding(horizontal = 20.dp)
     ) {
+        var stateSound by remember { mutableStateOf(viewModel.getSoundState()) }
+        var stateAutomaticFlashMode by remember { mutableStateOf(viewModel.getAutomaticOnState()) }
+
+        val activity = LocalContext.current as Activity
+
         Text(
             text = "TÙY CHỈNH",
             fontFamily = FontFamily.Monospace,
@@ -129,17 +142,20 @@ fun CustomOptionUI(padding: PaddingValues) {
             onClick = {},
             switchVisible = true,
             textVisible = false,
-            subText = ""
+            statusSwitch = stateAutomaticFlashMode,
+            onCheckedChange = {
+                //  stateSound = it
+                viewModel.setAutomaticOnState(it)
+            }
         )
 
-        CustomOptionsItem(
-            icon = R.drawable.ic_shortcut,
-            mainText = "Phím tắt bật/tắt đèn pin",
-            onClick = {},
-            switchVisible = true,
-            textVisible = false,
-            subText = ""
-        )
+//        CustomOptionsItem(
+//            icon = R.drawable.ic_shortcut,
+//            mainText = "Phím tắt bật/tắt đèn pin",
+//            onClick = {},
+//            switchVisible = true,
+//            textVisible = false,
+//        )
 
         CustomOptionsItem(
             icon = R.drawable.ic_settings_sound,
@@ -147,7 +163,12 @@ fun CustomOptionUI(padding: PaddingValues) {
             onClick = {},
             switchVisible = true,
             textVisible = false,
-            subText = ""
+            statusSwitch = stateSound,
+            onCheckedChange = {
+              //  stateSound = it
+                viewModel.setSoundState(it)
+            }
+
         )
         Divider(
             modifier = Modifier.padding(vertical = 16.dp),
@@ -165,31 +186,29 @@ fun CustomOptionUI(padding: PaddingValues) {
                 .padding(bottom = 16.dp)
         )
 
-        CustomOptionsItem(
-            icon = R.drawable.ic_more_apps,
-            mainText = "Thêm nhiều ứng dụng",
-            onClick = {},
-            switchVisible = false,
-            textVisible = false,
-            subText = ""
-        )
+//        CustomOptionsItem(
+//            icon = R.drawable.ic_more_apps,
+//            mainText = "Thêm nhiều ứng dụng",
+//            onClick = {},
+//            switchVisible = false,
+//            textVisible = false,
+//            subText = ""
+//        )
 
         CustomOptionsItem(
             icon = R.drawable.ic_feedback,
             mainText = "Phản hồi",
-            onClick = {},
+            onClick = {activity.feedback()},
             switchVisible = false,
             textVisible = false,
-            subText = ""
         )
 
         CustomOptionsItem(
             icon = R.drawable.ic_share,
             mainText = "Chia sẽ",
-            onClick = {},
+            onClick = {activity.shareApp()},
             switchVisible = false,
             textVisible = false,
-            subText = ""
         )
 
         CustomOptionsItem(
@@ -198,8 +217,9 @@ fun CustomOptionUI(padding: PaddingValues) {
             onClick = {},
             switchVisible = false,
             textVisible = true,
-            subText = "1.6.5"
+            subText = activity.getVersionApp(),
         )
+
     }
 }
 
@@ -211,15 +231,19 @@ fun CustomOptionsItem(
     onClick: () -> Unit,
     switchVisible: Boolean,
     textVisible: Boolean,
-    subText: String
-) {
-    val checked = remember { mutableStateOf(false) }
+    subText: String="",
+    statusSwitch:Boolean=false,
+    onCheckedChange: (Boolean) -> Unit? = {},
+
+    ) {
+    val checked = remember { mutableStateOf(statusSwitch) }
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth().clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -251,6 +275,7 @@ fun CustomOptionsItem(
                 checked = checked.value,
                 onCheckedChange = {
                     checked.value = it
+                    onCheckedChange(it)
                 },
                 thumbContent = {
                     Icon(

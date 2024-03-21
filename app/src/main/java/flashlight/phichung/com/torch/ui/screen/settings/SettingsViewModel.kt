@@ -16,4 +16,20 @@ class SettingsViewModel @Inject constructor(
     ) : BaseViewModel(contextProvider) {
 
 
+
+    fun setSoundState(isOn: Boolean) {
+        preferencesHelper.stateSound=isOn
+    }
+
+    fun getSoundState() :  Boolean{
+        return  preferencesHelper.stateSound
+    }
+
+    fun setAutomaticOnState(isOn: Boolean) {
+        preferencesHelper.stateAutomaticOn=isOn
+    }
+
+    fun getAutomaticOnState() :  Boolean{
+        return  preferencesHelper.stateAutomaticOn
+    }
 }

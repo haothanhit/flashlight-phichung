@@ -74,37 +74,16 @@ fun HomeScreen(
     openCameraAction: () -> Unit,
 ) {
     val context = LocalContext.current
-    var camManager by remember { mutableStateOf<CameraManager?>(null) }
-    var cameraId by remember { mutableStateOf<String?>(null) }
+//    var camManager by remember { mutableStateOf<CameraManager?>(null) }
+//    var cameraId by remember { mutableStateOf<String?>(null) }
 
     var skinCurrent = viewModel.getSkinCurrent()
 
     DisposableEffect(Unit) {   //register torch callback
-        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        camManager = cameraManager
-        try {
-            if (camManager != null) {
-                cameraId = camManager!!.cameraIdList[0]
-            }
-        } catch (e: Exception) {
-            // Handle exception
-        }
 
-        val torchCallback = object : CameraManager.TorchCallback() {
-            override fun onTorchModeUnavailable(cameraId: String) {
-                // Handle torch mode unavailable
-            }
-
-            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                // Handle torch mode changed
-            }
-        }
-
-        camManager?.registerTorchCallback(torchCallback, null)
 
         onDispose {
-            camManager?.unregisterTorchCallback(torchCallback)
-            viewModel.setPowerState(false)
+            viewModel.onDisposeTorch()
         //    viewModel.toggleBlinkStateWithDelay(camManager = camManager, cameraId = cameraId)
         }
     }
@@ -126,15 +105,11 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.size(55.dp))
                     SliderFlash(
                         viewModel = viewModel,
-                        cameraId = cameraId,
-                        camManager = camManager,
                         skinCurrent = skinCurrent
                     )
                     ButtonPower(
                         modifier = Modifier.weight(1f),
                         viewModel = viewModel,
-                        cameraId = cameraId,
-                        camManager = camManager,
                         skinCurrent = skinCurrent
                     )
 
@@ -210,8 +185,6 @@ fun HomeScreen(
 fun SliderFlash(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
-    camManager: CameraManager?,
-    cameraId: String?,
     skinCurrent: Skin
 ) {
 
@@ -233,7 +206,7 @@ fun SliderFlash(
                 Timber.i("sliderPosition: $sliderPosition")
 
                 viewModel.setValueFlashFloatBlinkState(sliderPosition)
-                viewModel.toggleBlinkStateWithDelay(camManager, cameraId)
+                viewModel.toggleBlinkStateWithDelay()
 
 
             },
@@ -303,8 +276,6 @@ fun VerticalLines(dates: List<String>) {
 fun ButtonPower(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    camManager: CameraManager?,
-    cameraId: String?,
     skinCurrent: Skin
 ) {
     val uiPowerState by viewModel.uiPowerState.collectAsState()
@@ -328,10 +299,10 @@ fun ButtonPower(
                 .clip(CircleShape)
                 .clickable {
                     viewModel.setPowerState(!uiPowerState)
-                    viewModel.toggleBlinkStateWithDelay(
-                        camManager = camManager,
-                        cameraId = cameraId
-                    )
+//                    viewModel.toggleBlinkStateWithDelay(
+//                        camManager = camManager,
+//                        cameraId = cameraId
+//                    )
                 }
         )
     }

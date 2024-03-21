@@ -13,6 +13,7 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
         private const val PREF_KEY_LANGUAGE_APP = "language_app"
         private const val PREF_KEY_SOUND = "sound_on_of_app"
         private const val PREF_KEY_SKIN = "skin_app"
+        private const val PREF_KEY_AUTOMATIC_ON = "flash_light_automatic_on"
 
 
     }
@@ -28,6 +29,10 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
         set(language) = preferences.edit().putString(PREF_KEY_LANGUAGE_APP, language).apply()
 
 
+    var stateSound: Boolean
+        get() = preferences.getBoolean(PREF_KEY_SOUND, true)
+        set(sound) = preferences.edit().putBoolean(PREF_KEY_SOUND, sound).apply()
+
 
     var skin: Skin?
         get() {
@@ -40,9 +45,9 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
         }
 
 
-    var stateSound: Boolean
-        get() = preferences.getBoolean(PREF_KEY_SOUND, true)
-        set(sound) = preferences.edit().putBoolean(PREF_KEY_SOUND, sound).apply()
+    var stateAutomaticOn: Boolean
+        get() = preferences.getBoolean(PREF_KEY_AUTOMATIC_ON, true)
+        set(isOn) = preferences.edit().putBoolean(PREF_KEY_AUTOMATIC_ON, isOn).apply()
 
 
     fun clearCache() {
