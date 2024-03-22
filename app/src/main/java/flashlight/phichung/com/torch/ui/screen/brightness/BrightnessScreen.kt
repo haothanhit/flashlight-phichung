@@ -67,7 +67,7 @@ import timber.log.Timber
 
 object BrightnessNavigation {
 
-    const val titleScreen = "Brightness"
+    const val titleScreen = "Colorful Screen"
     const val route = "brightness"
 
 }
