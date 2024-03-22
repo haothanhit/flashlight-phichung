@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.flask.colorpicker.ColorPickerView
+import flashlight.phichung.com.torch.MyApplication
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
@@ -67,7 +69,7 @@ import timber.log.Timber
 
 object BrightnessNavigation {
 
-    const val titleScreen = "Colorful Screen"
+
     const val route = "brightness"
 
 }
@@ -122,7 +124,7 @@ fun BrightnessScreen(
                 TopAppBar(
                     title = {
                         Text(
-                            text = BrightnessNavigation.titleScreen,
+                            text = stringResource(R.string.str_color_title),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleMedium,
                             color = TextWhiteColor
@@ -150,14 +152,21 @@ fun BrightnessScreen(
             },
             content = ({innerPadding->
                 Column(
-                    Modifier.fillMaxSize().padding(innerPadding),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
                     verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 //                   Spacer(modifier = Modifier.fillMaxWidth().size(1.dp).shadow(1.dp))
 
-                    Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Canvas(modifier = Modifier.size(160.dp).aspectRatio(1f)) {
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Canvas(modifier = Modifier
+                            .size(160.dp)
+                            .aspectRatio(1f)) {
                             drawCircle(
                                 color = GrayColor,
                                 style = Stroke(2.dp.toPx()),
@@ -167,7 +176,9 @@ fun BrightnessScreen(
                             )
                         }
                         AndroidView(
-                            modifier = Modifier.size(150.dp).aspectRatio(1f),
+                            modifier = Modifier
+                                .size(150.dp)
+                                .aspectRatio(1f),
                             factory = { context ->
                                 // Inflate your custom view here
                                 val customView = ColorPickerView(context)
@@ -248,7 +259,7 @@ fun SliderBrightness(modifier: Modifier= Modifier) {
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = "Brightness", style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
+        Text(text = stringResource(R.string.str_color_brightness), style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
 
     }
 }
@@ -290,7 +301,7 @@ fun SliderBlink(
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = "Blink", style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
+        Text(text = stringResource(R.string.str_color_blink), style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
 
     }
 }

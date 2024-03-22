@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.ui.screen.settings
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.haohao.languagepicker.allLanguage
+import com.haohao.languagepicker.dataGenerator.LangFileReaderHard
+import com.haohao.languagepicker.dialog.launchCountryPickerDialog
+import com.haohao.languagepicker.localesLanguageApp
+import com.haohao.languagepicker.setApplicationLocales
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
@@ -101,7 +107,7 @@ fun SettingsScreen(
             )
         },
         content = ({ padding ->
-            CustomOptionUI(padding,viewModel)
+            CustomOptionUI(padding, viewModel)
         }),
     )
 }
@@ -130,10 +136,35 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         CustomOptionsItem(
             icon = R.drawable.ic_language,
             mainText = "Ngôn ngữ",
-            onClick = {},
+            onClick = {
+
+                activity.launchCountryPickerDialog(
+                    countryFileReader = LangFileReaderHard,
+                    allowSearch = false,
+                    onCountryClickListener = { languageModel ->
+                        val langChange = languageModel?.code ?: ""
+                        Log.i("HAOHAO", "langChange :  $langChange")
+                        viewModel.setLanguageApp(langChange)
+                        val index = localesLanguageApp.indexOfFirst {
+                            it.toLanguageTag().lowercase() == langChange.lowercase()
+                        }
+                        if (index != -1) {
+                            Log.i("HAOHAO", "index :  $index")
+                            setApplicationLocales(
+                                localesLanguageApp[index].language.toString().lowercase()
+                            )
+
+
+                        }
+
+                    },
+                    langCodeSelect = viewModel.getLanguageApp()
+
+                )
+            },
             switchVisible = false,
             textVisible = true,
-            subText = "Tiếng Việt"
+            subText = allLanguage!!.filter { it.code== viewModel.getLanguageApp()}[0].emoji
         )
 
         CustomOptionsItem(
@@ -165,7 +196,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
             textVisible = false,
             statusSwitch = stateSound,
             onCheckedChange = {
-              //  stateSound = it
+                //  stateSound = it
                 viewModel.setSoundState(it)
             }
 
@@ -198,7 +229,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         CustomOptionsItem(
             icon = R.drawable.ic_feedback,
             mainText = "Phản hồi",
-            onClick = {activity.feedback()},
+            onClick = { activity.feedback() },
             switchVisible = false,
             textVisible = false,
         )
@@ -206,7 +237,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         CustomOptionsItem(
             icon = R.drawable.ic_share,
             mainText = "Chia sẽ",
-            onClick = {activity.shareApp()},
+            onClick = { activity.shareApp() },
             switchVisible = false,
             textVisible = false,
         )
@@ -231,8 +262,8 @@ fun CustomOptionsItem(
     onClick: () -> Unit,
     switchVisible: Boolean,
     textVisible: Boolean,
-    subText: String="",
-    statusSwitch:Boolean=false,
+    subText: String = "",
+    statusSwitch: Boolean = false,
     onCheckedChange: (Boolean) -> Unit? = {},
 
     ) {
@@ -240,11 +271,12 @@ fun CustomOptionsItem(
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth().clickable { onClick() },
+            .fillMaxWidth()
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
 
-    ) {
+        ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier

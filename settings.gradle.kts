@@ -19,5 +19,4 @@ dependencyResolutionManagement {
 rootProject.name = "Flashlight"
 include(":app")
 include(":camposer")
-
-
+include(":languagepicker")

@@ -1,16 +1,8 @@
 <resources>
-    <string name="app_name">Flashlight</string>
+    <string name="app_name" translatable="false">Flashlight</string>
 
     <string name="email_support" translatable="false">haothanhit@gmail.com</string>
     <string name="email_subject_format" translatable="false" formatted="true">[%s Android] - SUPPORT &#38; FEEDBACK</string>
-
-    //screen app
-    <string name="str_home">Home</string>
-    <string name="str_setting">Settings</string>
-    <string name="str_color">Color</string>
-    <string name="str_compass">Compass</string>
-    <string name="str_morse">Morse</string>
-    <string name="str_camera">Camera</string>
 
 
     <string name="request_allow_permissions">Please allow camera and storage access to use %s</string>
@@ -20,4 +12,9 @@
 
     <string name="compass">Compass</string>
     <string name="degree_format">%d°</string>
+
+    <!-- Colorful Screen -->
+    <string name="str_color_title">Color</string>
+    <string name="str_color_brightness">Brightness</string>
+    <string name="str_color_blink">Blink</string>
 </resources>

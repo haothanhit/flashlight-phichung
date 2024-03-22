@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--    Vietnamese (vi)-->
+<resources>
+    <!-- Colorful Screen -->
+    <string name="str_color_title">Màu sắc</string>
+    <string name="str_color_brightness">Độ sáng</string>
+    <string name="str_color_blink">Nhấp nháy</string>
+</resources>
