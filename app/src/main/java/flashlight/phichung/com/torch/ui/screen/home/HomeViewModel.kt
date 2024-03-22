@@ -228,7 +228,8 @@ class HomeViewModel @Inject constructor(
 
         try {
             _uiPowerState.value = false
-          //  jobBlink?.cancel() // Cancel the previous coroutine if it exists
+            jobBlink?.cancel() // Cancel the previous coroutine if it exists
+            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
             torchCallback?.let { camManager?.unregisterTorchCallback(it) }
         }catch (ex:Exception){}
