@@ -89,7 +89,7 @@ fun CameraScreen(
                     Text(
                         text = CameraNavigation.titleScreen,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
                     )
                 },

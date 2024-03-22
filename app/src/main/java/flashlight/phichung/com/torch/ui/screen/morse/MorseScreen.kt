@@ -83,7 +83,7 @@ fun MorseScreen(
                     Text(
                         text = MorseNavigation.titleScreen,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
                     )
                 },

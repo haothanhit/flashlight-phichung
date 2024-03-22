@@ -124,7 +124,7 @@ fun BrightnessScreen(
                         Text(
                             text = BrightnessNavigation.titleScreen,
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.headlineMedium,
+                            style = MaterialTheme.typography.titleMedium,
                             color = TextWhiteColor
                         )
                     },
@@ -248,7 +248,7 @@ fun SliderBrightness(modifier: Modifier= Modifier) {
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = "Brightness", style = MaterialTheme.typography.titleLarge, color = TextWhiteColor)
+        Text(text = "Brightness", style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
 
     }
 }
@@ -290,7 +290,7 @@ fun SliderBlink(
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = "Blink", style = MaterialTheme.typography.titleLarge, color = TextWhiteColor)
+        Text(text = "Blink", style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
 
     }
 }

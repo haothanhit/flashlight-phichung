@@ -17,4 +17,7 @@
     <string name="gallery">gallery</string>
     <string name="gallery_empty_description">you don\'t have any photos or videos yet</string>
 
+
+    <string name="compass">Compass</string>
+    <string name="degree_format">%d°</string>
 </resources>

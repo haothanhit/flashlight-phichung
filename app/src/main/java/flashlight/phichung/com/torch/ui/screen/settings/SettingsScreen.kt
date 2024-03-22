@@ -83,7 +83,7 @@ fun SettingsScreen(
                     Text(
                         text = SettingsNavigation.titleScreen,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor,
                         fontSize = 14.sp
 
@@ -213,7 +213,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         CustomOptionsItem(
             icon = R.drawable.ic_version,
-            mainText = "Phiên ba",
+            mainText = "Phiên bản",
             onClick = {},
             switchVisible = false,
             textVisible = true,

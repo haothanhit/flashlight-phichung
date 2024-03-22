@@ -4,9 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Build
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
+import androidx.core.app.ActivityCompat
 import flashlight.phichung.com.torch.R
 
 fun hexToColor(hex: String): Color {
@@ -98,3 +104,43 @@ fun Activity.getVersionApp(): String {
 
 
 }
+
+
+fun Float.toRotationInDegrees(): Int = (this.toInt() + 360) % 360
+fun Double.toRotationInDegrees(): Int = (this.toInt() + 360) % 360
+
+fun Activity.arePermissionNeverAskAgain(permissions: Array<String>): Boolean =
+    permissions.any {
+        !ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            it
+        )
+    }
+
+fun makeLocation(lat: Double, long: Double, provider: String = "") = Location(provider).apply {
+    longitude = long
+    latitude = lat
+}
+
+fun String.isProperLatitude(): Boolean
+{
+    toDoubleOrNull()?.let {
+        return it <= 90.0 && it >= -90.0
+    } ?: return false
+}
+
+fun String.isProperLongitude(): Boolean
+{
+    toDoubleOrNull()?.let {
+        return it <= 180.0 && it >= -180.0
+    } ?: return false
+}
+
+@Composable
+fun TextStyle.sizeInDp(): Dp
+{
+    with(LocalDensity.current) {
+        return this@sizeInDp.fontSize.toDp()
+    }
+}
+

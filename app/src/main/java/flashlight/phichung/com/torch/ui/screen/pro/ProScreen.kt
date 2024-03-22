@@ -45,7 +45,7 @@ fun ProScreen(
                     Text(
                         text = ProNavigation.titleScreen,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
                     )
                 },
