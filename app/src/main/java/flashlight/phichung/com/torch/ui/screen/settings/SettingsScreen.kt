@@ -126,7 +126,8 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         Text(
             text = "TÙY CHỈNH",
-            fontFamily = FontFamily.Monospace,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.headlineMedium,
             color = GrayColor,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
@@ -293,11 +294,11 @@ fun CustomOptionsItem(
             Spacer(modifier = Modifier.width(14.dp))
             Text(
                 text = mainText,
-                fontFamily = FontFamily.Default,
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                style = MaterialTheme.typography.headlineMedium,
+                color = TextWhiteColor,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Bold
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -328,11 +329,10 @@ fun CustomOptionsItem(
         if (textVisible) {
             Text(
                 text = subText,
-                fontFamily = FontFamily.Default,
-                color = Color.Gray,
                 textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.Gray,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
             )
         }
     }

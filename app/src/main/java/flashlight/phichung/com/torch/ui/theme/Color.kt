@@ -49,4 +49,5 @@ val uncheckedThumbColor = Color(0xFF8c8c8c)
 val checkedThumbColor = Color(0xFFFFFFFF)
 val uncheckedTrackColor = Color(0xFFcdcdcd)
 val checkedTrackColor = Color(0xFF03FF72)
+val cardColor = Color(0xE91C1D1C)
 
