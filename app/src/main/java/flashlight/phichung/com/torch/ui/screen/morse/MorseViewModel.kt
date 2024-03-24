@@ -104,7 +104,8 @@ class MorseViewModel @Inject constructor(
                 mSoundPlayer.makeSoundsWorkerThreadFunc(onDone = {
                     Timber.i("HAOHAO makeSoundsWorkerThreadFunc onDone")
                     _uiPlayState.value = false
-
+                    _uiIndexCharacterState.value=-1
+                    
                 },_uiIndexCharacterState)
 
             }
