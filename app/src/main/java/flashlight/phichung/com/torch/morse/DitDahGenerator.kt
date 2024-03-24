@@ -493,13 +493,16 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
         // Add a symbol to the queue to ensure the worker thread is released to see the quit signal
         mSymbolQueue.put(SoundTypes.WORD_SPACE)
     }
+    fun setSoundState(isOn:Boolean){
+        stateSound=isOn
+    }
 
     suspend fun makeSoundsWorkerThreadFunc(
         onDone: (Unit) -> Unit,
         onCharacter: MutableStateFlow<Int>
     ) {
         mShouldQuit = false
-        var characterIndex=-1
+        var characterIndex = -1
         Timber.i("HAOHAO makeSoundsWorkerThreadFunc")
 
         while (true) {
@@ -524,48 +527,69 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
 
             if (mShouldQuit)
                 return
-            if(sym!=SoundTypes.WORD_SPACE){
+            if (sym != SoundTypes.WORD_SPACE) {
                 characterIndex++
-            }else{
-                characterIndex+=2
+            } else {
+                characterIndex += 2
             }
-            onCharacter.value=characterIndex //view text
+            onCharacter.value = characterIndex //view text
 
-            val soundToWrite: ShortArray = when (sym!!) {
-                SoundTypes.DIT -> mDitSound
-                SoundTypes.DAH -> mDahSound
-                SoundTypes.LETTER_SPACE -> mCharacterSpacingSound
-                SoundTypes.WORD_SPACE -> mWordSpacingSound
-                SoundTypes.UNDEFINED -> mCharacterSpacingSound
 
-            }
+            if (stateSound) {
+                val startTime = System.currentTimeMillis()
 
-            if (didWait) {
-                // If we had to wait for a character, that means we are
-                // in interactive mode. Sometimes, a pop can be heard at
-                // the start, so add an extra bit of silence, to fill up
-                // the audio buffers. If the buffer is smaller than this,
-                // it should be OK, since we just want leading silence:
-                mSoundPlayer.write(mCharacterSpacingSound, 0, mCharacterSpacingSound.size)
-            }
+                val soundToWrite: ShortArray = when (sym!!) {
+                    SoundTypes.DIT -> mDitSound
+                    SoundTypes.DAH -> mDahSound
+                    SoundTypes.LETTER_SPACE -> mCharacterSpacingSound
+                    SoundTypes.WORD_SPACE -> mWordSpacingSound
+                    SoundTypes.UNDEFINED -> mCharacterSpacingSound
 
-            // Now attempt to write the real sound:
-            val numWritten = mSoundPlayer.write(soundToWrite, 0, soundToWrite.size)
-            // And start the audio playing:
-            mSoundPlayer.play()
+                }
 
-            if (numWritten != soundToWrite.size) {
-                mSoundPlayer.write(
-                    soundToWrite,
-                    numWritten,
-                    soundToWrite.size - numWritten,
-                    AudioTrack.WRITE_BLOCKING
+                if (didWait) {
+                    // If we had to wait for a character, that means we are
+                    // in interactive mode. Sometimes, a pop can be heard at
+                    // the start, so add an extra bit of silence, to fill up
+                    // the audio buffers. If the buffer is smaller than this,
+                    // it should be OK, since we just want leading silence:
+                    mSoundPlayer.write(mCharacterSpacingSound, 0, mCharacterSpacingSound.size)
+                }
+
+                // Now attempt to write the real sound:
+                val numWritten = mSoundPlayer.write(soundToWrite, 0, soundToWrite.size)
+                // And start the audio playing:
+                mSoundPlayer.play()
+
+                if (numWritten != soundToWrite.size) {
+                    mSoundPlayer.write(
+                        soundToWrite,
+                        numWritten,
+                        soundToWrite.size - numWritten,
+                        AudioTrack.WRITE_BLOCKING
+                    )
+                }
+
+
+                val endTime = System.currentTimeMillis()
+                val timeDelay = endTime - startTime
+                Timber.i("Time delay $sym: $timeDelay milliseconds")
+                // Now we can stop the audio player; it won't stop the audio
+                // immediately, instead once the last write() has been output
+                mSoundPlayer.stop()
+            } else {
+
+                delay(
+                    when (sym) {
+                        SoundTypes.DIT -> 1
+                        SoundTypes.DAH -> 255
+                        SoundTypes.LETTER_SPACE -> 510
+                        SoundTypes.WORD_SPACE -> 1210
+                        SoundTypes.UNDEFINED -> 510
+                        else -> {1}
+                    }
                 )
             }
-
-            // Now we can stop the audio player; it won't stop the audio
-            // immediately, instead once the last write() has been output
-            mSoundPlayer.stop()
         }
     }
 
@@ -574,6 +598,10 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
 
     // Used to notify our audio-track-writing thread that it should quit
     private var mShouldQuit = false;
+
+    // on off sound morse
+    private var stateSound = true  // false = off, true = on
+
 
     // A queue of sounds we want to play
     private var mSymbolQueue = ArrayBlockingQueue<SoundTypes>(1000);

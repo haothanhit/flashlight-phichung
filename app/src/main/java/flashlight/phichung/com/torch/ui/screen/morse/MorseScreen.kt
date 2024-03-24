@@ -113,6 +113,7 @@ fun MorseScreen(
                 var isLightOn by remember { mutableStateOf(true) }
                 val uiMorseCodeState by viewModel.combinedFlow.collectAsState(AnnotatedString(""))
                 val uiPlayState by viewModel.uiPlayState.collectAsState()
+                var isSoundOn by remember { mutableStateOf(true) }
 
 
 
@@ -221,9 +222,10 @@ fun MorseScreen(
                 {
 
                     ButtonChild(
-                        icon = R.drawable.ic_volume_on,
+                        icon = if(isSoundOn) R.drawable.ic_volume_off else R.drawable.ic_volume_on,
                         clickAction = {
-
+                            isSoundOn=!isSoundOn
+                            viewModel.setStateSound(isSoundOn)
                         }
                     )
 

@@ -116,6 +116,11 @@ class MorseViewModel @Inject constructor(
 
     }
 
+    fun setStateSound(isOn :Boolean){
+
+        mSoundPlayer.setSoundState(isOn)
+    }
+
 
     fun generateTextMorse(text: String) {
         Timber.i("HAOHAO $uiMorseCodeState : $text")
