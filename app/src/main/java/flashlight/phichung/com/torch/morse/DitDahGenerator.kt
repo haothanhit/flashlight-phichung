@@ -4,9 +4,11 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import timber.log.Timber
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 import kotlin.math.PI
 import kotlin.math.min
 import kotlin.math.sin
@@ -446,8 +448,8 @@ fun StringToSoundSequence(s: String): List<SoundTypes> {
 
 data class DitDahGeneratorSettings(var context: Context? = null) {
     var toneFrequency = 650
-    var wordsPerMinute = 20
-    var farnsworthWordsPerMinute = 20
+    var wordsPerMinute = 15
+    var farnsworthWordsPerMinute = 10
 }
 
 class DitDahSoundStream(config: DitDahGeneratorSettings) {
@@ -457,6 +459,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
     }
 
     fun enqueue(symbols: List<SoundTypes>) {
+        mSymbolQueue.clear()
         for (sym in symbols) {
             mSymbolQueue.put(sym)
         }
@@ -480,19 +483,30 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
     }
 
     fun quit() {
-        mShouldQuit = true;
+        mShouldQuit = true
 
         // Pause and flush the audio player, which has the effect of stopping
         // playback immediately.
-        mSoundPlayer.pause();
-        mSoundPlayer.flush();
+        mSoundPlayer.pause()
+        mSoundPlayer.flush()
 
         // Add a symbol to the queue to ensure the worker thread is released to see the quit signal
         mSymbolQueue.put(SoundTypes.WORD_SPACE)
     }
 
-    fun makeSoundsWorkerThreadFunc() {
+    suspend fun makeSoundsWorkerThreadFunc(
+        onDone: (Unit) -> Unit,
+        onCharacter: MutableStateFlow<Int>
+    ) {
+        mShouldQuit = false
+        var characterIndex=-1
+        Timber.i("HAOHAO makeSoundsWorkerThreadFunc")
+
         while (true) {
+            if (mSymbolQueue.size == 0) {
+                onDone(Unit)
+                return
+            }
             // Try to get a symbol from the queue:
             var didWait: Boolean = false
             var sym: SoundTypes? = mSymbolQueue.poll(1, TimeUnit.MILLISECONDS)
@@ -510,6 +524,12 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
 
             if (mShouldQuit)
                 return
+            if(sym!=SoundTypes.WORD_SPACE){
+                characterIndex++
+            }else{
+                characterIndex+=2
+            }
+            onCharacter.value=characterIndex //view text
 
             val soundToWrite: ShortArray = when (sym!!) {
                 SoundTypes.DIT -> mDitSound
@@ -532,7 +552,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
             // Now attempt to write the real sound:
             val numWritten = mSoundPlayer.write(soundToWrite, 0, soundToWrite.size)
             // And start the audio playing:
-            mSoundPlayer.play();
+            mSoundPlayer.play()
 
             if (numWritten != soundToWrite.size) {
                 mSoundPlayer.write(
@@ -625,6 +645,5 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
             mDahSound[dahLengthInSamples - i - 1] =
                 (frac * mDahSound[dahLengthInSamples - i - 1]).toInt().toShort();
         }
-        thread() { makeSoundsWorkerThreadFunc() }
     }
 }

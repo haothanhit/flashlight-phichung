@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -109,10 +111,9 @@ fun MorseScreen(
                 var valueInputMorse by remember { mutableStateOf("") }
                 var isHintDisplayed by remember { mutableStateOf(true) }
                 var isLightOn by remember { mutableStateOf(true) }
-                val uiMorseCodeState by viewModel.uiMorseCodeState.collectAsState()
+                val uiMorseCodeState by viewModel.combinedFlow.collectAsState(AnnotatedString(""))
                 val uiPlayState by viewModel.uiPlayState.collectAsState()
 
-                var skinCurrent = viewModel.getSkinCurrent()
 
 
 
@@ -199,20 +200,13 @@ fun MorseScreen(
                         .shadow(4.dp, RoundedCornerShape(8.dp))
                 ) {
                     Text(
-                        text = uiMorseCodeState.joinToString(separator = "") {
-                            when (it) {
-                                SoundTypes.DIT -> "."
-                                SoundTypes.DAH -> "-"
-                                SoundTypes.LETTER_SPACE -> " "
-                                SoundTypes.WORD_SPACE -> "  "
-                                SoundTypes.UNDEFINED -> "*"
-                            }
-                        },
+                        text = uiMorseCodeState,
                         style = MaterialTheme.typography.bodySmall,
                         color = TextWhiteColor,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(15.dp).verticalScroll(rememberScrollState())
+                            .padding(15.dp)
+                            .verticalScroll(rememberScrollState())
 
                     )
 
@@ -251,9 +245,16 @@ fun MorseScreen(
                 Spacer(modifier = Modifier.size(15.dp))
 
             }
+
         }),
 
         )
+    DisposableEffect(true){
+        onDispose {
+            viewModel.setValuePlayState(false)
+        }
+    }
+
 
 }
 
