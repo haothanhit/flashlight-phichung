@@ -238,9 +238,11 @@ fun MorseScreen(
                     )
 
                     ButtonChild(
-                        icon = R.drawable.ic_light_on,
+                        icon = if(isLightOn) R.drawable.ic_light_on else R.drawable.ic_light_off,
                         clickAction = {
 
+                            isLightOn=!isLightOn
+                            viewModel.setFlashlight(isLightOn)
                         }
                     )
                 }
@@ -253,7 +255,7 @@ fun MorseScreen(
         )
     DisposableEffect(true){
         onDispose {
-            viewModel.setValuePlayState(false)
+            viewModel.onDispose()
         }
     }
 

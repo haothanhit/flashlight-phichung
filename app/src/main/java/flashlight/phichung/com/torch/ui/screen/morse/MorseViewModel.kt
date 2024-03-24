@@ -1,12 +1,11 @@
 package flashlight.phichung.com.torch.ui.screen.morse
 
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.ui.graphics.Color
+import android.content.Context
+import android.hardware.camera2.CameraManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.core.text.HtmlCompat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import flashlight.phichung.com.torch.MyApplication
 import flashlight.phichung.com.torch.base.BaseViewModel
@@ -35,6 +34,12 @@ class MorseViewModel @Inject constructor(
     private val preferencesHelper: CachePreferencesHelper,
 
     ) : BaseViewModel(contextProvider) {
+
+
+
+    var camManager : CameraManager? = null
+    var cameraId :String?= null
+    private var torchCallback: CameraManager.TorchCallback?=null
 
 
 
@@ -94,6 +99,31 @@ class MorseViewModel @Inject constructor(
 
             }
         skinCurrent=getSkinCurrent()
+
+
+
+        val cameraManager = MyApplication.instance.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        camManager = cameraManager
+        try {
+            if (camManager != null) {
+                cameraId = camManager!!.cameraIdList[0]
+            }
+        } catch (e: Exception) {
+            // Handle exception
+        }
+
+        torchCallback = object : CameraManager.TorchCallback() {
+            override fun onTorchModeUnavailable(cameraId: String) {
+                // Handle torch mode unavailable
+            }
+
+            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                // Handle torch mode changed
+            }
+        }
+
+        camManager?.registerTorchCallback(torchCallback!!, null)
+
     }
 
     fun setValuePlayState(playState: Boolean) {
@@ -106,7 +136,7 @@ class MorseViewModel @Inject constructor(
                     _uiPlayState.value = false
                     _uiIndexCharacterState.value=-1
                     
-                },_uiIndexCharacterState)
+                },onCharacter=_uiIndexCharacterState, camManager=camManager,cameraId=cameraId)
 
             }
         } else {
@@ -121,6 +151,11 @@ class MorseViewModel @Inject constructor(
         mSoundPlayer.setSoundState(isOn)
     }
 
+    fun setFlashlight(isOn :Boolean){
+
+        mSoundPlayer.setFlashState(isOn)
+    }
+
 
     fun generateTextMorse(text: String) {
         Timber.i("HAOHAO $uiMorseCodeState : $text")
@@ -131,6 +166,19 @@ class MorseViewModel @Inject constructor(
     fun getSkinCurrent(): Skin {
         return preferencesHelper.skin ?: listSkin[0]
     }
+
+
+    fun onDispose() {
+        setValuePlayState(false)
+
+        try {
+            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+
+            torchCallback?.let { camManager?.unregisterTorchCallback(it) }
+        }catch (ex:Exception){}
+
+    }
+
 
 
 }

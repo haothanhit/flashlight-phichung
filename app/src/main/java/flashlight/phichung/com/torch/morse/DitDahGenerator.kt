@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.morse
 
 import android.content.Context
+import android.hardware.camera2.CameraManager
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
@@ -448,7 +449,7 @@ fun StringToSoundSequence(s: String): List<SoundTypes> {
 
 data class DitDahGeneratorSettings(var context: Context? = null) {
     var toneFrequency = 650
-    var wordsPerMinute = 15
+    var wordsPerMinute = 10
     var farnsworthWordsPerMinute = 10
 }
 
@@ -497,9 +498,15 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
         stateSound=isOn
     }
 
+    fun setFlashState(isOn:Boolean){
+        stateFlash=isOn
+    }
+
     suspend fun makeSoundsWorkerThreadFunc(
         onDone: (Unit) -> Unit,
-        onCharacter: MutableStateFlow<Int>
+        onCharacter: MutableStateFlow<Int>,
+        camManager: CameraManager?,
+        cameraId: String?
     ) {
         mShouldQuit = false
         var characterIndex = -1
@@ -560,6 +567,10 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 val numWritten = mSoundPlayer.write(soundToWrite, 0, soundToWrite.size)
                 // And start the audio playing:
                 mSoundPlayer.play()
+                if(sym!=SoundTypes.UNDEFINED && sym!=SoundTypes.WORD_SPACE && sym!=SoundTypes.LETTER_SPACE && stateFlash) {
+                    cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+
+                }
 
                 if (numWritten != soundToWrite.size) {
                     mSoundPlayer.write(
@@ -571,24 +582,31 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 }
 
 
+
                 val endTime = System.currentTimeMillis()
                 val timeDelay = endTime - startTime
                 Timber.i("Time delay $sym: $timeDelay milliseconds")
                 // Now we can stop the audio player; it won't stop the audio
                 // immediately, instead once the last write() has been output
                 mSoundPlayer.stop()
-            } else {
+                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
+            } else {
+                if(stateFlash)
+                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
                 delay(
                     when (sym) {
-                        SoundTypes.DIT -> 1
-                        SoundTypes.DAH -> 255
-                        SoundTypes.LETTER_SPACE -> 510
-                        SoundTypes.WORD_SPACE -> 1210
-                        SoundTypes.UNDEFINED -> 510
+                        SoundTypes.DIT -> 80
+                        SoundTypes.DAH -> 450
+                        SoundTypes.LETTER_SPACE -> 285
+                        SoundTypes.WORD_SPACE -> 1010
+                        SoundTypes.UNDEFINED -> 285
                         else -> {1}
                     }
                 )
+                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+
+
             }
         }
     }
@@ -602,6 +620,9 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
     // on off sound morse
     private var stateSound = true  // false = off, true = on
 
+
+    // on off flash morse
+    private var stateFlash= true  // false = off, true = on
 
     // A queue of sounds we want to play
     private var mSymbolQueue = ArrayBlockingQueue<SoundTypes>(1000);
