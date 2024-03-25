@@ -8,7 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -56,14 +58,13 @@ import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import coil.request.videoFramePercent
 import flashlight.phichung.com.torch.R
-import flashlight.phichung.com.torch.ui.screen.camera.CameraNavigation
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import flashlight.phichung.com.torch.utils.getDuration
 import java.io.File
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-
 
 
 object GalleryNavigation {
@@ -105,17 +106,23 @@ fun GalleryScreen(
         },
 
         content = ({ innerPadding ->
-            Box(Modifier.padding(innerPadding)) {
+            Column(Modifier.padding(innerPadding)) {
 
-                val uiState by viewModel.uiState.collectAsState()
-                when (val result: GalleryUiState = uiState) {
-                    GalleryUiState.Initial -> GalleryLoading()
-                    GalleryUiState.Empty -> GalleryEmpty()
-                    is GalleryUiState.Success -> GallerySection(
-                        imageFiles = result.images,
-                        onPreviewClick = onPreviewClick,
-                    )
+
+                Box(modifier = Modifier.weight(1f)) {
+                    val uiState by viewModel.uiState.collectAsState()
+                    when (val result: GalleryUiState = uiState) {
+                        GalleryUiState.Initial -> GalleryLoading()
+                        GalleryUiState.Empty -> GalleryEmpty()
+                        is GalleryUiState.Success -> GallerySection(
+                            imageFiles = result.images,
+                            onPreviewClick = onPreviewClick,
+                        )
+                    }
+
                 }
+                Spacer(modifier = Modifier.size(15.dp))
+                AdmobBanner()
             }
 
         }),
