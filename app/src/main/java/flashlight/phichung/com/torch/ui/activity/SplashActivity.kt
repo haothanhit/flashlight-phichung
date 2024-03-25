@@ -40,9 +40,12 @@ class SplashActivity : AppCompatActivity() {
             object : MyApplication.OnShowAdCompleteListener {
 
                 override fun onShowAdComplete() {
-                    val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
-                    startActivity(mainIntent)
-                    finish()
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
+                        startActivity(mainIntent)
+                        finish()
+                    }, 50)
                 }
             })
 

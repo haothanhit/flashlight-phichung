@@ -20,3 +20,4 @@ rootProject.name = "Flashlight"
 include(":app")
 include(":camposer")
 include(":languagepicker")
+include(":billing-utils")
