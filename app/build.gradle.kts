@@ -29,6 +29,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue ("string", "str_ads_google_app_id", "ca-app-pub-4824353242373249~8219707070")
+            resValue ("string", "str_ads_banner", "ca-app-pub-4824353242373249/4433000143")
+            resValue ("string", "str_ads_open", "ca-app-pub-4824353242373249/1921781637")
+        }
+        debug {
+            isMinifyEnabled = false
+            resValue ("string", "str_ads_google_app_id", "ca-app-pub-3940256099942544~3347511713")
+            resValue ("string", "str_ads_banner", "ca-app-pub-3940256099942544/6300978111")
+            resValue ("string", "str_ads_open", "ca-app-pub-3940256099942544/9257395921")
         }
     }
     compileOptions {
@@ -108,5 +117,17 @@ dependencies {
 
     //request permission
     implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    // admob
+    implementation("com.google.android.gms:play-services-ads:23.0.0")
+
+    val lifecycle_version = "2.6.2"
+
+
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation ("androidx.lifecycle:lifecycle-process:$lifecycle_version")
+    kapt ("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
+    // For apps targeting Android 12, add WorkManager dependency.
+    implementation("androidx.work:work-runtime:2.9.0")
 
 }

@@ -46,6 +46,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.theme.BottomCardShape
+import flashlight.phichung.com.torch.ui.theme.GrayColor
+import flashlight.phichung.com.torch.ui.theme.GrayWhiteColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.Skin9Color
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
@@ -145,7 +147,7 @@ fun CustomProUI(padding: PaddingValues, viewModel: ProViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(2.5f),
-                colors = CardDefaults.cardColors(Color.Green),
+                colors = CardDefaults.cardColors(GrayWhiteColor),
                 elevation = CardDefaults.cardElevation(),
                 shape = BottomCardShape.large
             ) {

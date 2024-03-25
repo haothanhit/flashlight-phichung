@@ -7,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -25,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.data.model.Skin
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
@@ -104,7 +108,9 @@ fun SkinScreen(
                 LazyVerticalGrid(
                     state = stateGrid,
                     columns = GridCells.Fixed(2),
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f),
                     contentPadding = PaddingValues(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -130,10 +136,18 @@ fun SkinScreen(
                     }
                 }
 
-                coroutineScope.launch {
-                    // Animate scroll to the first item
-                    stateGrid.animateScrollToItem(index = skinList.indexOf(skinList.find { it.selected }))
+
+                LaunchedEffect(true) {
+                    coroutineScope.launch {
+                        // Animate scroll to the first item
+                        stateGrid.animateScrollToItem(index = skinList.indexOf(skinList.find { it.selected }))
+                    }
                 }
+                Spacer(modifier = Modifier.size(15.dp))
+
+                AdmobBanner()
+
+
             }
 
         }),

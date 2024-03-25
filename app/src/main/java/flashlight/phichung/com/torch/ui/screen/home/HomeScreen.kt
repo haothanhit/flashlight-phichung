@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.data.model.Skin
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.PowerOffColor
@@ -170,7 +171,7 @@ fun HomeScreen(
                     }
                     Spacer(modifier = Modifier.size(15.dp))
 
-
+                    AdmobBanner()
                 }
             })
         )

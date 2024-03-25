@@ -24,6 +24,9 @@ val HintTextColor= Color(0xFFA7A7A7)
 val PowerOffColor= Color(0xFF313035)
 
 
+val GrayWhiteColor= Color(0xFF46444B)
+
+
 val PowerOnColor= Color(0xFF00FFFF)
 
 

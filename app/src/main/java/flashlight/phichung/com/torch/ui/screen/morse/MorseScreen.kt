@@ -50,6 +50,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.morse.SoundTypes
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.HintTextColor
@@ -247,6 +248,8 @@ fun MorseScreen(
                     )
                 }
                 Spacer(modifier = Modifier.size(15.dp))
+
+                AdmobBanner()
 
             }
 

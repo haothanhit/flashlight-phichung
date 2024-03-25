@@ -60,6 +60,7 @@ import androidx.navigation.compose.rememberNavController
 import com.flask.colorpicker.ColorPickerView
 import flashlight.phichung.com.torch.MyApplication
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
@@ -205,6 +206,7 @@ fun BrightnessScreen(
 
                     }
                     Spacer(modifier = Modifier.size(15.dp))
+                    AdmobBanner()
 
                 }
 

@@ -54,6 +54,7 @@ class MorseViewModel @Inject constructor(
 
 
     private val _uiIndexCharacterState = MutableStateFlow(-1) // index of character
+    private val _uiIndexCharacterInputState = MutableStateFlow(-1) // index of character
 
 
     private lateinit var  skinCurrent :Skin

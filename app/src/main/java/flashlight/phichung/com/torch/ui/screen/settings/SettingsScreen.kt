@@ -55,6 +55,7 @@ import com.haohao.languagepicker.dialog.launchCountryPickerDialog
 import com.haohao.languagepicker.localesLanguageApp
 import com.haohao.languagepicker.setApplicationLocales
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
@@ -251,6 +252,8 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
             textVisible = true,
             subText = activity.getVersionApp(),
         )
+
+        AdmobBanner()
 
     }
 }
