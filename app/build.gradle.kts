@@ -106,6 +106,9 @@ dependencies {
     //lib for camera
     implementation(project(":camposer"))
 
+    //lib for billing
+    implementation(project(":billing-utils"))
+
     //lib for language picker
     implementation(project(":languagepicker"))
 
