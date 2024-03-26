@@ -2,19 +2,19 @@ package flashlight.phichung.com.torch.ui.screen.settings
 
 import android.app.Activity
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -42,11 +42,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -57,8 +54,9 @@ import com.haohao.languagepicker.localesLanguageApp
 import com.haohao.languagepicker.setApplicationLocales
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
-import flashlight.phichung.com.torch.ui.theme.GrayColor
+import flashlight.phichung.com.torch.ui.theme.GrayWhiteColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
+import flashlight.phichung.com.torch.ui.theme.TextGrayWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import flashlight.phichung.com.torch.ui.theme.checkedThumbColor
 import flashlight.phichung.com.torch.ui.theme.checkedTrackColor
@@ -92,8 +90,6 @@ fun SettingsScreen(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor,
-                        fontSize = 14.sp
-
                     )
                 },
                 navigationIcon = {
@@ -118,142 +114,147 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
     Column(
         modifier = Modifier
             .padding(padding)
-            .padding(horizontal = 20.dp)
     ) {
         var stateSound by remember { mutableStateOf(viewModel.getSoundState()) }
         var stateAutomaticFlashMode by remember { mutableStateOf(viewModel.getAutomaticOnState()) }
-
         val activity = LocalContext.current as Activity
+        LazyColumn(modifier = Modifier
+            .padding(horizontal = 15.dp)
+            .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(vertical = 15.dp),
+            content = {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.str_settings_customize),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextGrayWhiteColor,
+                    )
+                }
+                item {
+                    CustomOptionsItem(
+                        icon = R.drawable.ic_language,
+                        mainText = stringResource(id = R.string.str_settings_language),
+                        onClick = {
 
-        Text(
-            text = stringResource(id = R.string.str_settings_customize),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium,
-            color = GrayColor,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-        )
-        CustomOptionsItem(
-            icon = R.drawable.ic_language,
-            mainText = stringResource(id = R.string.str_settings_language),
-            onClick = {
+                            activity.launchCountryPickerDialog(
+                                countryFileReader = LangFileReaderHard,
+                                allowSearch = false,
+                                onCountryClickListener = { languageModel ->
+                                    val langChange = languageModel?.code ?: ""
+                                    Log.i("HAOHAO", "langChange :  $langChange")
+                                    viewModel.setLanguageApp(langChange)
+                                    val index = localesLanguageApp.indexOfFirst {
+                                        it.toLanguageTag().lowercase() == langChange.lowercase()
+                                    }
+                                    if (index != -1) {
+                                        Log.i("HAOHAO", "index :  $index")
+                                        setApplicationLocales(
+                                            localesLanguageApp[index].language.toString()
+                                                .lowercase()
+                                        )
 
-                activity.launchCountryPickerDialog(
-                    countryFileReader = LangFileReaderHard,
-                    allowSearch = false,
-                    onCountryClickListener = { languageModel ->
-                        val langChange = languageModel?.code ?: ""
-                        Log.i("HAOHAO", "langChange :  $langChange")
-                        viewModel.setLanguageApp(langChange)
-                        val index = localesLanguageApp.indexOfFirst {
-                            it.toLanguageTag().lowercase() == langChange.lowercase()
-                        }
-                        if (index != -1) {
-                            Log.i("HAOHAO", "index :  $index")
-                            setApplicationLocales(
-                                localesLanguageApp[index].language.toString().lowercase()
+
+                                    }
+
+                                },
+                                langCodeSelect = viewModel.getLanguageApp()
+
                             )
+                        },
+                        switchVisible = false,
+                        textVisible = true,
+                        subText = allLanguage!!.filter { it.code == viewModel.getLanguageApp() }[0].emoji
+                    )
+                }
+
+                item {
+                    CustomOptionsItem(
+                        icon = R.drawable.ic_automatic_on,
+                        mainText = "Tự động bật",
+                        onClick = {},
+                        switchVisible = true,
+                        textVisible = false,
+                        statusSwitch = stateAutomaticFlashMode,
+                        onCheckedChange = {
+                            //  stateSound = it
+                            viewModel.setAutomaticOnState(it)
+                        }
+                    )
+                }
 
 
+                item {
+                    CustomOptionsItem(
+                        icon = R.drawable.ic_settings_sound,
+                        mainText = stringResource(id = R.string.str_settings_sound),
+                        onClick = {},
+                        switchVisible = true,
+                        textVisible = false,
+                        statusSwitch = stateSound,
+                        onCheckedChange = {
+                            //  stateSound = it
+                            viewModel.setSoundState(it)
                         }
 
-                    },
-                    langCodeSelect = viewModel.getLanguageApp()
+                    )
+                }
 
-                )
-            },
-            switchVisible = false,
-            textVisible = true,
-            subText = allLanguage!!.filter { it.code== viewModel.getLanguageApp()}[0].emoji
-        )
+                item {
 
-        CustomOptionsItem(
-            icon = R.drawable.ic_automatic_on,
-            mainText = "Tự động bật",
-            onClick = {},
-            switchVisible = true,
-            textVisible = false,
-            statusSwitch = stateAutomaticFlashMode,
-            onCheckedChange = {
-                //  stateSound = it
-                viewModel.setAutomaticOnState(it)
+                    Divider(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        color = GrayWhiteColor, thickness = 1.dp
+                    )
+                }
+                item {
+                    Text(
+                        text = stringResource(id = R.string.str_settings_support),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextGrayWhiteColor,
+                    )
+                }
+
+                item {
+                    CustomOptionsItem(
+                        icon = R.drawable.ic_feedback,
+                        mainText = stringResource(id = R.string.str_settings_feedback),
+                        onClick = { activity.feedback() },
+                        switchVisible = false,
+                        textVisible = false,
+                    )
+                }
+
+                item {
+                    CustomOptionsItem(
+                        icon = R.drawable.ic_share,
+                        mainText = stringResource(id = R.string.str_settings_share),
+                        onClick = { activity.shareApp() },
+                        switchVisible = false,
+                        textVisible = false,
+                    )
+                }
+
+                item {
+                    CustomOptionsItem(
+                        icon = R.drawable.ic_version,
+                        mainText = stringResource(id = R.string.str_settings_version),
+                        onClick = {},
+                        switchVisible = false,
+                        textVisible = true,
+                        subText = activity.getVersionApp(),
+                    )
+
+                }
             }
-        )
 
-//        CustomOptionsItem(
-//            icon = R.drawable.ic_shortcut,
-//            mainText = "Phím tắt bật/tắt đèn pin",
-//            onClick = {},
-//            switchVisible = true,
-//            textVisible = false,
-//        )
-
-        CustomOptionsItem(
-            icon = R.drawable.ic_settings_sound,
-            mainText = stringResource(id = R.string.str_settings_sound),
-            onClick = {},
-            switchVisible = true,
-            textVisible = false,
-            statusSwitch = stateSound,
-            onCheckedChange = {
-                //  stateSound = it
-                viewModel.setSoundState(it)
-            }
 
         )
-        Divider(
-            modifier = Modifier.padding(vertical = 16.dp),
-            color = Color.Gray, thickness = 1.dp
-        )
 
-        Text(
-            text = stringResource(id = R.string.str_settings_support),
-            fontFamily = FontFamily.Monospace,
-            color = GrayColor,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .padding(bottom = 16.dp)
-        )
-
-//        CustomOptionsItem(
-//            icon = R.drawable.ic_more_apps,
-//            mainText = "Thêm nhiều ứng dụng",
-//            onClick = {},
-//            switchVisible = false,
-//            textVisible = false,
-//            subText = ""
-//        )
-
-        CustomOptionsItem(
-            icon = R.drawable.ic_feedback,
-            mainText = stringResource(id = R.string.str_settings_feedback),
-            onClick = { activity.feedback() },
-            switchVisible = false,
-            textVisible = false,
-        )
-
-        CustomOptionsItem(
-            icon = R.drawable.ic_share,
-            mainText = stringResource(id = R.string.str_settings_share),
-            onClick = { activity.shareApp() },
-            switchVisible = false,
-            textVisible = false,
-        )
-
-        CustomOptionsItem(
-            icon = R.drawable.ic_version,
-            mainText = stringResource(id = R.string.str_settings_version),
-            onClick = {},
-            switchVisible = false,
-            textVisible = true,
-            subText = activity.getVersionApp(),
-        )
+        Spacer(modifier = Modifier.size(15.dp))
 
         AdmobBanner()
+
 
     }
 }
@@ -273,37 +274,34 @@ fun CustomOptionsItem(
     ) {
     val checked = remember { mutableStateOf(statusSwitch) }
     Row(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .fillMaxWidth()
-            .clickable { onClick() },
+        modifier = if (!switchVisible) {
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .clickable { onClick() }
+        } else {
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        },
+
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
 
         ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(34.dp)
-                    .background(Color.Transparent),
-                Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = icon),
-                    contentDescription = "",
-                    tint = Color.White,
-                )
-            }
-            Spacer(modifier = Modifier.width(14.dp))
-            Text(
-                text = mainText,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
-                color = TextWhiteColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        Icon(
+            modifier = Modifier
+                .size(24.dp),
+            painter = painterResource(id = icon),
+            contentDescription = "",
+            tint = IconWhiteColor,
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        Text(
+            text = mainText,
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextWhiteColor,
+        )
         Spacer(modifier = Modifier.weight(1f))
         if (switchVisible) {
             Switch(
@@ -332,10 +330,8 @@ fun CustomOptionsItem(
         if (textVisible) {
             Text(
                 text = subText,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.Gray,
-                fontSize = 16.sp,
+                style = MaterialTheme.typography.bodyLarge,
+                color = TextGrayWhiteColor,
             )
         }
     }
