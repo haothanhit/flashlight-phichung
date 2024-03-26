@@ -31,6 +31,9 @@ val GrayWhiteColor= Color(0xFF46444B)
 
 val PowerOnColor= Color(0xFF00FFFF)
 
+val ProColor= Color(0xFFFF5722)
+
+
 
 
 val Skin1Color= Color(0xFF00FFFF)

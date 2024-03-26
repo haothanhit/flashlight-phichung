@@ -1,11 +1,11 @@
 package flashlight.phichung.com.torch.ui.screen.pro
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,47 +16,39 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.theme.BottomCardShape
-import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.GrayWhiteColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
-import flashlight.phichung.com.torch.ui.theme.Skin9Color
+import flashlight.phichung.com.torch.ui.theme.PrimaryColor
+import flashlight.phichung.com.torch.ui.theme.ProColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
 
 object ProNavigation {
 
-    const val titleScreen = "Pro"
     const val route = "pro"
 
 }
@@ -67,127 +59,85 @@ fun ProScreen(
     viewModel: ProViewModel = hiltViewModel<ProViewModel>(),
     navController: NavHostController = rememberNavController()
 ) {
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = ProNavigation.titleScreen,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextWhiteColor
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-
-
-            )
-//            TopAppBar(
-//                title = {
-//                    Text(
-//                        text = ProNavigation.titleScreen,
-//                        textAlign = TextAlign.Center,
-//                        style = MaterialTheme.typography.headlineMedium,
-//                        color = TextWhiteColor
-//                    )
-//                },
-//                navigationIcon = {
-//                    IconButton(onClick = { navController.navigateUp() }) {
-//                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-//                    }
-//                }, colors = TopAppBarDefaults.topAppBarColors(
-//                    containerColor = MaterialTheme.colorScheme.primary
-//                )
-//            )
-        },
-        content = ({ padding ->
-            CustomProUI(padding, viewModel)
-        }),
-    )
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomProUI(padding: PaddingValues, viewModel: ProViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Green),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_flashligh_pro),
-                contentDescription = "ProScreen",
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-            )
+                    .weight(1f)
+            ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.bg_pro),
+                    contentDescription = "ProScreen",
+                    contentScale = ContentScale.FillBounds,
+
+                )
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_close),
+                    contentDescription = "",
+                    tint = IconWhiteColor,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(30.dp)
+                        .size(30.dp)
+                        .clickable {
+                            navController.navigateUp()
+                        })
+            }
+            Spacer(modifier = Modifier.weight(2f))
         }
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
         ) {
-            Divider(
-                modifier = Modifier.weight(1f),
-                color = Color.Transparent
-            )
+
+            Spacer(modifier = Modifier.weight(3f))
+
             Card(
                 modifier = Modifier
                     .fillMaxSize()
-                    .weight(2.5f),
-                colors = CardDefaults.cardColors(GrayWhiteColor),
-                elevation = CardDefaults.cardElevation(),
+                    .weight(5f),
+                colors = CardDefaults.cardColors(PrimaryColor),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 7.dp
+                ),
+                border = BorderStroke(1.dp, GrayWhiteColor),
                 shape = BottomCardShape.large
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                        .weight(4f),
+                        .fillMaxSize()
+                        .padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "PRO",
-                        modifier = Modifier.padding(vertical = 10.dp),
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = Skin9Color,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = ProColor,
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Column(
-                        modifier = Modifier.wrapContentSize(),
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        CustomProOptionUI(
-                            icon = R.drawable.ic_pro,
-                            mainText = stringResource(id = R.string.str_pro_remove_ads)
-                        )
-                    }
+                    CustomProOptionUI(
+                        icon = R.drawable.ic_pro,
+                        mainText = stringResource(id = R.string.str_pro_remove_ads)
+                    )
                     Spacer(modifier = Modifier.weight(1f))
-                    Column(
-                        modifier = Modifier
-                            .wrapContentSize(),
-                    ) {
-                        RoundedButton(
-                            text = "234.000đ",
-                            onClick = {}
-                        )
-                    }
+                    RoundedButton(
+                        text = "234.000đ",
+                        onClick = {}
+                    )
 
                 }
 
@@ -197,31 +147,29 @@ fun CustomProUI(padding: PaddingValues, viewModel: ProViewModel) {
 
 }
 
+
 @Composable
 fun RoundedButton(text: String, onClick: () -> Unit) {
     val description = AnnotatedString.Builder().apply {
-        pushStyle(SpanStyle(color = Color.Black))
+        pushStyle(SpanStyle(color = TextWhiteColor))
         append(stringResource(id = R.string.str_pro_limited_offer))
-
-        pushStyle(SpanStyle(color = Color.Red))
+        append("\n")
+        pushStyle(SpanStyle(color = ProColor))
         append(stringResource(id = R.string.str_pro_sale_off))
         pop()
     }.toAnnotatedString()
     Text(
-        modifier = Modifier
-            .padding(10.dp),
         text = description,
-        style = MaterialTheme.typography.headlineMedium,
-        color = Skin9Color,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Start
     )
+    Spacer(modifier = Modifier.size(10.dp))
     Button(
         onClick = onClick,
         modifier = Modifier
-            .padding(8.dp)
             .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(Skin9Color),
+        colors = ButtonDefaults.buttonColors(ProColor),
     )
     {
         Row(
@@ -233,19 +181,18 @@ fun RoundedButton(text: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = text,
-                color = Color.White,
+                color = TextWhiteColor,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+                style = MaterialTheme.typography.titleMedium,
+
+                )
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = null,
-                tint = Color.White,
+                tint = IconWhiteColor,
                 modifier = Modifier
-                    .padding(start = 4.dp)
+                    .size(24.dp)
             )
         }
     }
@@ -255,34 +202,24 @@ fun RoundedButton(text: String, onClick: () -> Unit) {
 fun CustomProOptionUI(icon: Int, mainText: String) {
     Row(
         modifier = Modifier
-            .padding(vertical = 8.dp)
             .wrapContentSize(),
         verticalAlignment = Alignment.CenterVertically
 
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(34.dp)
-                    .background(Color.Transparent),
-                Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = icon),
-                    contentDescription = "",
-                    tint = Color.Black,
-                )
-            }
-            Spacer(modifier = Modifier.width(14.dp))
-            Text(
-                text = mainText,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = "",
+            tint = IconWhiteColor,
+            modifier = Modifier
+                .size(28.dp)
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        Text(
+            text = mainText,
+            style = MaterialTheme.typography.bodyLarge,
+            color = TextWhiteColor,
+
             )
-        }
     }
 }
 
