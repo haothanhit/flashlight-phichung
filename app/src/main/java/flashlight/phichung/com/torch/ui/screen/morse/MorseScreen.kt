@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -60,7 +61,6 @@ import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
 object MorseNavigation {
 
-    const val titleScreen = "Morse"
     const val route = "morse"
 
 }
@@ -84,7 +84,7 @@ fun MorseScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = MorseNavigation.titleScreen,
+                        text = stringResource(id = R.string.str_morse_title),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
@@ -123,7 +123,7 @@ fun MorseScreen(
                 Spacer(modifier = Modifier.size(15.dp))
                 Text(
                     modifier = Modifier.padding(horizontal = 15.dp),
-                    text = "Your Text",
+                    text = stringResource(id = R.string.str_morse_your_text),
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextWhiteColor
                 )
@@ -159,7 +159,7 @@ fun MorseScreen(
                         decorationBox = { innerTextField ->
                             if (isHintDisplayed) {
                                 Text(
-                                    text = " Enter your text here",
+                                    text = stringResource(id = R.string.str_morse_hint_your_text),
                                     color = HintTextColor,
                                     style = MaterialTheme.typography.bodySmall
                                 )
@@ -184,7 +184,7 @@ fun MorseScreen(
 
                 Text(
                     modifier = Modifier.padding(horizontal = 15.dp),
-                    text = "Morse Code",
+                    text = stringResource(id = R.string.str_morse_code_text),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextWhiteColor

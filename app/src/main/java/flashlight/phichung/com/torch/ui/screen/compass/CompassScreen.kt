@@ -47,7 +47,6 @@ import timber.log.Timber
 
 object CompassNavigation {
 
-    const val titleScreen = "Compass"
     const val route = "compass"
 
 }
@@ -65,7 +64,7 @@ fun CompassScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = CompassNavigation.titleScreen,
+                        text = stringResource(id = R.string.str_compass_title),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
@@ -164,7 +163,7 @@ fun Rose(
             .fillMaxSize()
             .rotate(angle),
         painter = painterResource(id = R.drawable.ic_rose),
-        contentDescription = stringResource(id = R.string.compass),
+        contentDescription = "",
         contentScale = ContentScale.Fit,
 
         )

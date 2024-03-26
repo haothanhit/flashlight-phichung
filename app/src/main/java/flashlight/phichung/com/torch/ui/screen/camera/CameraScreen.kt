@@ -69,7 +69,6 @@ import java.io.File
 
 object CameraNavigation {
 
-    const val titleScreen = "Camera"
     const val route = "camera"
 
 }
@@ -89,7 +88,7 @@ fun CameraScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = CameraNavigation.titleScreen,
+                        text = stringResource(R.string.str_camera_title),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
@@ -296,7 +295,7 @@ fun GalleryButton(lastPicture: File?, onClick: () -> Unit) {
             .decoderFactory(VideoFrameDecoder.Factory())
             .videoFrameMillis(1)
             .build(),
-        contentDescription = stringResource(R.string.gallery)
+        contentDescription = ""
     )
 
     LaunchedEffect(lastPicture) {

@@ -69,7 +69,6 @@ import kotlin.time.Duration.Companion.seconds
 
 object GalleryNavigation {
 
-    const val titleScreen = "Gallery"
     const val route = "gallery"
 
 }
@@ -87,7 +86,7 @@ fun GalleryScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = GalleryNavigation.titleScreen,
+                        text = stringResource(id = R.string.str_gallery_title),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor
@@ -142,9 +141,9 @@ private fun GalleryEmpty() {
         Text(
             modifier = Modifier.padding(24.dp),
             textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.gallery_empty_description).replaceFirstChar { it.uppercase() },
-            fontSize = 18.sp,
-            color = Color.Gray,
+            text = stringResource(id = R.string.str_gallery_empty).replaceFirstChar { it.uppercase() },
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextWhiteColor,
         )
     }
 }

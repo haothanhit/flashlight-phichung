@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -70,7 +71,6 @@ import flashlight.phichung.com.torch.utils.shareApp
 
 object SettingsNavigation {
 
-    const val titleScreen = "Settings"
     const val route = "settings"
 
 }
@@ -88,7 +88,7 @@ fun SettingsScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = SettingsNavigation.titleScreen,
+                        text = stringResource(id = R.string.str_settings_title),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor,
@@ -126,7 +126,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         val activity = LocalContext.current as Activity
 
         Text(
-            text = "TÙY CHỈNH",
+            text = stringResource(id = R.string.str_settings_customize),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium,
             color = GrayColor,
@@ -137,7 +137,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         )
         CustomOptionsItem(
             icon = R.drawable.ic_language,
-            mainText = "Ngôn ngữ",
+            mainText = stringResource(id = R.string.str_settings_language),
             onClick = {
 
                 activity.launchCountryPickerDialog(
@@ -192,7 +192,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         CustomOptionsItem(
             icon = R.drawable.ic_settings_sound,
-            mainText = "Âm thanh",
+            mainText = stringResource(id = R.string.str_settings_sound),
             onClick = {},
             switchVisible = true,
             textVisible = false,
@@ -209,7 +209,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         )
 
         Text(
-            text = "ỦNG HỘ",
+            text = stringResource(id = R.string.str_settings_support),
             fontFamily = FontFamily.Monospace,
             color = GrayColor,
             fontSize = 16.sp,
@@ -230,7 +230,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         CustomOptionsItem(
             icon = R.drawable.ic_feedback,
-            mainText = "Phản hồi",
+            mainText = stringResource(id = R.string.str_settings_feedback),
             onClick = { activity.feedback() },
             switchVisible = false,
             textVisible = false,
@@ -238,7 +238,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         CustomOptionsItem(
             icon = R.drawable.ic_share,
-            mainText = "Chia sẽ",
+            mainText = stringResource(id = R.string.str_settings_share),
             onClick = { activity.shareApp() },
             switchVisible = false,
             textVisible = false,
@@ -246,7 +246,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         CustomOptionsItem(
             icon = R.drawable.ic_version,
-            mainText = "Phiên bản",
+            mainText = stringResource(id = R.string.str_settings_version),
             onClick = {},
             switchVisible = false,
             textVisible = true,

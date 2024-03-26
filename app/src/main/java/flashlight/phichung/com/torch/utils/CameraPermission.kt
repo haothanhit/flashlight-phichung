@@ -71,7 +71,7 @@ private fun DeniedSection(onClick: () -> Unit) {
         Text(
             modifier = Modifier.padding(15.dp),
             text = stringResource(
-                id = flashlight.phichung.com.torch.R.string.request_allow_permissions,
+                id = flashlight.phichung.com.torch.R.string.str_camera_request_permission,
                 stringResource(id = flashlight.phichung.com.torch.R.string.app_name),
             ).replaceFirstChar { it.uppercase() },
             style = MaterialTheme.typography.bodyMedium,

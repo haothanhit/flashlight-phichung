@@ -39,11 +39,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.data.model.Skin
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.theme.GrayColor
@@ -54,7 +56,6 @@ import kotlinx.coroutines.launch
 
 object SkinNavigation {
 
-    const val titleScreen = "Skin"
     const val route = "skin"
 
 }
@@ -73,7 +74,7 @@ fun SkinScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = SkinNavigation.titleScreen,
+                        text = stringResource(id = R.string.str_skin_title),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         color = TextWhiteColor

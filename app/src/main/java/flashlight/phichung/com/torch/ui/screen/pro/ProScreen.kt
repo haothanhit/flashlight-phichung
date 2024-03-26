@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -174,11 +175,7 @@ fun CustomProUI(padding: PaddingValues, viewModel: ProViewModel) {
                     ) {
                         CustomProOptionUI(
                             icon = R.drawable.ic_pro,
-                            mainText = "Loại bỏ các quảng cáo."
-                        )
-                        CustomProOptionUI(
-                            icon = R.drawable.ic_pro,
-                            mainText = "Phím tắt bật/tắt đèn pin."
+                            mainText = stringResource(id = R.string.str_pro_remove_ads)
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
@@ -204,10 +201,10 @@ fun CustomProUI(padding: PaddingValues, viewModel: ProViewModel) {
 fun RoundedButton(text: String, onClick: () -> Unit) {
     val description = AnnotatedString.Builder().apply {
         pushStyle(SpanStyle(color = Color.Black))
-        append("Ưu đãi có giới hạn dành cho bạn: ")
+        append(stringResource(id = R.string.str_pro_limited_offer))
 
         pushStyle(SpanStyle(color = Color.Red))
-        append("50% GIẢM GIÁ")
+        append(stringResource(id = R.string.str_pro_sale_off))
         pop()
     }.toAnnotatedString()
     Text(
