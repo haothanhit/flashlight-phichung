@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -41,6 +42,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -164,6 +166,8 @@ private fun GallerySection(imageFiles: List<File>, onPreviewClick: (String) -> U
             PlaceholderImage(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(4.dp)
+                    .clip(RoundedCornerShape(6.dp))
                     .animateItemPlacement()
                     .aspectRatio(1F)
                     .clickable(onClick = { onPreviewClick(image.path) }),
@@ -174,6 +178,7 @@ private fun GallerySection(imageFiles: List<File>, onPreviewClick: (String) -> U
                         Modifier
                             .fillMaxSize()
                             .background(Color.LightGray)
+                            .clip(RoundedCornerShape(6.dp))
                     )
                 },
             ) {
@@ -220,7 +225,8 @@ private fun PlaceholderImage(
     var imageState: AsyncImagePainter.State by remember { mutableStateOf(AsyncImagePainter.State.Empty) }
     Box(modifier) {
         AsyncImage(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .clip(RoundedCornerShape(6.dp)),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(data)
                 .decoderFactory(VideoFrameDecoder.Factory())
