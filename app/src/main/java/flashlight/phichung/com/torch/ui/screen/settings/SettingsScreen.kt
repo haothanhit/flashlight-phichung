@@ -171,7 +171,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
                 item {
                     CustomOptionsItem(
                         icon = R.drawable.ic_automatic_on,
-                        mainText = "Tự động bật",
+                        mainText = stringResource(id = R.string.str_settings_automatic_on),
                         onClick = {},
                         switchVisible = true,
                         textVisible = false,
