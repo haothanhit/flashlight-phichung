@@ -64,7 +64,6 @@ object HomeNavigation {
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
-//    navController: NavHostController = rememberNavController(),
     openSkinAction: () -> Unit,
     openSettingsAction: () -> Unit,
     openColorAction: () -> Unit,
@@ -73,7 +72,7 @@ fun HomeScreen(
     openRemoveAdsAction: () -> Unit,
     openCameraAction: () -> Unit,
 ) {
-    val context = LocalContext.current
+   // val context = LocalContext.current
 //    var camManager by remember { mutableStateOf<CameraManager?>(null) }
 //    var cameraId by remember { mutableStateOf<String?>(null) }
 

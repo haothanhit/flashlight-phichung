@@ -16,16 +16,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -50,12 +43,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
-import flashlight.phichung.com.torch.morse.SoundTypes
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
+import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.HintTextColor
-import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 
 
@@ -69,43 +61,23 @@ object MorseNavigation {
 @Composable
 fun MorseScreen(
     viewModel: MorseViewModel = hiltViewModel<MorseViewModel>(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current  // help hide soft keyboard
 
-
-    Scaffold(
+    TopAppBarApp(
+        navController=navController,
         modifier = Modifier
-            .fillMaxSize()
             .clickable {
                 keyboardController?.hide()
             },
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.str_morse_title),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextWhiteColor
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+        title = stringResource(id = R.string.str_morse_title),
+        content = {
 
-
-            )
-        },
-        content = ({ innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding),
+                    .padding(it),
             ) {
 
 
@@ -223,15 +195,15 @@ fun MorseScreen(
                 {
 
                     ButtonChild(
-                        icon = if(isSoundOn) R.drawable.ic_volume_off else R.drawable.ic_volume_on,
+                        icon = if (isSoundOn) R.drawable.ic_volume_off else R.drawable.ic_volume_on,
                         clickAction = {
-                            isSoundOn=!isSoundOn
+                            isSoundOn = !isSoundOn
                             viewModel.setStateSound(isSoundOn)
                         }
                     )
 
                     ButtonChild(
-                        icon = if(uiPlayState) R.drawable.ic_pause else R.drawable.ic_play,
+                        icon = if (uiPlayState) R.drawable.ic_pause else R.drawable.ic_play,
                         clickAction = {
                             viewModel.setValuePlayState(!uiPlayState)
 
@@ -239,10 +211,10 @@ fun MorseScreen(
                     )
 
                     ButtonChild(
-                        icon = if(isLightOn) R.drawable.ic_light_on else R.drawable.ic_light_off,
+                        icon = if (isLightOn) R.drawable.ic_light_on else R.drawable.ic_light_off,
                         clickAction = {
 
-                            isLightOn=!isLightOn
+                            isLightOn = !isLightOn
                             viewModel.setFlashlight(isLightOn)
                         }
                     )
@@ -253,10 +225,12 @@ fun MorseScreen(
 
             }
 
-        }),
+        }
+    )
 
-        )
-    DisposableEffect(true){
+
+
+    DisposableEffect(true) {
         onDispose {
             viewModel.onDispose()
         }

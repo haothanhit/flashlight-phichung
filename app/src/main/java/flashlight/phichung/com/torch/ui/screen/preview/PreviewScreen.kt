@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,13 +71,17 @@ fun PreviewScreen(
         }
         is PreviewUiState.Ready -> {
             val context = LocalContext.current
-            PreviewImageSection(result.file)
-            PreviewTopAppBar(
-                onBackPressed = {navController.navigateUp() },
-                onDeleteClick = {
-                    viewModel.deleteFile(context, intentSenderLauncher, result.file)
-                }
-            )
+
+            Column {
+                PreviewTopAppBar(
+                    onBackPressed = {navController.navigateUp() },
+                    onDeleteClick = {
+                        viewModel.deleteFile(context, intentSenderLauncher, result.file)
+                    }
+                )
+                PreviewImageSection(result.file)
+
+            }
         }
 
         PreviewUiState.Deleted -> LaunchedEffect(Unit) {

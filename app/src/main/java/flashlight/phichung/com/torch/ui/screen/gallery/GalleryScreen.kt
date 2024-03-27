@@ -21,17 +21,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -61,7 +56,7 @@ import coil.request.ImageRequest
 import coil.request.videoFramePercent
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
-import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
+import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import flashlight.phichung.com.torch.utils.getDuration
 import java.io.File
@@ -75,40 +70,18 @@ object GalleryNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
     viewModel: GalleryViewModel = hiltViewModel<GalleryViewModel>(),
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     onPreviewClick: (String) -> Unit,
 ) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.str_gallery_title),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextWhiteColor
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+    TopAppBarApp(
+        navController=navController,
+        title = stringResource(id = R.string.str_gallery_title),
+        content = {
 
-
-            )
-        },
-
-        content = ({ innerPadding ->
-            Column(Modifier.padding(innerPadding)) {
-
+            Column(Modifier.padding(it)) {
 
                 Box(modifier = Modifier.weight(1f)) {
                     val uiState by viewModel.uiState.collectAsState()
@@ -126,10 +99,8 @@ fun GalleryScreen(
                 AdmobBanner()
             }
 
-        }),
-
-
-        )
+        }
+    )
 
 
 }
@@ -225,7 +196,8 @@ private fun PlaceholderImage(
     var imageState: AsyncImagePainter.State by remember { mutableStateOf(AsyncImagePainter.State.Empty) }
     Box(modifier) {
         AsyncImage(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .clip(RoundedCornerShape(6.dp)),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(data)

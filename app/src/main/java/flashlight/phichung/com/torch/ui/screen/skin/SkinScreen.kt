@@ -10,23 +10,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,7 +31,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -49,9 +38,8 @@ import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.data.model.Skin
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
+import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.GrayColor
-import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
-import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import kotlinx.coroutines.launch
 
 
@@ -61,43 +49,22 @@ object SkinNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SkinScreen(
     viewModel: SkinViewModel = hiltViewModel<SkinViewModel>(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController
 ) {
 
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.str_skin_title),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextWhiteColor
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-
-
-            )
-        },
-        content = ({ innerPadding ->
+    TopAppBarApp(
+        navController=navController,
+        title = stringResource(id = R.string.str_skin_title),
+        content = {
 
 
             Column(
                 modifier = Modifier
-                    .padding(innerPadding)
+                    .padding(it)
             ) {
                 var skinList by remember {
                     mutableStateOf(
@@ -151,10 +118,9 @@ fun SkinScreen(
 
 
             }
+        }
+    )
 
-        }),
-
-        )
 
 }
 
@@ -183,7 +149,6 @@ fun GridItem(skin: Skin, onClick: () -> Unit) {
             modifier = Modifier.matchParentSize() // Ensures the image fills the available space inside the Box
         )
     }
-
 
 
 }

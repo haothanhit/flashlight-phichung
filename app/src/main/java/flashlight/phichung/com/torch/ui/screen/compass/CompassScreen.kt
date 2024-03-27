@@ -40,6 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
+import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import timber.log.Timber
@@ -51,37 +52,16 @@ object CompassNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompassScreen(
     viewModel: CompassViewModel = hiltViewModel<CompassViewModel>(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController
 ) {
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.str_compass_title),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextWhiteColor
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-
-
-            )
-        },
-        content = ({
+    TopAppBarApp(
+        navController=navController,
+        title = stringResource(id = R.string.str_compass_title),
+        content = {
 
             Column(modifier = Modifier.padding(it)) {
 
@@ -97,9 +77,10 @@ fun CompassScreen(
 
             }
 
-        }),
+        }
+    )
 
-        )
+
 
     DisposableEffect(true) {
         Timber.i("HAOHAO startRotationUpdates")

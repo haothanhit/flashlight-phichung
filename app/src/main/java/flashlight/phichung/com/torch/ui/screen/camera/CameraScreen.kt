@@ -60,6 +60,8 @@ import com.haohao.camposer.state.rememberTorch
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
+import flashlight.phichung.com.torch.ui.components.TopAppBarApp
+import flashlight.phichung.com.torch.ui.screen.compass.Compass
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import flashlight.phichung.com.torch.utils.CameraPermission
@@ -81,35 +83,14 @@ fun CameraScreen(
     openGalleryScreen: () -> Unit,
 
     ) {
+    TopAppBarApp(
+        navController=navController,
+        title = stringResource(id = R.string.str_camera_title),
+        content = {
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.str_camera_title),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextWhiteColor
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-
-
-            )
-        },
-
-        content = ({ innerPadding ->
             Column(
                 modifier = Modifier
-                    .padding(innerPadding),
+                    .padding(it),
             ) {
 
 
@@ -126,10 +107,11 @@ fun CameraScreen(
 
             }
 
-        }),
+        }
+    )
 
 
-        )
+
 
 }
 
