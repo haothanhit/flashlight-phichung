@@ -84,6 +84,7 @@ fun GalleryScreen(
             Column(Modifier.padding(it)) {
 
                 Box(modifier = Modifier.weight(1f)) {
+                    viewModel.fetchGallery()
                     val uiState by viewModel.uiState.collectAsState()
                     when (val result: GalleryUiState = uiState) {
                         GalleryUiState.Initial -> GalleryLoading()

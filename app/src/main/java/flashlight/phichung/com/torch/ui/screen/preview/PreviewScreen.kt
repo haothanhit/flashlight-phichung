@@ -5,46 +5,48 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import flashlight.phichung.com.torch.ui.components.NavigationIcon
-import java.io.File
+import flashlight.phichung.com.torch.ui.components.AdmobBanner
+import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 
 
 object PreviewNavigation {
 
     const val pathArg = "path"
 
-    const val titleScreen = "Preview"
     const val route = "preview/{$pathArg}"
     fun createRoute(path: String) = "preview/${Uri.encode(path)}"
 
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewScreen(
     viewModel: PreviewViewModel = hiltViewModel<PreviewViewModel>(),
@@ -69,61 +71,60 @@ fun PreviewScreen(
             Log.d("PreviewUiState", "Empty")
 
         }
+
         is PreviewUiState.Ready -> {
             val context = LocalContext.current
 
-            Column {
-                PreviewTopAppBar(
-                    onBackPressed = {navController.navigateUp() },
-                    onDeleteClick = {
-                        viewModel.deleteFile(context, intentSenderLauncher, result.file)
-                    }
-                )
-                PreviewImageSection(result.file)
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(
+                        title = {
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.navigateUp() }) {
+                                Icon(Icons.Filled.KeyboardArrowLeft, null, tint = IconWhiteColor)
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        actions = {
+                            IconButton(onClick = {
+                                viewModel.deleteFile(context, intentSenderLauncher, result.file)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Delete,
+                                    contentDescription = "Delete",
+                                    tint = IconWhiteColor
+                                )
+                            }
+                        },
 
-            }
+
+                        )
+                },
+                content = ({
+                    val file = result.file
+                    Column(modifier = Modifier.padding(it)) {
+                        AsyncImage(
+                            modifier = Modifier.weight(1f),
+                            model = file,
+                            contentScale = ContentScale.Fit,
+                            contentDescription = file.name,
+                        )
+
+                        Spacer(modifier = Modifier.size(15.dp))
+                        AdmobBanner()
+                    }
+                }),
+
+                )
+
         }
 
         PreviewUiState.Deleted -> LaunchedEffect(Unit) {
             navController.navigateUp()
         }
     }
-}
-
-@Composable
-fun PreviewTopAppBar(
-    onBackPressed: () -> Unit,
-    onDeleteClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        NavigationIcon(
-            modifier = Modifier
-                .background(Color.Black.copy(alpha = 0.1F), CircleShape),
-            icon = Icons.Filled.ArrowBack,
-            contentDescription = "Back",
-            onClick = onBackPressed
-        )
-        NavigationIcon(
-            modifier = Modifier
-                .background(Color.Black.copy(alpha = 0.1F), CircleShape),
-            icon = Icons.Filled.Delete,
-            contentDescription = "Delete",
-            onClick = onDeleteClick
-        )
-    }
-}
-
-@Composable
-private fun PreviewImageSection(file: File) {
-    AsyncImage(
-        modifier = Modifier.fillMaxSize(),
-        model = file,
-        contentScale = ContentScale.Fit,
-        contentDescription = file.name,
-    )
 }

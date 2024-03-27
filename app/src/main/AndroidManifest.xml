@@ -23,20 +23,24 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/str_ads_google_app_id" />
         <activity
+            android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:name=".ui.activity.MainActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:name=".ui.activity.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
