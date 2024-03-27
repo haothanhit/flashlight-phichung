@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -161,24 +162,28 @@ fun SkinScreen(
 @Composable
 fun GridItem(skin: Skin, onClick: () -> Unit) {
 
-    Image(
-        painter = painterResource(id = skin.imageSkin),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
+    Box(
         modifier = Modifier
             .aspectRatio(1f)
             .shadow(10.dp, RectangleShape)
             .border(
-                BorderStroke(4.dp, if (skin.selected) skin.colorSkin else GrayColor),
-                RoundedCornerShape(10.dp)
+                BorderStroke(3.dp, if (skin.selected) skin.colorSkin else GrayColor),
+                shape = RoundedCornerShape(10.dp)
             )
-            .clip(RectangleShape)
+            .padding(5.dp)
+            .clip(RoundedCornerShape(10.dp))
             .clickable {
                 onClick()
-
-
             }
-    )
+    ) {
+        Image(
+            painter = painterResource(id = skin.imageSkin),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize() // Ensures the image fills the available space inside the Box
+        )
+    }
+
 
 
 }

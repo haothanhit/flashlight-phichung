@@ -1,16 +1,10 @@
 package flashlight.phichung.com.torch.ui.screen.home
 
-import android.content.Context
-import android.hardware.camera2.CameraManager
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -41,18 +34,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,7 +54,6 @@ import flashlight.phichung.com.torch.ui.theme.PowerOffColor
 import flashlight.phichung.com.torch.ui.theme.TextSOSColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
 import timber.log.Timber
-import kotlin.io.path.Path
 
 object HomeNavigation {
 
@@ -97,7 +84,7 @@ fun HomeScreen(
 
         onDispose {
             viewModel.onDisposeTorch()
-        //    viewModel.toggleBlinkStateWithDelay(camManager = camManager, cameraId = cameraId)
+            //    viewModel.toggleBlinkStateWithDelay(camManager = camManager, cameraId = cameraId)
         }
     }
 
@@ -225,7 +212,7 @@ fun SliderFlash(
             },
 
             colors = SliderDefaults.colors(
-             //   thumbColor = if (uiPowerState) skinCurrent.colorSkin else PowerOffColor,
+                //   thumbColor = if (uiPowerState) skinCurrent.colorSkin else PowerOffColor,
                 activeTrackColor = Color.Transparent,
                 inactiveTrackColor = Color.Transparent,
                 activeTickColor = Color.Transparent,
@@ -235,33 +222,25 @@ fun SliderFlash(
 
             thumb = {
 
-
-                Canvas(
-                    modifier = Modifier.size(20.dp),
-                    onDraw = {
-                        val shadowRadius = 2f // Adjust shadow radius as needed
-                       // val shadowOffset = Offset(2f, 2f) // Adjust shadow offset (x, y)
-
-                        // Draw shadow
-                        drawCircle(
-                            color = Color.Black.copy(alpha = 0.2f), // Adjust shadow color and alpha
-                            radius = 15f + shadowRadius, // Increase radius for shadow
-                            style = Stroke(width = shadowRadius)
+                Image(
+                    painter = painterResource(id = R.drawable.ic_circle),
+                    colorFilter = if (uiPowerState) ColorFilter.tint(skinCurrent.colorSkin) else ColorFilter.tint(
+                        PowerOffColor
+                    ),
+                    contentDescription = "Thumb Slider",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .shadow(10.dp, CircleShape)
+                        .border(
+                            BorderStroke(4.dp, GrayDarkColor),
+                            CircleShape
                         )
+                        .clip(CircleShape)
+                        .clickable {
+                            viewModel.setPowerState(!uiPowerState)
 
-                        // Draw inner circle
-                        drawCircle(
-                            color = if (uiPowerState) skinCurrent.colorSkin else PowerOffColor,
-                            radius = 15f,
-                        )
-
-                        val strokeWidth = 7f
-                        drawCircle(
-                            color = GrayDarkColor,
-                            radius = 15f,
-                            style = Stroke(width = strokeWidth)
-                        )
-                    }
+                        }
                 )
 
             },
@@ -273,8 +252,6 @@ fun SliderFlash(
     }
 
 }
-
-
 
 
 @Composable
