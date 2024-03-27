@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -88,9 +91,16 @@ fun NavigationIcon(
 
 @Composable
 fun AdmobBanner(modifier: Modifier = Modifier) {
+    val adWidth = LocalConfiguration.current.screenWidthDp
+    val context = LocalContext.current
+
+    val adSize= AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+        context,
+        adWidth
+    )
     Box(modifier = Modifier
         .fillMaxWidth()
-        .height(AdSize.BANNER.height.dp)) {
+        .height(adSize.height.dp)) {
         AndroidView(
             modifier = Modifier.fillMaxWidth(),
             factory = { context ->
@@ -102,7 +112,7 @@ fun AdmobBanner(modifier: Modifier = Modifier) {
                     //adSize = AdSize.BANNER
                     // on below line specifying ad unit id
                     // currently added a test ad unit id.
-                    setAdSize(AdSize.BANNER)
+                    setAdSize(adSize)
                     adUnitId = context.getString(R.string.str_ads_banner)
                     // calling load ad to load our ad.
                     loadAd(AdRequest.Builder().build())
