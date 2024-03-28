@@ -34,14 +34,21 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
@@ -66,7 +73,7 @@ fun MorseScreen(
     val keyboardController = LocalSoftwareKeyboardController.current  // help hide soft keyboard
 
     TopAppBarApp(
-        navController=navController,
+        navController = navController,
         modifier = Modifier
             .clickable {
                 keyboardController?.hide()
@@ -87,7 +94,7 @@ fun MorseScreen(
                 val uiMorseCodeState by viewModel.combinedFlow.collectAsState(AnnotatedString(""))
                 val uiPlayState by viewModel.uiPlayState.collectAsState()
                 var isSoundOn by remember { mutableStateOf(true) }
-
+                val uiIndexCharacterInputState by viewModel.uiIndexCharacterInputState.collectAsState()
 
 
 
@@ -120,6 +127,19 @@ fun MorseScreen(
                             valueInputMorse = it
                             isHintDisplayed = it.isEmpty()
                             viewModel.generateTextMorse(it)
+
+                        },
+                        visualTransformation= {
+
+                            val annotatedString =   buildAnnotatedString {
+                                it.forEachIndexed { idx, char ->
+                                    val color = if (idx <= uiIndexCharacterInputState) viewModel.getSkinCurrent().colorSkin else TextWhiteColor
+                                    withStyle(style = SpanStyle(color = color)) {
+                                        append(char.toString())
+                                    }
+                                }
+                            }
+                            TransformedText(annotatedString, OffsetMapping.Identity)
 
                         },
 

@@ -3,8 +3,13 @@ package flashlight.phichung.com.torch.ui.screen.morse
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import flashlight.phichung.com.torch.MyApplication
@@ -55,35 +60,63 @@ class MorseViewModel @Inject constructor(
 
     private val _uiIndexCharacterState = MutableStateFlow(-1) // index of character
     private val _uiIndexCharacterInputState = MutableStateFlow(-1) // index of character
+    val uiIndexCharacterInputState: StateFlow<Int> = _uiIndexCharacterInputState.asStateFlow()
 
 
     private lateinit var  skinCurrent :Skin
 
 
-    val combinedFlow: Flow<AnnotatedString> = _uiIndexCharacterState.combine(_uiMorseCodeState) { index, morseCodeList ->
-        // Map index and morseCodeList to corresponding text colors
 
-        Timber.i("HAOHAO combinedFlow index: $index, morseCodeList: $morseCodeList")
-        val formattedString = morseCodeList.joinToString(separator = "") { soundType ->
-            when (soundType) {
-                SoundTypes.DIT -> "."
-                SoundTypes.DAH -> "-"
-                SoundTypes.LETTER_SPACE -> " "
-                SoundTypes.WORD_SPACE -> "  "
-                SoundTypes.UNDEFINED -> "*"
-            }
-        }
-      buildAnnotatedString {
-            formattedString.forEachIndexed { idx, char ->
-                val color = if (idx <= index) skinCurrent.colorSkin else TextWhiteColor
+
+    val combinedFlow: Flow<AnnotatedString> = _uiIndexCharacterState.combine(_uiMorseCodeState) { index, morseCodeList ->
+
+
+        var count = if(_uiPlayState.value) 0 else -1
+        buildAnnotatedString {
+            morseCodeList.forEachIndexed { idx, soundTypes ->
+                var color: Color =TextWhiteColor
+                if (idx <= index){
+                    color = skinCurrent.colorSkin
+                    if (soundTypes == SoundTypes.LETTER_SPACE ||soundTypes == SoundTypes.WORD_SPACE ) {
+                        count++
+                    }
+
+
+                }
+
+             val char =   when (soundTypes) {
+                    SoundTypes.DIT -> "."
+                    SoundTypes.DAH -> "-"
+                    SoundTypes.LETTER_SPACE -> " "
+                    SoundTypes.WORD_SPACE -> "  "
+                    SoundTypes.UNDEFINED -> "*"
+                }
                 withStyle(style = androidx.compose.ui.text.SpanStyle(color = color)) {
                     append(char.toString())
                 }
+
+
+
             }
+
+            Timber.i("HAOHAO  buildAnnotatedString morseCodeList $count  : $morseCodeList")
+            if(_uiIndexCharacterInputState.value!=count)
+            _uiIndexCharacterInputState.value=count
+
         }
 
 
+
+
+
+
+
     }
+
+
+
+
+
 
 
     init {
@@ -136,12 +169,14 @@ class MorseViewModel @Inject constructor(
                     Timber.i("HAOHAO makeSoundsWorkerThreadFunc onDone")
                     _uiPlayState.value = false
                     _uiIndexCharacterState.value=-1
+                    _uiIndexCharacterInputState.value=-1
                     
                 },onCharacter=_uiIndexCharacterState, camManager=camManager,cameraId=cameraId)
 
             }
         } else {
             _uiIndexCharacterState.value=-1
+            _uiIndexCharacterInputState.value=-1
             mSoundPlayer.quit()
         }
 

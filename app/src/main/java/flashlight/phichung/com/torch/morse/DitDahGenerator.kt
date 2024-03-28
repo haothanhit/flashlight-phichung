@@ -534,11 +534,14 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
 
             if (mShouldQuit)
                 return
-            if (sym != SoundTypes.WORD_SPACE) {
-                characterIndex++
-            } else {
-                characterIndex += 2
-            }
+
+            characterIndex++
+
+//            if (sym != SoundTypes.WORD_SPACE) {
+//                characterIndex++
+//            } else {
+//                characterIndex += 2
+         //   }
             onCharacter.value = characterIndex //view text
 
 
@@ -592,8 +595,9 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
             } else {
-                if(stateFlash)
-                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                if(stateFlash){
+                    cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                }
                 delay(
                     when (sym) {
                         SoundTypes.DIT -> 80
