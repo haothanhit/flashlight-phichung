@@ -236,10 +236,10 @@ fun SliderFlash(
                             CircleShape
                         )
                         .clip(CircleShape)
-                        .clickable {
-                            viewModel.setPowerState(!uiPowerState)
-
-                        }
+//                        .clickable {
+//                            viewModel.setPowerState(!uiPowerState)
+//
+//                        }
                 )
 
             },
