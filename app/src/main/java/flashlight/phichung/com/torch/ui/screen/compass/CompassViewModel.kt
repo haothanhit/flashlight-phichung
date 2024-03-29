@@ -23,7 +23,8 @@ class CompassViewModel @Inject constructor(
     private val preferencesHelper: CachePreferencesHelper,
     private val rotationRepository: RotationRepository,
 
-    ) : BaseViewModel(contextProvider) {
+    ) : BaseViewModel(contextProvider,preferencesHelper)
+ {
 
 
     private var lastRotationUpdateTime = 0L

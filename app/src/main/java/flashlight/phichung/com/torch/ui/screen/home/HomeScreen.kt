@@ -157,10 +157,13 @@ fun HomeScreen(
                             clickAction = openSkinAction
                         )
 
-                        ButtonChild(
-                            icon = R.drawable.ic_pro,
-                            clickAction = openRemoveAdsAction
-                        )
+                        if(!viewModel.getCachePreferencesHelper().stateRemoveAds) {
+                            ButtonChild(
+                                icon = R.drawable.ic_pro,
+                                clickAction = openRemoveAdsAction
+                            )
+                        }
+
 
                         ButtonChild(
                             icon = R.drawable.ic_settings,
@@ -169,7 +172,8 @@ fun HomeScreen(
                     }
                     Spacer(modifier = Modifier.size(15.dp))
 
-                    AdmobBanner()
+                    AdmobBanner(cachePreferencesHelper = viewModel.getCachePreferencesHelper())
+
                 }
             })
         )

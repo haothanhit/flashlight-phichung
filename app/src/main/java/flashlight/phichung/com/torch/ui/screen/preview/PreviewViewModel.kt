@@ -27,7 +27,8 @@ class PreviewViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel(contextProvider) {
+) : BaseViewModel(contextProvider,preferencesHelper)
+ {
 
     private val _uiState = MutableStateFlow<PreviewUiState>(PreviewUiState.Initial)
     val uiState: StateFlow<PreviewUiState> = _uiState

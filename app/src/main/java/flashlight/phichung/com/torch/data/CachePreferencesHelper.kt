@@ -14,6 +14,7 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
         private const val PREF_KEY_SOUND = "sound_on_of_app"
         private const val PREF_KEY_SKIN = "skin_app"
         private const val PREF_KEY_AUTOMATIC_ON = "flash_light_automatic_on"
+        private const val PREF_KEY_REMOVE_ADS = "flash_light_remove_ads"
 
 
     }
@@ -48,6 +49,12 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
     var stateAutomaticOn: Boolean
         get() = preferences.getBoolean(PREF_KEY_AUTOMATIC_ON, true)
         set(isOn) = preferences.edit().putBoolean(PREF_KEY_AUTOMATIC_ON, isOn).apply()
+
+
+
+    var stateRemoveAds: Boolean
+        get() = preferences.getBoolean(PREF_KEY_REMOVE_ADS, false)
+        set(sound) = preferences.edit().putBoolean(PREF_KEY_REMOVE_ADS, sound).apply()
 
 
     fun clearCache() {

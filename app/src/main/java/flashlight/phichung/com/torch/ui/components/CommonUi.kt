@@ -37,11 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
@@ -103,7 +103,7 @@ fun NavigationIcon(
 }
 
 @Composable
-fun AdmobBanner(modifier: Modifier = Modifier) {
+fun AdmobBanner(modifier: Modifier = Modifier, cachePreferencesHelper: CachePreferencesHelper) {
     val adWidth = LocalConfiguration.current.screenWidthDp
     val context = LocalContext.current
 
@@ -116,24 +116,28 @@ fun AdmobBanner(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .height(adSize.height.dp)
     ) {
-        AndroidView(
-            modifier = Modifier.fillMaxWidth(),
-            factory = { context ->
+
+        if (!cachePreferencesHelper.stateRemoveAds) {
+            AndroidView(
+                modifier = Modifier.fillMaxWidth(),
+                factory = { context ->
 
 
-                // on below line specifying ad view.
-                AdView(context).apply {
-                    // on below line specifying ad size
-                    //adSize = AdSize.BANNER
-                    // on below line specifying ad unit id
-                    // currently added a test ad unit id.
-                    setAdSize(adSize)
-                    adUnitId = context.getString(R.string.str_ads_banner)
-                    // calling load ad to load our ad.
-                    loadAd(AdRequest.Builder().build())
+                    // on below line specifying ad view.
+                    AdView(context).apply {
+                        // on below line specifying ad size
+                        //adSize = AdSize.BANNER
+                        // on below line specifying ad unit id
+                        // currently added a test ad unit id.
+                        setAdSize(adSize)
+                        adUnitId = context.getString(R.string.str_ads_banner)
+                        // calling load ad to load our ad.
+                        loadAd(AdRequest.Builder().build())
+                    }
                 }
-            }
-        )
+            )
+        }
+
     }
 
 }
@@ -143,7 +147,7 @@ fun AdmobBanner(modifier: Modifier = Modifier) {
 fun TopAppBarApp(
     modifier: Modifier = Modifier,
     title: String = "",
-    navController: NavHostController ,
+    navController: NavHostController,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(

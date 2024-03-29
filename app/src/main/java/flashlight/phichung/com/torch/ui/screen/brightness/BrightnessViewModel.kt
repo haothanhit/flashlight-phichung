@@ -22,7 +22,7 @@ class BrightnessViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider) {
+    ) : BaseViewModel(contextProvider,preferencesHelper) {
 
 
     private val _uiBlinkFloatState = MutableStateFlow(0f)

@@ -73,7 +73,8 @@ fun CompassScreen(
 
                 Spacer(modifier = Modifier.size(15.dp))
 
-                AdmobBanner()
+                AdmobBanner(cachePreferencesHelper = viewModel.getCachePreferencesHelper())
+
 
             }
 

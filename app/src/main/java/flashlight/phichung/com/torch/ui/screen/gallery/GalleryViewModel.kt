@@ -3,6 +3,7 @@ package flashlight.phichung.com.torch.ui.screen.gallery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import flashlight.phichung.com.torch.base.BaseViewModel
 import flashlight.phichung.com.torch.camera.data.local.datasource.FileDataSource
+import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.utils.CoroutineContextProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
-//    private val preferencesHelper: CachePreferencesHelper,
+    private val preferencesHelper: CachePreferencesHelper,
     private val fileDataSource: FileDataSource,
-) : BaseViewModel(contextProvider) {
+) : BaseViewModel(contextProvider,preferencesHelper)
+ {
 
     private val _uiState = MutableStateFlow<GalleryUiState>(GalleryUiState.Initial)
     val uiState: StateFlow<GalleryUiState> get() = _uiState

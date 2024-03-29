@@ -6,3 +6,14 @@ plugins {
     id("com.android.library") version "8.2.2" apply false
 
 }
+
+buildscript {
+    extra.apply {
+        set("billingLibraryVersion", "6.2.0")
+        set("appcompatX", "1.6.1")
+
+
+    }
+
+
+}

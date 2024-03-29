@@ -38,7 +38,8 @@ class MorseViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider) {
+    ) : BaseViewModel(contextProvider,preferencesHelper)
+ {
 
 
 

@@ -229,7 +229,8 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
 
         Spacer(modifier = Modifier.size(15.dp))
 
-        AdmobBanner()
+        AdmobBanner(cachePreferencesHelper = viewModel.getCachePreferencesHelper())
+
 
 
     }

@@ -24,9 +24,12 @@ android {
 }
 
 
+val billingLibraryVersion = rootProject.extra.get("billingLibraryVersion") as String
+val appcompatX = rootProject.extra.get("appcompatX") as String
+
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.android.billingclient:billing:6.2.0")
+    implementation("androidx.appcompat:appcompat:$appcompatX")
+    implementation("com.android.billingclient:billing:$billingLibraryVersion")
 
 }

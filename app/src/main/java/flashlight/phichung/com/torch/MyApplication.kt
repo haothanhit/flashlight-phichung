@@ -65,7 +65,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         appOpenAdManager = AppOpenAdManager()
-
         appOpenAdManager.loadAd(this)
 
     }
@@ -178,6 +177,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
                 return
             }
 
+
             isLoadingAd = true
             val request = AdRequest.Builder().build()
             AppOpenAd.load(
@@ -264,6 +264,11 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
                 onShowAdCompleteListener.onShowAdComplete()
                 loadAd(activity)
 
+                return
+            }
+
+            if(cachePreferencesHelper.stateRemoveAds){
+                onShowAdCompleteListener.onShowAdComplete()
                 return
             }
 
