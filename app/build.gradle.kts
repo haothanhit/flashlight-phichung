@@ -138,4 +138,8 @@ dependencies {
     // For apps targeting Android 12, add WorkManager dependency.
     implementation("androidx.work:work-runtime:2.9.0")
 
+
+    //security
+    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
+
 }

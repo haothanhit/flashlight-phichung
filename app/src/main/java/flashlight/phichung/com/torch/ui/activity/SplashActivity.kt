@@ -46,54 +46,13 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun initBilling() {
-        BillingHelper(this).setInAppKeys(mutableListOf(KEY_PAYMENT_IN_APP_ADMOB))
-            .enableLogging(isEnableLog = true).setBillingClientListener(object :
-                BillingClientListener {
-                override fun onClientReady() {
-                    Timber.d("BillingHelper onClientReady")
-
-                    checkPaidRemoveAds()
-
-                    BillingHelper(this@SplashActivity).setBillingEventListener(object :
-                        BillingEventListener {
-                        override fun onProductsPurchased(purchases: List<Purchase?>) {
-                            //call back when purchase occurred
-
-                            Timber.d("BillingHelper onProductsPurchased purchases: $purchases")
-                        }
-
-                        override fun onPurchaseAcknowledged(purchase: Purchase) {
-                            //call back when purchase occurred and acknowledged
-                            Timber.d("BillingHelper onPurchaseAcknowledged purchase: $purchase")
-
-                            checkPaidRemoveAds()
 
 
-                        }
-
-                        override fun onPurchaseConsumed(purchase: Purchase) {
-                            //call back when purchase occurred and consumed
-                            Timber.d("BillingHelper onPurchaseConsumed purchases: $purchase")
-
-                        }
-
-                        override fun onBillingError(error: ErrorType) {
-
-                            Timber.d("BillingHelper onBillingError error: $error")
-
-                        }
-                    })
-
-                }
-
-                override fun onClientInitError() {
-                    Timber.d("BillingHelper onClientInitError")
-
-                }
-
-            })
-
-    }
+        BillingHelper(this@SplashActivity)
+            .setInAppKeys(mutableListOf(KEY_PAYMENT_IN_APP_ADMOB))
+            .enableLogging(isEnableLog = true)
+        checkPaidRemoveAds()
+            }
 
     private fun checkPaidRemoveAds() {
 

@@ -25,9 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,6 +60,11 @@ fun ProScreen(
     viewModel: ProViewModel = hiltViewModel<ProViewModel>(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    val statePayment by viewModel.statePayment.collectAsState()
+
+
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -81,7 +87,7 @@ fun ProScreen(
                     contentDescription = "ProScreen",
                     contentScale = ContentScale.FillBounds,
 
-                )
+                    )
 
                 Icon(
                     painter = painterResource(id = R.drawable.ic_close),
@@ -104,7 +110,6 @@ fun ProScreen(
         ) {
 
             Spacer(modifier = Modifier.weight(3f))
-
             Card(
                 modifier = Modifier
                     .fillMaxSize()
@@ -116,30 +121,51 @@ fun ProScreen(
                 border = BorderStroke(1.dp, GrayWhiteColor),
                 shape = BottomCardShape.large
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "PRO",
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = ProColor,
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    CustomProOptionUI(
-                        icon = R.drawable.ic_pro,
-                        mainText = stringResource(id = R.string.str_pro_remove_ads)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    RoundedButton(
-                        text = "234.000đ",
-                        onClick = {}
-                    )
 
+                when (statePayment) {
+                    is StatePayment.Initial -> {}
+                    is StatePayment.Paid -> {
+
+                       Box(modifier = Modifier.fillMaxSize().padding(15.dp), contentAlignment = Alignment.Center){
+                           Image(
+                               modifier = Modifier.fillMaxSize(),
+                               painter = painterResource(id = R.drawable.ic_paid),
+                               contentDescription = "background paid",
+                               contentScale = ContentScale.Crop
+                           )
+                       }
+
+                    }
+
+                    is StatePayment.Unpaid -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "PRO",
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.headlineLarge,
+                                color = ProColor,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            CustomProOptionUI(
+                                icon = R.drawable.ic_pro,
+                                mainText = stringResource(id = R.string.str_pro_remove_ads)
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            RoundedButton(
+                                statePayment,
+                            ) {
+
+                            }
+
+                        }
+                    }
                 }
+
 
             }
         }
@@ -149,7 +175,7 @@ fun ProScreen(
 
 
 @Composable
-fun RoundedButton(text: String, onClick: () -> Unit) {
+fun RoundedButton(statePayment: StatePayment, onClick: () -> Unit) {
     val description = AnnotatedString.Builder().apply {
         pushStyle(SpanStyle(color = TextWhiteColor))
         append(stringResource(id = R.string.str_pro_limited_offer))
@@ -180,7 +206,7 @@ fun RoundedButton(text: String, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = text,
+                text = if (statePayment is StatePayment.Unpaid) statePayment.price else "",
                 color = TextWhiteColor,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,

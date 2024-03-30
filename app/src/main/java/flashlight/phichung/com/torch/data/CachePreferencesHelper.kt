@@ -2,6 +2,8 @@ package flashlight.phichung.com.torch.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
 import flashlight.phichung.com.torch.data.model.Skin
 import javax.inject.Inject
@@ -21,8 +23,21 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
 
     private val gson = Gson()
 
-    private val preferences: SharedPreferences =
-        context.getSharedPreferences(PREF_PACKAGE_NAME, Context.MODE_PRIVATE)
+    var masterKey: MasterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
+
+    var preferences: SharedPreferences = EncryptedSharedPreferences.create(
+        context,
+        PREF_PACKAGE_NAME,
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+
+//    private val preferences: SharedPreferences =
+//        context.getSharedPreferences(PREF_PACKAGE_NAME, Context.MODE_PRIVATE)
 
 
     var languageApp: String

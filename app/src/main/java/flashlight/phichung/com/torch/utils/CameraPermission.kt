@@ -1,6 +1,9 @@
 package flashlight.phichung.com.torch.utils
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,15 +19,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
+import timber.log.Timber
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraPermission(content: @Composable () -> Unit) {
+    val context = LocalContext.current
     val permissionsState = rememberMultiplePermissionsState(
         mutableListOf(
             android.Manifest.permission.CAMERA,
@@ -45,11 +51,32 @@ fun CameraPermission(content: @Composable () -> Unit) {
         }
     )
 
+    Timber.d("HAOHAO first ${permissionsState.shouldShowRationale}")
+
     if (permissionsState.allPermissionsGranted) {
+
+        Timber.d("HAOHAO allPermissionsGranted")
+
         content()
     } else {
+        Timber.d("HAOHAO DeniedSection")
+
         DeniedSection {
-            permissionsState.launchMultiplePermissionRequest()
+            Timber.d("HAOHAO ${permissionsState.shouldShowRationale}")
+
+            if (permissionsState.shouldShowRationale){
+                permissionsState.launchMultiplePermissionRequest()
+
+            }else{
+                Timber.d("Permission denied by system")
+
+                context.startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.packageName, null),
+                    ),
+                )
+            }
         }
     }
 
