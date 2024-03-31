@@ -48,6 +48,8 @@ class BillingHelper(private val context: Context) {
     }
 
     init {
+        Log("init")
+
         if (billingClient == null) {
             isClientReady = false
             Log("Setup new billing client")
@@ -130,21 +132,26 @@ class BillingHelper(private val context: Context) {
     }
 
     private fun startConnection() {
-
         Log("Connect start with Google Play")
         billingClient?.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log("Connected to Google Play")
                     isClientReady = true
-                    fetchAvailableAllSubsProducts(subKeys)
+
+                    Log("fetchAvailableAllInAppProducts : $inAppKeys")
                     fetchAvailableAllInAppProducts(inAppKeys)
+                    Log("fetchAvailableAllSubsProducts : $subKeys")
+                    fetchAvailableAllSubsProducts(subKeys)
                     CoroutineScope(Dispatchers.IO).launch {
+                        Log("fetchActivePurchases")
                         fetchActivePurchases()
                     }
 
                     // callback with Main thread because billing throw it in IO thread
                     CoroutineScope(Dispatchers.Main).launch {
+                        Log("startConnection callback $billingClientListener")
+
                         billingClientListener?.onClientReady()
                     }
 
@@ -165,6 +172,7 @@ class BillingHelper(private val context: Context) {
 
 
     private fun fetchAvailableAllSubsProducts(productListKeys: MutableList<String>) {
+        if(productListKeys.isEmpty()) return
         val productList = mutableListOf<QueryProductDetailsParams.Product>()
 
         productListKeys.forEach {
@@ -427,7 +435,9 @@ class BillingHelper(private val context: Context) {
     }
 
     private fun fetchAvailableAllInAppProducts(productListKeys: MutableList<String>) {
+        if(productListKeys.isEmpty()) return
         val productList = mutableListOf<QueryProductDetailsParams.Product>()
+        Log("fetchAvailableAllInAppProducts ${productListKeys.size}")
 
         productListKeys.forEach {
             Log("in-App keys List ${productListKeys.size} $it")
@@ -440,7 +450,12 @@ class BillingHelper(private val context: Context) {
             QueryProductDetailsParams.newBuilder().setProductList(productList).build()
 
         if (billingClient != null) {
+            Log("fetchAvailableAllInAppProducts billingClient!= null")
+
             billingClient!!.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
+
+                Log("fetchAvailableAllInAppProducts  billingResult ${billingResult.responseCode} ${billingResult.debugMessage}")
+
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log("in productDetailsList ${productDetailsList.size}")
                     productDetailsList.forEach { productDetails ->
@@ -804,9 +819,8 @@ class BillingHelper(private val context: Context) {
     }
 
     private fun Log(debugMessage: String) {
-        if (enableLog) {
-            Log.d(TAG, debugMessage)
-        }
+        Log.d(TAG, debugMessage)
+
     }
 
     fun release() {
