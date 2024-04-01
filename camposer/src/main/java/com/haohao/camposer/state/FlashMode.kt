@@ -17,10 +17,10 @@ enum class FlashMode(internal val mode: Int) {
      * Inverse flash mode. Works only with default Off & On flash modes.
      * */
     val inverse: FlashMode
-        get() = when(this) {
-        On -> Off
-        else -> On
-    }
+        get() = when (this) {
+            On -> Off
+            else -> On
+        }
 
     internal companion object {
         internal fun find(mode: Int) = values().firstOrNull { it.mode == mode } ?: Off

@@ -13,10 +13,10 @@ private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColor,
     secondary = PurpleGrey80,
     tertiary = Pink80,
-    background =  PrimaryColor,
+    background = PrimaryColor,
     onBackground = PrimaryColor
 
-    )
+)
 
 //private val LightColorScheme = lightColorScheme(
 //    primary = PrimaryColor,
@@ -37,9 +37,9 @@ private val DarkColorScheme = darkColorScheme(
 
 @Composable
 fun FlashlightTheme(
-   // darkTheme: Boolean = isSystemInDarkTheme(),
+    // darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-   // dynamicColor: Boolean = true,
+    // dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
 //    val colorScheme = when {

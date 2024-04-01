@@ -85,7 +85,7 @@ class LangDialogHelper(
         imgClearQuery?.setOnClickListener {
             etQuery?.setText("")
         }
-     //   etQuery?.isVisible = langDialogConfig.allowSearch
+        //   etQuery?.isVisible = langDialogConfig.allowSearch
         etQuery?.doOnTextChanged { _, _, _, _ -> refreshClearQueryButton() }
         refreshClearQueryButton()
 

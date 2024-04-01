@@ -13,25 +13,23 @@ class SettingsViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider,preferencesHelper)
- {
-
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
     fun setSoundState(isOn: Boolean) {
-        preferencesHelper.stateSound=isOn
+        preferencesHelper.stateSound = isOn
     }
 
-    fun getSoundState() :  Boolean{
-        return  preferencesHelper.stateSound
+    fun getSoundState(): Boolean {
+        return preferencesHelper.stateSound
     }
 
     fun setAutomaticOnState(isOn: Boolean) {
-        preferencesHelper.stateAutomaticOn=isOn
+        preferencesHelper.stateAutomaticOn = isOn
     }
 
-    fun getAutomaticOnState() :  Boolean{
-        return  preferencesHelper.stateAutomaticOn
+    fun getAutomaticOnState(): Boolean {
+        return preferencesHelper.stateAutomaticOn
     }
 
 

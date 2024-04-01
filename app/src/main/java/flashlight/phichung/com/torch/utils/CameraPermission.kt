@@ -64,10 +64,10 @@ fun CameraPermission(content: @Composable () -> Unit) {
         DeniedSection {
             Timber.d("HAOHAO ${permissionsState.shouldShowRationale}")
 
-            if (permissionsState.shouldShowRationale){
+            if (permissionsState.shouldShowRationale) {
                 permissionsState.launchMultiplePermissionRequest()
 
-            }else{
+            } else {
                 Timber.d("Permission denied by system")
 
                 context.startActivity(

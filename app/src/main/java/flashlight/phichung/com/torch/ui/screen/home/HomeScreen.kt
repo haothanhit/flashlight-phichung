@@ -71,7 +71,7 @@ fun HomeScreen(
     openRemoveAdsAction: () -> Unit,
     openCameraAction: () -> Unit,
 ) {
-   // val context = LocalContext.current
+    // val context = LocalContext.current
 //    var camManager by remember { mutableStateOf<CameraManager?>(null) }
 //    var cameraId by remember { mutableStateOf<String?>(null) }
 
@@ -156,7 +156,7 @@ fun HomeScreen(
                             clickAction = openSkinAction
                         )
 
-                        if(!viewModel.getCachePreferencesHelper().stateRemoveAds) {
+                        if (!viewModel.getCachePreferencesHelper().stateRemoveAds) {
                             ButtonChild(
                                 icon = R.drawable.ic_pro,
                                 clickAction = openRemoveAdsAction

@@ -73,7 +73,7 @@ fun FlashlightApp(
             BrightnessScreen(navController = navController)
         }
         composable(CameraNavigation.route) {
-            CameraScreen(navController = navController){
+            CameraScreen(navController = navController) {
                 navController.navigate(GalleryNavigation.route)
             }
         }
@@ -92,16 +92,18 @@ fun FlashlightApp(
 
 
         composable(GalleryNavigation.route) {
-            GalleryScreen(navController = navController){
+            GalleryScreen(navController = navController) {
                 //preview
                 navController.navigate(PreviewNavigation.createRoute(it))
 
             }
         }
 
-        composable(PreviewNavigation.route,  arguments = listOf(
-            navArgument(PreviewNavigation.pathArg) { type = NavType.StringType },
-        )) {
+        composable(
+            PreviewNavigation.route, arguments = listOf(
+                navArgument(PreviewNavigation.pathArg) { type = NavType.StringType },
+            )
+        ) {
 
             PreviewScreen(navController = navController)
         }

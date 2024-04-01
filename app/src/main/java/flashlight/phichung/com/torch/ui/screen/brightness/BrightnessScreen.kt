@@ -77,7 +77,7 @@ fun BrightnessScreen(
 
     if (!stateIsShowUi) {
         Scaffold(
-            containerColor = if(!uiIsBlinkState) hexToColor(stateColorCurrent) else Color.Black,
+            containerColor = if (!uiIsBlinkState) hexToColor(stateColorCurrent) else Color.Black,
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
@@ -108,7 +108,7 @@ fun BrightnessScreen(
 
 
         Scaffold(
-            containerColor = if(!uiIsBlinkState) hexToColor(stateColorCurrent) else Color.Black,
+            containerColor = if (!uiIsBlinkState) hexToColor(stateColorCurrent) else Color.Black,
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
@@ -140,7 +140,7 @@ fun BrightnessScreen(
 
                 )
             },
-            content = ({innerPadding->
+            content = ({ innerPadding ->
                 Column(
                     Modifier
                         .fillMaxSize()
@@ -153,10 +153,13 @@ fun BrightnessScreen(
                     Box(
                         Modifier
                             .weight(1f)
-                            .fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Canvas(modifier = Modifier
-                            .size(160.dp)
-                            .aspectRatio(1f)) {
+                            .fillMaxWidth(), contentAlignment = Alignment.Center
+                    ) {
+                        Canvas(
+                            modifier = Modifier
+                                .size(160.dp)
+                                .aspectRatio(1f)
+                        ) {
                             drawCircle(
                                 color = GrayColor,
                                 style = Stroke(2.dp.toPx()),
@@ -191,7 +194,7 @@ fun BrightnessScreen(
 
                     Row {
                         SliderBrightness(modifier = Modifier.weight(1f))
-                        SliderBlink(viewModel = viewModel,modifier = Modifier.weight(1f))
+                        SliderBlink(viewModel = viewModel, modifier = Modifier.weight(1f))
 
                     }
                     Spacer(modifier = Modifier.size(15.dp))
@@ -205,35 +208,33 @@ fun BrightnessScreen(
     }
 
 
-
-
-
 }
 
 
-
-
 @Composable
-fun SliderBrightness(modifier: Modifier= Modifier) {
+fun SliderBrightness(modifier: Modifier = Modifier) {
     val view = LocalView.current
     val window = (view.context as Activity).window
     val valueCurrent = window?.attributes?.screenBrightness
 
-    val brightness = if (valueCurrent == -1f) 0.5f else valueCurrent?.toFloat()?:0f
+    val brightness = if (valueCurrent == -1f) 0.5f else valueCurrent?.toFloat() ?: 0f
 
 
     var sliderPosition by remember { mutableFloatStateOf(brightness) }
-    Column(modifier=modifier.fillMaxWidth(),
+    Column(
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         Slider(
             value = sliderPosition,
-            onValueChange = { sliderPosition = it
+            onValueChange = {
+                sliderPosition = it
                 val layoutParams = window?.attributes // Get Params
                 layoutParams?.screenBrightness = sliderPosition // Set Value
                 window?.attributes = layoutParams // Set params
-                            },
+            },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
                 activeTrackColor = Color.Transparent,
@@ -250,7 +251,11 @@ fun SliderBrightness(modifier: Modifier= Modifier) {
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = stringResource(R.string.str_color_brightness), style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
+        Text(
+            text = stringResource(R.string.str_color_brightness),
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextWhiteColor
+        )
 
     }
 }
@@ -263,18 +268,21 @@ fun SliderBlink(
     val uiBlinkState by viewModel.uiBlinkFloatState.collectAsState()
 
     var sliderPosition by remember { mutableFloatStateOf(uiBlinkState) }
-    Column(modifier= modifier
-        .fillMaxWidth()
-        , verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         Slider(
             value = sliderPosition,
-            onValueChange = { sliderPosition = it
+            onValueChange = {
+                sliderPosition = it
 
                 viewModel.toggleBlinkStateWithDelay(sliderPosition)
 
-                            },
+            },
 
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
@@ -292,7 +300,11 @@ fun SliderBlink(
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = stringResource(R.string.str_color_blink), style = MaterialTheme.typography.bodyMedium, color = TextWhiteColor)
+        Text(
+            text = stringResource(R.string.str_color_blink),
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextWhiteColor
+        )
 
     }
 }

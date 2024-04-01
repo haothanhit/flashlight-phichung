@@ -36,7 +36,7 @@ fun Context.launchCountryPickerDialog(
         customExcludedLang = customExcludedCountries,
         langFileReader = countryFileReader,
         useCache = useCache,
-        langCodeSelect=langCodeSelect
+        langCodeSelect = langCodeSelect
     )
 
     customDataStoreModifier?.invoke(cpDataStore)
@@ -57,14 +57,17 @@ fun Context.launchCountryPickerDialog(
     )
 
 
-
     val helper =
         LangDialogHelper(
             langDataStore = cpDataStore,
             langDialogConfig = cpDialogConfig,
             langRowConfig = cpCountryRowConfig,
             onCLangClickListener = onCountryClickListener,
-            langSelect = cpDataStore.langSelect?: LanguageModel(code = "en","English","\uD83C\uDDE6\uD83C\uDDEA")
+            langSelect = cpDataStore.langSelect ?: LanguageModel(
+                code = "en",
+                "English",
+                "\uD83C\uDDE6\uD83C\uDDEA"
+            )
         )
 
     val dialog = helper.createDialog(this)

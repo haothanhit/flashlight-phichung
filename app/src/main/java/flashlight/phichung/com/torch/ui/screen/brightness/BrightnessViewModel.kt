@@ -21,7 +21,7 @@ class BrightnessViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider,preferencesHelper) {
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
     private val _uiBlinkFloatState = MutableStateFlow(0f)
@@ -46,7 +46,7 @@ class BrightnessViewModel @Inject constructor(
     fun toggleBlinkStateWithDelay(sliderPosition: Float) {
 
         job?.cancel() // Cancel the previous coroutine if it exists
-        if(sliderPosition==0f){
+        if (sliderPosition == 0f) {
             setIsBlinkState(false) // turn off blink
             return
         }

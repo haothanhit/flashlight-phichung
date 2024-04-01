@@ -75,7 +75,7 @@ fun GalleryScreen(
     onPreviewClick: (String) -> Unit,
 ) {
     TopAppBarApp(
-        navController=navController,
+        navController = navController,
         title = stringResource(id = R.string.str_gallery_title),
         content = {
 

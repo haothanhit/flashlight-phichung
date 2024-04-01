@@ -38,11 +38,7 @@ class ProViewModel @Inject constructor(
     val statePayment = _statePayment.asStateFlow()
 
 
-
-
-
-
-        fun callPayment(context: Activity) {
+    fun callPayment(context: Activity) {
         BillingHelper(context).buyInApp(
             context,
             KEY_PAYMENT_IN_APP_ADMOB,
@@ -51,52 +47,53 @@ class ProViewModel @Inject constructor(
     }
 
     fun initListenerBilling(context: Activity) {
-       if( BillingHelper(context)
-               .setInAppKeys(mutableListOf(KEY_PAYMENT_IN_APP_ADMOB))
-               .enableLogging(isEnableLog = true).isClientReady())
-            {
-                Timber.d(" BillingHelper onClientReady: ")
-                checkPaidRemoveAds()
+        if (BillingHelper(context)
+                .setInAppKeys(mutableListOf(KEY_PAYMENT_IN_APP_ADMOB))
+                .enableLogging(isEnableLog = true).isClientReady()
+        ) {
+            Timber.d(" BillingHelper onClientReady: ")
+            checkPaidRemoveAds()
 
-                BillingHelper(context).setBillingEventListener(object :
-                    BillingEventListener {
-                    override fun onProductsPurchased(purchases: List<Purchase?>) {
-                        //call back when purchase occurred
-                        Timber.d(" BillingHelper onProductsPurchased: $purchases")
+            BillingHelper(context).setBillingEventListener(object :
+                BillingEventListener {
+                override fun onProductsPurchased(purchases: List<Purchase?>) {
+                    //call back when purchase occurred
+                    Timber.d(" BillingHelper onProductsPurchased: $purchases")
 
-                    }
+                }
 
-                    override fun onPurchaseAcknowledged(purchase: Purchase) {
-                        //call back when purchase occurred and acknowledged
+                override fun onPurchaseAcknowledged(purchase: Purchase) {
+                    //call back when purchase occurred and acknowledged
 
-                        Timber.d(" BillingHelper onPurchaseAcknowledged: $purchase")
+                    Timber.d(" BillingHelper onPurchaseAcknowledged: $purchase")
 
-                        //user paid
-                        checkPaidRemoveAds()
+                    //user paid
+                    checkPaidRemoveAds()
 
-                    }
+                }
 
-                    override fun onPurchaseConsumed(purchase: Purchase) {
-                        //call back when purchase occurred and consumed
-                        Timber.d(" BillingHelper onPurchaseConsumed: $purchase")
+                override fun onPurchaseConsumed(purchase: Purchase) {
+                    //call back when purchase occurred and consumed
+                    Timber.d(" BillingHelper onPurchaseConsumed: $purchase")
 
-                    }
+                }
 
-                    override fun onBillingError(error: ErrorType) {
-                        Timber.d(" BillingHelper onBillingError: $error")
+                override fun onBillingError(error: ErrorType) {
+                    Timber.d(" BillingHelper onBillingError: $error")
 
 
-                    }
-                })
-            }
+                }
+            })
+        }
     }
+
     private fun checkPaidRemoveAds() {
         if (BillingHelper(MyApplication.instance).isInAppPremiumUserByInAppKey(
                 KEY_PAYMENT_IN_APP_ADMOB
             )
         ) {
             // paid
-           _statePayment.value = StatePayment.Paid
+            _statePayment.value = StatePayment.Paid
             getCachePreferencesHelper().stateRemoveAds = true
         } else {
 

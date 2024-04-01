@@ -23,8 +23,7 @@ class CompassViewModel @Inject constructor(
     private val preferencesHelper: CachePreferencesHelper,
     private val rotationRepository: RotationRepository,
 
-    ) : BaseViewModel(contextProvider,preferencesHelper)
- {
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
     private var lastRotationUpdateTime = 0L
@@ -38,8 +37,7 @@ class CompassViewModel @Inject constructor(
     val rotation: Flow<Int> = rotationRepository.rotationFlow.map { r ->
         val c = System.currentTimeMillis()
 
-        if (lastRotationUpdateTime + UPDATE_FREQUENCY < c)
-        {
+        if (lastRotationUpdateTime + UPDATE_FREQUENCY < c) {
             lastRotationUpdateTime = c
             lastSavedRotation = r
         }

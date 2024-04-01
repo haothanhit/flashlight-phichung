@@ -494,12 +494,13 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
         // Add a symbol to the queue to ensure the worker thread is released to see the quit signal
         mSymbolQueue.put(SoundTypes.WORD_SPACE)
     }
-    fun setSoundState(isOn:Boolean){
-        stateSound=isOn
+
+    fun setSoundState(isOn: Boolean) {
+        stateSound = isOn
     }
 
-    fun setFlashState(isOn:Boolean){
-        stateFlash=isOn
+    fun setFlashState(isOn: Boolean) {
+        stateFlash = isOn
     }
 
     suspend fun makeSoundsWorkerThreadFunc(
@@ -541,7 +542,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
 //                characterIndex++
 //            } else {
 //                characterIndex += 2
-         //   }
+            //   }
             onCharacter.value = characterIndex //view text
 
 
@@ -570,7 +571,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 val numWritten = mSoundPlayer.write(soundToWrite, 0, soundToWrite.size)
                 // And start the audio playing:
                 mSoundPlayer.play()
-                if(sym!=SoundTypes.UNDEFINED && sym!=SoundTypes.WORD_SPACE && sym!=SoundTypes.LETTER_SPACE && stateFlash) {
+                if (sym != SoundTypes.UNDEFINED && sym != SoundTypes.WORD_SPACE && sym != SoundTypes.LETTER_SPACE && stateFlash) {
                     cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
                 }
@@ -585,7 +586,6 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 }
 
 
-
                 val endTime = System.currentTimeMillis()
                 val timeDelay = endTime - startTime
                 Timber.i("Time delay $sym: $timeDelay milliseconds")
@@ -595,7 +595,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
             } else {
-                if(stateFlash){
+                if (stateFlash) {
                     cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
                 }
                 delay(
@@ -605,7 +605,9 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                         SoundTypes.LETTER_SPACE -> 285
                         SoundTypes.WORD_SPACE -> 1010
                         SoundTypes.UNDEFINED -> 285
-                        else -> {1}
+                        else -> {
+                            1
+                        }
                     }
                 )
                 cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
@@ -626,7 +628,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
 
 
     // on off flash morse
-    private var stateFlash= true  // false = off, true = on
+    private var stateFlash = true  // false = off, true = on
 
     // A queue of sounds we want to play
     private var mSymbolQueue = ArrayBlockingQueue<SoundTypes>(1000)

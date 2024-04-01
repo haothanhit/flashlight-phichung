@@ -172,7 +172,7 @@ class BillingHelper(private val context: Context) {
 
 
     private fun fetchAvailableAllSubsProducts(productListKeys: MutableList<String>) {
-        if(productListKeys.isEmpty()) return
+        if (productListKeys.isEmpty()) return
         val productList = mutableListOf<QueryProductDetailsParams.Product>()
 
         productListKeys.forEach {
@@ -435,7 +435,7 @@ class BillingHelper(private val context: Context) {
     }
 
     private fun fetchAvailableAllInAppProducts(productListKeys: MutableList<String>) {
-        if(productListKeys.isEmpty()) return
+        if (productListKeys.isEmpty()) return
         val productList = mutableListOf<QueryProductDetailsParams.Product>()
         Log("fetchAvailableAllInAppProducts ${productListKeys.size}")
 

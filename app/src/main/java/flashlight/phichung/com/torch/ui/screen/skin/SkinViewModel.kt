@@ -18,14 +18,10 @@ class SkinViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider,preferencesHelper)
- {
-
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
     var listSkinState by mutableStateOf(listOf<Skin>())
-
-
 
 
     init {
@@ -34,7 +30,7 @@ class SkinViewModel @Inject constructor(
     }
 
 
-     private fun getListSkin(): List<Skin> {
+    private fun getListSkin(): List<Skin> {
 
         val listSkinSelect = listSkin.map { it.copy() }
         val skinLocal = preferencesHelper.skin

@@ -96,7 +96,6 @@ class LangViewHelper(
     }
 
 
-
     private fun setLanguage(lang: LanguageModel?) {
         _selectedLanguage.value = lang
         refreshView()

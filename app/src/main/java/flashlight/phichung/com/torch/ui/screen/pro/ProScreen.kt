@@ -66,7 +66,7 @@ fun ProScreen(
     val statePayment by viewModel.statePayment.collectAsState()
     val activity = (LocalContext.current as Activity)
 
-        viewModel.initListenerBilling(activity)
+    viewModel.initListenerBilling(activity)
 
     Box(
         modifier = Modifier
@@ -129,14 +129,19 @@ fun ProScreen(
                     is StatePayment.Initial -> {}
                     is StatePayment.Paid -> {
 
-                       Box(modifier = Modifier.fillMaxSize().padding(15.dp), contentAlignment = Alignment.Center){
-                           Image(
-                               modifier = Modifier.fillMaxSize(),
-                               painter = painterResource(id = R.drawable.ic_paid),
-                               contentDescription = "background paid",
-                               contentScale = ContentScale.Crop
-                           )
-                       }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(15.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                modifier = Modifier.fillMaxSize(),
+                                painter = painterResource(id = R.drawable.ic_paid),
+                                contentDescription = "background paid",
+                                contentScale = ContentScale.Crop
+                            )
+                        }
 
                     }
 

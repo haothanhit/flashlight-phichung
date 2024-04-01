@@ -63,8 +63,7 @@ data class CPDialogViewIds(
     @IdRes val cardSearch: Int?,
 
 
-
-)
+    )
 
 sealed class SizeModeLanguage {
     object Auto : SizeModeLanguage()

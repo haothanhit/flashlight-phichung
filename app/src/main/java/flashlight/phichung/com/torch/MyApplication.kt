@@ -56,7 +56,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         }
 
         MobileAds.initialize(this) {}
-        RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("99D88A4EA0C45D9F001597112E16494F"))
+        RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList("99D88A4EA0C45D9F001597112E16494F"))
         initLanguage()
         checkLanguageApp()
 
@@ -95,7 +96,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         // Show the ad (if available) when the app moves to foreground.
         currentActivity?.let {
 
-            if(currentActivity !is SplashActivity){   // not splash screen then call showAdIfAvailable
+            if (currentActivity !is SplashActivity) {   // not splash screen then call showAdIfAvailable
                 appOpenAdManager.showAdIfAvailable(it)
             }
         }
@@ -266,7 +267,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
                 return
             }
 
-            if(cachePreferencesHelper.stateRemoveAds){
+            if (cachePreferencesHelper.stateRemoveAds) {
                 onShowAdCompleteListener.onShowAdComplete()
                 return
             }

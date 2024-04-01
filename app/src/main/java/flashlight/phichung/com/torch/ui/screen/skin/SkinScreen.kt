@@ -55,7 +55,7 @@ fun SkinScreen(
 
 
     TopAppBarApp(
-        navController=navController,
+        navController = navController,
         title = stringResource(id = R.string.str_skin_title),
         content = {
 
@@ -113,7 +113,6 @@ fun SkinScreen(
                 Spacer(modifier = Modifier.size(15.dp))
 
                 AdmobBanner(cachePreferencesHelper = viewModel.getCachePreferencesHelper())
-
 
 
             }

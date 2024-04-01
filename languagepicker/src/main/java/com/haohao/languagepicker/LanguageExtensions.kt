@@ -238,7 +238,7 @@ fun getCurrentLanguageCode(): String {
 }
 
 
-fun setApplicationLocales(tagsLanguageApp:String){
+fun setApplicationLocales(tagsLanguageApp: String) {
 
     Log.i("HAO-HAO", "tagsLanguageApp :  $tagsLanguageApp")
     AppCompatDelegate.setApplicationLocales(

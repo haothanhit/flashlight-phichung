@@ -27,8 +27,7 @@ class PreviewViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel(contextProvider,preferencesHelper)
- {
+) : BaseViewModel(contextProvider, preferencesHelper) {
 
     private val _uiState = MutableStateFlow<PreviewUiState>(PreviewUiState.Initial)
     val uiState: StateFlow<PreviewUiState> = _uiState
@@ -37,7 +36,7 @@ class PreviewViewModel @Inject constructor(
         viewModelScope.launch {
             flow {
                 val path = savedStateHandle.get<String?>(pathArg)
-                        ?: return@flow emit(PreviewUiState.Empty)
+                    ?: return@flow emit(PreviewUiState.Empty)
 
                 Timber.d("HAOHAO PATH: $path")
                 val file = File(Uri.decode(path))

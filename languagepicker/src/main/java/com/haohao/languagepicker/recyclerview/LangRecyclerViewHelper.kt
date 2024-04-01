@@ -55,7 +55,6 @@ class LangRecyclerViewHelper(
     }
 
 
-
     private fun List<LanguageModel>.filterCountries(
         filterQuery: String,
         cpRowConfig: LangRowConfig

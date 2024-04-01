@@ -30,14 +30,12 @@ class HomeViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider,preferencesHelper)
- {
-
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
     private val _uiFlashFloatBlinkState = MutableStateFlow(1f)
-    val uiFlashFloatBlinkState: StateFlow<Float> = _uiFlashFloatBlinkState.asStateFlow() // speech blink
-
+    val uiFlashFloatBlinkState: StateFlow<Float> =
+        _uiFlashFloatBlinkState.asStateFlow() // speech blink
 
 
     private val _uiPowerState = MutableStateFlow(false)
@@ -52,17 +50,17 @@ class HomeViewModel @Inject constructor(
     private var mpTorchOn: MediaPlayer
     private var mpTorchOff: MediaPlayer
 
-    var camManager : CameraManager? = null
-    var cameraId :String?= null
-    private var torchCallback: CameraManager.TorchCallback?=null
-
+    var camManager: CameraManager? = null
+    var cameraId: String? = null
+    private var torchCallback: CameraManager.TorchCallback? = null
 
 
     init {
         mpTorchOn = MediaPlayer.create(MyApplication.instance, R.raw.sound_on)
         mpTorchOff = MediaPlayer.create(MyApplication.instance, R.raw.sound_off)
 
-        val cameraManager = MyApplication.instance.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val cameraManager =
+            MyApplication.instance.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         camManager = cameraManager
         try {
             if (camManager != null) {
@@ -88,22 +86,22 @@ class HomeViewModel @Inject constructor(
 
         setPowerState(preferencesHelper.stateAutomaticOn)
     }
+
     fun setValueFlashFloatBlinkState(blinkState: Float) {
         _uiFlashFloatBlinkState.value = blinkState
     }
 
 
     fun getSkinCurrent(): Skin {
-        return preferencesHelper.skin?: listSkin[0]
+        return preferencesHelper.skin ?: listSkin[0]
     }
-
 
 
     fun setPowerState(powerState: Boolean) {
         _uiPowerState.value = powerState
-        isPowerOn= uiPowerState.value
+        isPowerOn = uiPowerState.value
 
-        if(preferencesHelper.stateSound) {
+        if (preferencesHelper.stateSound) {
             if (powerState) {
                 mpTorchOn.start()
             } else {
@@ -114,14 +112,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setSoundState(isOn: Boolean) {
-        preferencesHelper.stateSound=isOn
+        preferencesHelper.stateSound = isOn
     }
 
-    fun getSoundState() :  Boolean{
-      return  preferencesHelper.stateSound
+    fun getSoundState(): Boolean {
+        return preferencesHelper.stateSound
     }
 
-    private var isPowerOn=false
+    private var isPowerOn = false
     fun toggleBlinkStateWithDelay() {
 
         if (!uiPowerState.value) {
@@ -129,19 +127,19 @@ class HomeViewModel @Inject constructor(
             jobBlink?.cancel() // Cancel the previous coroutine if it exists
             return
         }
-        isPowerOn=false
+        isPowerOn = false
         jobBlink?.cancel() // Cancel the previous coroutine if it exists
 
 
         launchCoroutineIO {
             delay(50)
-            isPowerOn=true
+            isPowerOn = true
 
-            val blinkValue= uiFlashFloatBlinkState.value.toInt()
-            Timber.i("blinkValue: " +blinkValue.toString())
+            val blinkValue = uiFlashFloatBlinkState.value.toInt()
+            Timber.i("blinkValue: " + blinkValue.toString())
 
             if (blinkValue == 0) { //SOS
-                jobBlink = CoroutineScope(Dispatchers.IO +coroutineExceptionHandler).launch {
+                jobBlink = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
 
                     while (isPowerOn) {
                         try {
@@ -201,17 +199,17 @@ class HomeViewModel @Inject constructor(
                             cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
                             delay(1400.toLong())
-                        }catch (ex:Exception){
-                            Timber.i("HAOHAO jobBlink" +ex.toString())
+                        } catch (ex: Exception) {
+                            Timber.i("HAOHAO jobBlink" + ex.toString())
                         }
 
                     }
                 }
 
-            }else if (blinkValue==1){
+            } else if (blinkValue == 1) {
                 camManager?.setTorchMode(cameraId!!, true) // Turn ON
 
-            }else{
+            } else {
                 jobBlink = CoroutineScope(Dispatchers.IO).launch {
                     val delayMs = ((10 - blinkValue) * 100L) // Adjust as needed
 
@@ -221,16 +219,14 @@ class HomeViewModel @Inject constructor(
                             delay(delayMs)
                             cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
                             delay(delayMs) // Wait for 1 second
-                        }catch (ex:Exception){
-                            Timber.i("HAOHAO jobBlink" +ex.toString())
+                        } catch (ex: Exception) {
+                            Timber.i("HAOHAO jobBlink" + ex.toString())
                         }
                     }
                 }
             }
 
         }
-
-
 
 
     }
@@ -243,12 +239,10 @@ class HomeViewModel @Inject constructor(
             cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
             torchCallback?.let { camManager?.unregisterTorchCallback(it) }
-        }catch (ex:Exception){}
+        } catch (ex: Exception) {
+        }
 
     }
-
-
-
 
 
 }

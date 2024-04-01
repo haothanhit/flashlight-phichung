@@ -26,8 +26,7 @@ class CameraViewModel @Inject constructor(
     private val fileDataSource: FileDataSource,
 
 
-    ) : BaseViewModel(contextProvider,preferencesHelper)
- {
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
     private val _uiState: MutableStateFlow<CameraUiState> = MutableStateFlow(CameraUiState.Initial)
@@ -35,7 +34,6 @@ class CameraViewModel @Inject constructor(
 
 
     private lateinit var user: User
-
 
 
     init {

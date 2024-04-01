@@ -72,7 +72,7 @@ fun CameraScreen(
 
     ) {
     TopAppBarApp(
-        navController=navController,
+        navController = navController,
         title = stringResource(id = R.string.str_camera_title),
         content = {
 
@@ -98,8 +98,6 @@ fun CameraScreen(
 
         }
     )
-
-
 
 
 }

@@ -73,7 +73,7 @@ fun SettingsScreen(
 ) {
 
     TopAppBarApp(
-        navController=navController,
+        navController = navController,
         title = stringResource(id = R.string.str_settings_title),
         content = {
 
@@ -229,7 +229,6 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         Spacer(modifier = Modifier.size(15.dp))
 
         AdmobBanner(cachePreferencesHelper = viewModel.getCachePreferencesHelper())
-
 
 
     }

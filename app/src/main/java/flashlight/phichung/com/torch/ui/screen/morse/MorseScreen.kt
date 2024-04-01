@@ -126,11 +126,12 @@ fun MorseScreen(
                             viewModel.generateTextMorse(it)
 
                         },
-                        visualTransformation= {
+                        visualTransformation = {
 
-                            val annotatedString =   buildAnnotatedString {
+                            val annotatedString = buildAnnotatedString {
                                 it.forEachIndexed { idx, char ->
-                                    val color = if (idx <= uiIndexCharacterInputState) viewModel.getSkinCurrent().colorSkin else TextWhiteColor
+                                    val color =
+                                        if (idx <= uiIndexCharacterInputState) viewModel.getSkinCurrent().colorSkin else TextWhiteColor
                                     withStyle(style = SpanStyle(color = color)) {
                                         append(char.toString())
                                     }

@@ -49,7 +49,7 @@ fun CompassScreen(
 ) {
 
     TopAppBarApp(
-        navController=navController,
+        navController = navController,
         title = stringResource(id = R.string.str_compass_title),
         content = {
 

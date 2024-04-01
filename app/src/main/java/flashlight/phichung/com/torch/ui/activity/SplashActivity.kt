@@ -45,7 +45,7 @@ class SplashActivity : AppCompatActivity() {
             .setInAppKeys(mutableListOf(KEY_PAYMENT_IN_APP_ADMOB))
             .enableLogging(isEnableLog = true)
         checkPaidRemoveAds()
-            }
+    }
 
     private fun checkPaidRemoveAds() {
 

@@ -17,8 +17,7 @@ class GalleryViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
     private val fileDataSource: FileDataSource,
-) : BaseViewModel(contextProvider,preferencesHelper)
- {
+) : BaseViewModel(contextProvider, preferencesHelper) {
 
     private val _uiState = MutableStateFlow<GalleryUiState>(GalleryUiState.Initial)
     val uiState: StateFlow<GalleryUiState> get() = _uiState

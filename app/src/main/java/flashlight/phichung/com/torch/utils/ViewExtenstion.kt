@@ -52,7 +52,7 @@ fun Activity.getVersionApp(): String {
     return ""
 }
 
- fun Activity.shareApp() {
+fun Activity.shareApp() {
     val sendIntent = Intent(Intent.ACTION_SEND)
     sendIntent.type = "text/plain"
     sendIntent.putExtra(
@@ -66,7 +66,7 @@ fun Activity.getVersionApp(): String {
 }
 
 
- fun Activity.feedback() {
+fun Activity.feedback() {
 
 
     val deviceInfo = buildString {
@@ -122,23 +122,20 @@ fun makeLocation(lat: Double, long: Double, provider: String = "") = Location(pr
     latitude = lat
 }
 
-fun String.isProperLatitude(): Boolean
-{
+fun String.isProperLatitude(): Boolean {
     toDoubleOrNull()?.let {
         return it <= 90.0 && it >= -90.0
     } ?: return false
 }
 
-fun String.isProperLongitude(): Boolean
-{
+fun String.isProperLongitude(): Boolean {
     toDoubleOrNull()?.let {
         return it <= 180.0 && it >= -180.0
     } ?: return false
 }
 
 @Composable
-fun TextStyle.sizeInDp(): Dp
-{
+fun TextStyle.sizeInDp(): Dp {
     with(LocalDensity.current) {
         return this@sizeInDp.fontSize.toDp()
     }
