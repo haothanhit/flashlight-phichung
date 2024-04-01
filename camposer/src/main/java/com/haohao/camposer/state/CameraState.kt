@@ -52,7 +52,7 @@ import java.util.concurrent.Executor
  * To be created use [rememberCameraState].
  * */
 @Stable
-public class CameraState(context: Context) {
+class CameraState(context: Context) {
 
     /**
      * Main Executor to action as take picture or record.
@@ -75,7 +75,7 @@ public class CameraState(context: Context) {
     /**
      * Main controller from CameraX. useful in cases that haven't been release some feature yet.
      * */
-    public val controller: LifecycleCameraController = LifecycleCameraController(context)
+    val controller: LifecycleCameraController = LifecycleCameraController(context)
 
     /**
      * Record controller to video Capture
@@ -85,7 +85,7 @@ public class CameraState(context: Context) {
     /**
      * Get max zoom from camera.
      * */
-    public var maxZoom: Float by mutableFloatStateOf(
+    var maxZoom: Float by mutableFloatStateOf(
         controller.zoomState.value?.maxZoomRatio ?: INITIAL_ZOOM_VALUE
     )
         internal set
@@ -93,7 +93,7 @@ public class CameraState(context: Context) {
     /**
      * Get min zoom from camera.
      * */
-    public var minZoom: Float by mutableFloatStateOf(
+    var minZoom: Float by mutableFloatStateOf(
         controller.zoomState.value?.minZoomRatio ?: INITIAL_ZOOM_VALUE
     )
         internal set
@@ -108,7 +108,7 @@ public class CameraState(context: Context) {
     /**
      * Get min exposure from camera.
      * */
-    public var minExposure: Int by mutableIntStateOf(
+    var minExposure: Int by mutableIntStateOf(
         exposureCompensationRange?.lower ?: INITIAL_EXPOSURE_VALUE
     )
         internal set
@@ -116,45 +116,45 @@ public class CameraState(context: Context) {
     /**
      * Get max exposure from camera.
      * */
-    public var maxExposure: Int by mutableIntStateOf(
+    var maxExposure: Int by mutableIntStateOf(
         exposureCompensationRange?.upper ?: INITIAL_EXPOSURE_VALUE
     )
         internal set
 
-    public val initialExposure: Int = INITIAL_EXPOSURE_VALUE
+    val initialExposure: Int = INITIAL_EXPOSURE_VALUE
         get() = controller.cameraInfo?.exposureState?.exposureCompensationIndex ?: field
 
     /**
      * Check if compensation exposure is supported.
      * */
-    public val isExposureSupported: Boolean by derivedStateOf { maxExposure != INITIAL_EXPOSURE_VALUE }
+    val isExposureSupported: Boolean by derivedStateOf { maxExposure != INITIAL_EXPOSURE_VALUE }
 
     /**
      * Check if camera is streaming or not.
      * */
-    public var isStreaming: Boolean by mutableStateOf(false)
+    var isStreaming: Boolean by mutableStateOf(false)
         internal set
 
     /**
      * Check if zoom is supported.
      * */
-    public val isZoomSupported: Boolean by derivedStateOf { maxZoom != 1F }
+    val isZoomSupported: Boolean by derivedStateOf { maxZoom != 1F }
 
     /**
      * Check if focus on tap supported
      * */
-    public var isFocusOnTapSupported: Boolean by mutableStateOf(true)
+    var isFocusOnTapSupported: Boolean by mutableStateOf(true)
 
     /**
      * Check if camera state is initialized or not.
      * */
-    public var isInitialized: Boolean by mutableStateOf(false)
+    var isInitialized: Boolean by mutableStateOf(false)
         internal set
 
     /**
      * Verify if camera has flash or not.
      * */
-    public var hasFlashUnit: Boolean by mutableStateOf(
+    var hasFlashUnit: Boolean by mutableStateOf(
         controller.cameraInfo?.hasFlashUnit() ?: true
     )
 
@@ -242,7 +242,7 @@ public class CameraState(context: Context) {
     /**
      * Check if image analysis is supported by camera hardware level.
      * */
-    public var isImageAnalysisSupported: Boolean by mutableStateOf(
+    var isImageAnalysisSupported: Boolean by mutableStateOf(
         isImageAnalysisSupported(
             camSelector
         )
@@ -335,12 +335,12 @@ public class CameraState(context: Context) {
      * */
 
     @ChecksSdkIntAtLeast(VERSION_CODES.N)
-    public var isVideoSupported: Boolean = Build.VERSION.SDK_INT >= VERSION_CODES.N
+    var isVideoSupported: Boolean = Build.VERSION.SDK_INT >= VERSION_CODES.N
 
     /**
      * Return true if it's recording.
      * */
-    public var isRecording: Boolean by mutableStateOf(controller.isRecording)
+    var isRecording: Boolean by mutableStateOf(controller.isRecording)
         private set
 
     init {
@@ -389,7 +389,7 @@ public class CameraState(context: Context) {
      *  @param contentValues Content values of the photo.
      *  @param onResult Callback called when [ImageCaptureResult] is ready
      * */
-    public fun takePicture(
+    fun takePicture(
         contentValues: ContentValues,
         saveCollection: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
         onResult: (ImageCaptureResult) -> Unit,
@@ -406,7 +406,7 @@ public class CameraState(context: Context) {
      * @param file file where the photo will be saved
      * @param onResult Callback called when [ImageCaptureResult] is ready
      * */
-    public fun takePicture(
+    fun takePicture(
         file: File, onResult: (ImageCaptureResult) -> Unit
     ) {
         takePicture(ImageCapture.OutputFileOptions.Builder(file).build(), onResult)
@@ -418,7 +418,7 @@ public class CameraState(context: Context) {
      * @param outputFileOptions Output file options of the photo.
      * @param onResult Callback called when [ImageCaptureResult] is ready
      * */
-    public fun takePicture(
+    fun takePicture(
         outputFileOptions: ImageCapture.OutputFileOptions,
         onResult: (ImageCaptureResult) -> Unit,
     ) {
@@ -459,7 +459,7 @@ public class CameraState(context: Context) {
      * */
     @RequiresApi(VERSION_CODES.N)
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    public fun startRecording(
+    fun startRecording(
         fileOutputOptions: FileOutputOptions,
         audioConfig: AudioConfig = AudioConfig.create(true),
         onResult: (VideoCaptureResult) -> Unit,
@@ -481,7 +481,7 @@ public class CameraState(context: Context) {
      * */
     @RequiresApi(VERSION_CODES.O)
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    public fun startRecording(
+    fun startRecording(
         fileDescriptorOutputOptions: FileDescriptorOutputOptions,
         audioConfig: AudioConfig = AudioConfig.create(true),
         onResult: (VideoCaptureResult) -> Unit,
@@ -502,7 +502,7 @@ public class CameraState(context: Context) {
      *  */
     @RequiresApi(VERSION_CODES.N)
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    public fun startRecording(
+    fun startRecording(
         mediaStoreOutputOptions: MediaStoreOutputOptions,
         audioConfig: AudioConfig = AudioConfig.create(true),
         onResult: (VideoCaptureResult) -> Unit,
@@ -566,7 +566,7 @@ public class CameraState(context: Context) {
      * Stop recording camera.
      * */
     @RequiresApi(VERSION_CODES.M)
-    public fun stopRecording() {
+    fun stopRecording() {
         Log.i(TAG, "Stop recording")
         recordController?.stop()?.also {
             isRecording = false
@@ -574,19 +574,19 @@ public class CameraState(context: Context) {
     }
 
     @RequiresApi(VERSION_CODES.M)
-    public fun pauseRecording() {
+    fun pauseRecording() {
         Log.i(TAG, "Pause recording")
         recordController?.pause()
     }
 
     @RequiresApi(VERSION_CODES.M)
-    public fun resumeRecording() {
+    fun resumeRecording() {
         Log.i(TAG, "Resume recording")
         recordController?.resume()
     }
 
     @RequiresApi(VERSION_CODES.M)
-    public fun muteRecording(muted: Boolean) {
+    fun muteRecording(muted: Boolean) {
         recordController?.mute(muted)
     }
 
@@ -595,7 +595,7 @@ public class CameraState(context: Context) {
      * */
     @RequiresApi(VERSION_CODES.O)
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    public fun toggleRecording(
+    fun toggleRecording(
         fileDescriptorOutputOptions: FileDescriptorOutputOptions,
         audioConfig: AudioConfig = AudioConfig.create(true),
         onResult: (VideoCaptureResult) -> Unit
@@ -611,7 +611,7 @@ public class CameraState(context: Context) {
      * */
     @RequiresApi(VERSION_CODES.N)
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    public fun toggleRecording(
+    fun toggleRecording(
         mediaStoreOutputOptions: MediaStoreOutputOptions,
         audioConfig: AudioConfig = AudioConfig.create(true),
         onResult: (VideoCaptureResult) -> Unit
@@ -627,7 +627,7 @@ public class CameraState(context: Context) {
      * */
     @RequiresApi(VERSION_CODES.N)
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    public fun toggleRecording(
+    fun toggleRecording(
         fileOutputOptions: FileOutputOptions,
         audioConfig: AudioConfig = AudioConfig.create(true),
         onResult: (VideoCaptureResult) -> Unit
@@ -641,7 +641,7 @@ public class CameraState(context: Context) {
     /**
      * Return if has camera selector or not, camera must be initialized, otherwise result is false.
      * */
-    public fun hasCamera(cameraSelector: CamSelector): Boolean =
+    fun hasCamera(cameraSelector: CamSelector): Boolean =
         isInitialized && controller.hasCamera(cameraSelector.selector)
 
     private fun startZoom() {
@@ -663,14 +663,14 @@ public class CameraState(context: Context) {
     /**
      *  Set effects on camera
      * */
-    public fun setEffects(effects: Set<CameraEffect>) {
+    fun setEffects(effects: Set<CameraEffect>) {
         controller.setEffects(effects)
     }
 
     /**
      *  Set effects on camera
      * */
-    public fun clearEffects() {
+    fun clearEffects() {
         controller.clearEffects()
     }
 

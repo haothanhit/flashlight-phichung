@@ -480,7 +480,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
             }.size
         }
 
-        return numSamples.toFloat() / mAudioSampleRate.toFloat();
+        return numSamples.toFloat() / mAudioSampleRate.toFloat()
     }
 
     fun quit() {
@@ -619,7 +619,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
     var streamNotificationListener: StreamNotificationListener? = null
 
     // Used to notify our audio-track-writing thread that it should quit
-    private var mShouldQuit = false;
+    private var mShouldQuit = false
 
     // on off sound morse
     private var stateSound = true  // false = off, true = on
@@ -629,15 +629,15 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
     private var stateFlash= true  // false = off, true = on
 
     // A queue of sounds we want to play
-    private var mSymbolQueue = ArrayBlockingQueue<SoundTypes>(1000);
+    private var mSymbolQueue = ArrayBlockingQueue<SoundTypes>(1000)
 
     private val mAudioSampleRate = 44100
 
     // Buffers containing the sounds we want to play
-    private val mDitSound: ShortArray;
-    private val mDahSound: ShortArray;
-    private val mWordSpacingSound: ShortArray;
-    private val mCharacterSpacingSound: ShortArray;
+    private val mDitSound: ShortArray
+    private val mDahSound: ShortArray
+    private val mWordSpacingSound: ShortArray
+    private val mCharacterSpacingSound: ShortArray
 
     // Our actual audio track
     private val mSoundPlayer: AudioTrack =
@@ -689,14 +689,14 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
         val attackReleaseDuration = 0.008f
         val attackReleaseTimeInSamples = (attackReleaseDuration * mAudioSampleRate).toInt()
         for (i in 0 until attackReleaseTimeInSamples) {
-            val frac = i.toFloat() / attackReleaseTimeInSamples.toFloat();
+            val frac = i.toFloat() / attackReleaseTimeInSamples.toFloat()
             mDitSound[i] = (frac * mDitSound[i]).toInt().toShort()
             mDahSound[i] = (frac * mDahSound[i]).toInt().toShort()
 
             mDitSound[ditLengthInSamples - i - 1] =
-                (frac * mDitSound[ditLengthInSamples - i - 1]).toInt().toShort();
+                (frac * mDitSound[ditLengthInSamples - i - 1]).toInt().toShort()
             mDahSound[dahLengthInSamples - i - 1] =
-                (frac * mDahSound[dahLengthInSamples - i - 1]).toInt().toShort();
+                (frac * mDahSound[dahLengthInSamples - i - 1]).toInt().toShort()
         }
     }
 }

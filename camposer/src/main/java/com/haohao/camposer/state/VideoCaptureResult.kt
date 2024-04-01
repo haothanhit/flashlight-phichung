@@ -9,12 +9,12 @@ import androidx.compose.runtime.Immutable
  * @see CameraState.startRecording
  * @see CameraState.toggleRecording
  * */
-public sealed interface VideoCaptureResult {
+sealed interface VideoCaptureResult {
     @Immutable
-    public data class Success(val savedUri: Uri?) : VideoCaptureResult
+    data class Success(val savedUri: Uri?) : VideoCaptureResult
 
     @Immutable
-    public data class Error(
+    data class Error(
         val message: String,
         val throwable: Throwable?
     ) : VideoCaptureResult

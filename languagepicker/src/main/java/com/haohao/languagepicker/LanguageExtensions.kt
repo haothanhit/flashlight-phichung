@@ -252,7 +252,7 @@ fun initLanguage() {
         .mapNotNull { locale ->
             val language = locale.displayLanguage
             val languageCode = locale.language
-            val countryCode = getCountryCodeFromLanguageCode(languageCode) ?: locale.country
+            val countryCode = getCountryCodeFromLanguageCode(languageCode)
             val emojiFlag = getFlagEmojiBaseCountryCode(countryCode)
             if (language.isNotEmpty() && emojiFlag.isNotEmpty() && languageCode.isNotEmpty()) {
                 LanguageModel(languageCode, language, emojiFlag)

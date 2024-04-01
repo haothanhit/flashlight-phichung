@@ -24,14 +24,14 @@ import kotlin.coroutines.resumeWithException
 /**
  * Transform takePicture file to suspend function
  * */
-public suspend fun CameraState.takePicture(file: File): Uri? = suspendCancellableCoroutine { cont ->
+suspend fun CameraState.takePicture(file: File): Uri? = suspendCancellableCoroutine { cont ->
     with(cont) { takePicture(file, ::takePictureContinuation) }
 }
 
 /**
  * Transform takePicture content values to suspend function
  * */
-public suspend fun CameraState.takePicture(
+suspend fun CameraState.takePicture(
     contentValues: ContentValues,
     saveCollection: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 ): Uri? = suspendCancellableCoroutine { cont ->
@@ -41,7 +41,7 @@ public suspend fun CameraState.takePicture(
 /**
  * Transform takePicture output files options to suspend function
  * */
-public suspend fun CameraState.takePicture(
+suspend fun CameraState.takePicture(
     outputFileOptions: ImageCapture.OutputFileOptions,
 ): Uri? = suspendCancellableCoroutine { cont ->
     with(cont) { takePicture(outputFileOptions, ::takePictureContinuation) }
@@ -52,7 +52,7 @@ public suspend fun CameraState.takePicture(
  * */
 @RequiresApi(Build.VERSION_CODES.O)
 @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-public suspend fun CameraState.toggleRecording(
+suspend fun CameraState.toggleRecording(
     fileOutputOptions: FileOutputOptions,
     audioConfig: AudioConfig = AudioConfig.create(true),
 ): Uri? =
@@ -65,7 +65,7 @@ public suspend fun CameraState.toggleRecording(
  * */
 @RequiresApi(Build.VERSION_CODES.N)
 @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-public suspend fun CameraState.toggleRecording(
+suspend fun CameraState.toggleRecording(
     mediaStoreOutputOptions: MediaStoreOutputOptions,
     audioConfig: AudioConfig = AudioConfig.create(true),
 ): Uri? = suspendCancellableCoroutine { cont ->
@@ -77,7 +77,7 @@ public suspend fun CameraState.toggleRecording(
  * */
 @RequiresApi(Build.VERSION_CODES.O)
 @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-public suspend fun CameraState.toggleRecording(
+suspend fun CameraState.toggleRecording(
     fileDescriptorOutputOptions: FileDescriptorOutputOptions,
     audioConfig: AudioConfig = AudioConfig.create(true),
 ): Uri? = suspendCancellableCoroutine { cont ->

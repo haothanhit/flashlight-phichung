@@ -68,7 +68,7 @@ import androidx.camera.core.CameraSelector as CameraXSelector
  * @see CameraState
  * */
 @Composable
-public fun CameraPreview(
+fun CameraPreview(
     modifier: Modifier = Modifier,
     cameraState: CameraState = rememberCameraState(),
     camSelector: CamSelector = cameraState.camSelector,

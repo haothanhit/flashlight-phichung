@@ -15,7 +15,7 @@ import androidx.compose.runtime.Stable
  * @see rememberImageAnalyzer
  * */
 @Stable
-public class ImageAnalyzer(
+class ImageAnalyzer(
     private val cameraState: CameraState,
     imageAnalysisBackpressureStrategy: ImageAnalysisBackpressureStrategy,
     imageAnalysisTargetSize: ImageTargetSize?,
@@ -44,7 +44,7 @@ public class ImageAnalyzer(
     /**
      * Update actual image analysis instance.
      * */
-    public fun update(
+    fun update(
         imageAnalysisBackpressureStrategy: ImageAnalysisBackpressureStrategy = ImageAnalysisBackpressureStrategy.find(
             cameraState.imageAnalysisBackpressureStrategy
         ),

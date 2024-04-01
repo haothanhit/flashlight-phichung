@@ -13,7 +13,7 @@ import com.haohao.camposer.CameraPreview
  * Camera State from [CameraPreview] Composable.
  * */
 @Composable
-public fun rememberCameraState(): CameraState {
+fun rememberCameraState(): CameraState {
     val context = LocalContext.current
     return remember { CameraState(context) }
 }
@@ -22,7 +22,7 @@ public fun rememberCameraState(): CameraState {
  * Camera selector's State to [CameraPreview] Composable.
  * */
 @Composable
-public fun rememberCamSelector(
+fun rememberCamSelector(
     selector: CamSelector = CamSelector.Back
 ): MutableState<CamSelector> = rememberSaveable(saver = CamSelector.Saver) {
     mutableStateOf(selector)
@@ -32,7 +32,7 @@ public fun rememberCamSelector(
  * Flash mode's State to [CameraPreview] Composable.
  * */
 @Composable
-public fun CameraState.rememberFlashMode(
+fun CameraState.rememberFlashMode(
     initialFlashMode: FlashMode = FlashMode.Off,
     useSaver: Boolean = true
 ): MutableState<FlashMode> = rememberConditionalState(
@@ -46,7 +46,7 @@ public fun CameraState.rememberFlashMode(
  * Torch's State to [CameraPreview] Composable.
  * */
 @Composable
-public fun CameraState.rememberTorch(
+fun CameraState.rememberTorch(
     initialTorch: Boolean = false,
     useSaver: Boolean = true
 ): MutableState<Boolean> = rememberConditionalState(
@@ -62,7 +62,7 @@ public fun CameraState.rememberTorch(
  * @see ImageAnalyzer
  * */
 @Composable
-public fun CameraState.rememberImageAnalyzer(
+fun CameraState.rememberImageAnalyzer(
     imageAnalysisBackpressureStrategy: ImageAnalysisBackpressureStrategy = ImageAnalysisBackpressureStrategy.KeepOnlyLatest,
     imageAnalysisTargetSize: ImageTargetSize? = ImageTargetSize(this.imageAnalysisTargetSize),
     imageAnalysisImageQueueDepth: Int = this.imageAnalysisImageQueueDepth,

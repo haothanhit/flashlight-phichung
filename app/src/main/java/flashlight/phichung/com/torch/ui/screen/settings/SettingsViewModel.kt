@@ -36,7 +36,7 @@ class SettingsViewModel @Inject constructor(
 
 
     fun getLanguageApp(): String {
-        return preferencesHelper.languageApp ?: "en"
+        return preferencesHelper.languageApp
     }
 
     fun setLanguageApp(language: String) {

@@ -8,10 +8,10 @@ import androidx.compose.runtime.Immutable
  *
  * @see CameraState.takePicture
  * */
-public sealed interface ImageCaptureResult {
+sealed interface ImageCaptureResult {
     @Immutable
-    public data class Success(val savedUri: Uri?) : ImageCaptureResult
+    data class Success(val savedUri: Uri?) : ImageCaptureResult
 
     @Immutable
-    public data class Error(val throwable: Throwable) : ImageCaptureResult
+    data class Error(val throwable: Throwable) : ImageCaptureResult
 }

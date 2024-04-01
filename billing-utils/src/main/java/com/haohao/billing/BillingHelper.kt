@@ -201,7 +201,7 @@ class BillingHelper(private val context: Context) {
         }
     }
 
-    public fun subscribe(activity: Activity, productId: String, offerId: String = "") {
+    fun subscribe(activity: Activity, productId: String, offerId: String = "") {
         if (billingClient != null) {
             val productInfo = getProductDetail(productId, offerId, BillingClient.ProductType.SUBS)
             if (productInfo != null) {
@@ -459,7 +459,7 @@ class BillingHelper(private val context: Context) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     Log("in productDetailsList ${productDetailsList.size}")
                     productDetailsList.forEach { productDetails ->
-                        Log("SS in app product details ${productDetails.toString()}")
+                        Log("SS in app product details $productDetails")
                         AllProducts.add(productDetails)
                     }
                 } else {
