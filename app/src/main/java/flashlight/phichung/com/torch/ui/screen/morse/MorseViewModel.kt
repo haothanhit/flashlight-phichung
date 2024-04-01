@@ -3,13 +3,9 @@ package flashlight.phichung.com.torch.ui.screen.morse
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import flashlight.phichung.com.torch.MyApplication
@@ -38,16 +34,12 @@ class MorseViewModel @Inject constructor(
     contextProvider: CoroutineContextProvider,
     private val preferencesHelper: CachePreferencesHelper,
 
-    ) : BaseViewModel(contextProvider,preferencesHelper)
- {
+    ) : BaseViewModel(contextProvider, preferencesHelper) {
 
 
-
-    var camManager : CameraManager? = null
-    var cameraId :String?= null
-    private var torchCallback: CameraManager.TorchCallback?=null
-
-
+    var camManager: CameraManager? = null
+    var cameraId: String? = null
+    private var torchCallback: CameraManager.TorchCallback? = null
 
 
     private val _uiPlayState = MutableStateFlow(false) // isPlaying
@@ -64,60 +56,48 @@ class MorseViewModel @Inject constructor(
     val uiIndexCharacterInputState: StateFlow<Int> = _uiIndexCharacterInputState.asStateFlow()
 
 
-    private lateinit var  skinCurrent :Skin
+    private lateinit var skinCurrent: Skin
 
 
+    val combinedFlow: Flow<AnnotatedString> =
+        _uiIndexCharacterState.combine(_uiMorseCodeState) { index, morseCodeList ->
 
 
-    val combinedFlow: Flow<AnnotatedString> = _uiIndexCharacterState.combine(_uiMorseCodeState) { index, morseCodeList ->
+            var count = if (_uiPlayState.value) 0 else -1
+            buildAnnotatedString {
+                morseCodeList.forEachIndexed { idx, soundTypes ->
+                    var color: Color = TextWhiteColor
+                    if (idx <= index) {
+                        color = skinCurrent.colorSkin
+                        if (soundTypes == SoundTypes.LETTER_SPACE || soundTypes == SoundTypes.WORD_SPACE) {
+                            count++
+                        }
 
 
-        var count = if(_uiPlayState.value) 0 else -1
-        buildAnnotatedString {
-            morseCodeList.forEachIndexed { idx, soundTypes ->
-                var color: Color =TextWhiteColor
-                if (idx <= index){
-                    color = skinCurrent.colorSkin
-                    if (soundTypes == SoundTypes.LETTER_SPACE ||soundTypes == SoundTypes.WORD_SPACE ) {
-                        count++
+                    }
+
+                    val char = when (soundTypes) {
+                        SoundTypes.DIT -> "."
+                        SoundTypes.DAH -> "-"
+                        SoundTypes.LETTER_SPACE -> " "
+                        SoundTypes.WORD_SPACE -> "  "
+                        SoundTypes.UNDEFINED -> "*"
+                    }
+                    withStyle(style = androidx.compose.ui.text.SpanStyle(color = color)) {
+                        append(char.toString())
                     }
 
 
                 }
 
-             val char =   when (soundTypes) {
-                    SoundTypes.DIT -> "."
-                    SoundTypes.DAH -> "-"
-                    SoundTypes.LETTER_SPACE -> " "
-                    SoundTypes.WORD_SPACE -> "  "
-                    SoundTypes.UNDEFINED -> "*"
-                }
-                withStyle(style = androidx.compose.ui.text.SpanStyle(color = color)) {
-                    append(char.toString())
-                }
-
-
+                Timber.i("HAOHAO  buildAnnotatedString morseCodeList $count  : $morseCodeList")
+                if (_uiIndexCharacterInputState.value != count)
+                    _uiIndexCharacterInputState.value = count
 
             }
 
-            Timber.i("HAOHAO  buildAnnotatedString morseCodeList $count  : $morseCodeList")
-            if(_uiIndexCharacterInputState.value!=count)
-            _uiIndexCharacterInputState.value=count
 
         }
-
-
-
-
-
-
-
-    }
-
-
-
-
-
 
 
     init {
@@ -133,11 +113,11 @@ class MorseViewModel @Inject constructor(
                 }
 
             }
-        skinCurrent=getSkinCurrent()
+        skinCurrent = getSkinCurrent()
 
 
-
-        val cameraManager = MyApplication.instance.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val cameraManager =
+            MyApplication.instance.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         camManager = cameraManager
         try {
             if (camManager != null) {
@@ -166,29 +146,34 @@ class MorseViewModel @Inject constructor(
         if (playState) {
             mSoundPlayer.enqueue(uiMorseCodeState.value)
             launchCoroutineIO {
-                mSoundPlayer.makeSoundsWorkerThreadFunc(onDone = {
-                    Timber.i("HAOHAO makeSoundsWorkerThreadFunc onDone")
-                    _uiPlayState.value = false
-                    _uiIndexCharacterState.value=-1
-                    _uiIndexCharacterInputState.value=-1
-                    
-                },onCharacter=_uiIndexCharacterState, camManager=camManager,cameraId=cameraId)
+                mSoundPlayer.makeSoundsWorkerThreadFunc(
+                    onDone = {
+                        Timber.i("HAOHAO makeSoundsWorkerThreadFunc onDone")
+                        _uiPlayState.value = false
+                        _uiIndexCharacterState.value = -1
+                        _uiIndexCharacterInputState.value = -1
+
+                    },
+                    onCharacter = _uiIndexCharacterState,
+                    camManager = camManager,
+                    cameraId = cameraId
+                )
 
             }
         } else {
-            _uiIndexCharacterState.value=-1
-            _uiIndexCharacterInputState.value=-1
+            _uiIndexCharacterState.value = -1
+            _uiIndexCharacterInputState.value = -1
             mSoundPlayer.quit()
         }
 
     }
 
-    fun setStateSound(isOn :Boolean){
+    fun setStateSound(isOn: Boolean) {
 
         mSoundPlayer.setSoundState(isOn)
     }
 
-    fun setFlashlight(isOn :Boolean){
+    fun setFlashlight(isOn: Boolean) {
 
         mSoundPlayer.setFlashState(isOn)
     }
@@ -212,10 +197,10 @@ class MorseViewModel @Inject constructor(
             cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
             torchCallback?.let { camManager?.unregisterTorchCallback(it) }
-        }catch (ex:Exception){}
+        } catch (ex: Exception) {
+        }
 
     }
-
 
 
 }

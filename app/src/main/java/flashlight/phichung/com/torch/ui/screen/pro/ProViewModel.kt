@@ -2,9 +2,7 @@ package flashlight.phichung.com.torch.ui.screen.pro
 
 
 import android.app.Activity
-import android.content.Context
 import com.android.billingclient.api.Purchase
-import com.haohao.billing.BillingClientListener
 import com.haohao.billing.BillingEventListener
 import com.haohao.billing.BillingHelper
 import com.haohao.billing.model.ErrorType
@@ -15,7 +13,6 @@ import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.utils.Constant.KEY_PAYMENT_IN_APP_ADMOB
 import flashlight.phichung.com.torch.utils.CoroutineContextProvider
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import javax.inject.Inject

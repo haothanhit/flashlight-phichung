@@ -15,7 +15,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -133,7 +133,7 @@ internal fun scaleAsState(
     targetValue: Float = 1F,
     animationSpec: AnimationSpec<Float>? = null,
 ): State<Float> {
-    var scale by remember { mutableStateOf(initialValue) }
+    var scale by remember { mutableFloatStateOf(initialValue) }
     LaunchedEffect(scale) { scale = targetValue }
     return animateFloatAsState(
         targetValue = scale,

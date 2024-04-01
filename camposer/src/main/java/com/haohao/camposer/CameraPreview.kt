@@ -1,12 +1,10 @@
 package com.haohao.camposer
 
+//import androidx.camera.video.QualitySelector
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
-//import androidx.camera.video.QualitySelector
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,7 +33,6 @@ import com.haohao.camposer.state.ScaleType
 import com.haohao.camposer.state.rememberCameraState
 import kotlinx.coroutines.delay
 import androidx.camera.core.CameraSelector as CameraXSelector
-
 
 
 /**

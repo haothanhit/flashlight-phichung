@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -84,7 +83,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
                 it.toLanguageTag().lowercase() == currentLang.lowercase()
             }
             if (index != -1) {
-                Log.i("HAOHAO", "index :  $index")
+                Timber.tag("HAOHAO").i("index :  " + index)
                 setApplicationLocales(localesLanguageApp[index].language.toString().lowercase())
             }
         }

@@ -1,7 +1,6 @@
 package flashlight.phichung.com.torch.ui.screen.settings
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -59,6 +57,7 @@ import flashlight.phichung.com.torch.ui.theme.uncheckedTrackColor
 import flashlight.phichung.com.torch.utils.feedback
 import flashlight.phichung.com.torch.utils.getVersionApp
 import flashlight.phichung.com.torch.utils.shareApp
+import timber.log.Timber
 
 
 object SettingsNavigation {
@@ -118,13 +117,13 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
                                 allowSearch = false,
                                 onCountryClickListener = { languageModel ->
                                     val langChange = languageModel?.code ?: ""
-                                    Log.i("HAOHAO", "langChange :  $langChange")
+                                    Timber.tag("HAOHAO").i("langChange :  " + langChange)
                                     viewModel.setLanguageApp(langChange)
                                     val index = localesLanguageApp.indexOfFirst {
                                         it.toLanguageTag().lowercase() == langChange.lowercase()
                                     }
                                     if (index != -1) {
-                                        Log.i("HAOHAO", "index :  $index")
+                                        Timber.tag("HAOHAO").i("index :  " + index)
                                         setApplicationLocales(
                                             localesLanguageApp[index].language.toString()
                                                 .lowercase()

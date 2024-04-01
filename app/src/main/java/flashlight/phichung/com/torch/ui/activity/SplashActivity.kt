@@ -5,21 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.Fragment
-import com.android.billingclient.api.Purchase
-import com.haohao.billing.BillingClientListener
-import com.haohao.billing.BillingEventListener
 import com.haohao.billing.BillingHelper
-import com.haohao.billing.model.ErrorType
 import dagger.hilt.android.AndroidEntryPoint
 import flashlight.phichung.com.torch.MyApplication
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.utils.Constant.KEY_PAYMENT_IN_APP_ADMOB
-import timber.log.Timber
 import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")

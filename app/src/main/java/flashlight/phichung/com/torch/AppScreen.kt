@@ -27,7 +27,6 @@ import flashlight.phichung.com.torch.ui.screen.settings.SettingsNavigation
 import flashlight.phichung.com.torch.ui.screen.settings.SettingsScreen
 import flashlight.phichung.com.torch.ui.screen.skin.SkinNavigation
 import flashlight.phichung.com.torch.ui.screen.skin.SkinScreen
-import timber.log.Timber
 
 
 @Composable

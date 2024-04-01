@@ -9,8 +9,8 @@ import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
 import com.haohao.languagepicker.R
-import com.haohao.languagepicker.databinding.ItemLangRowBinding
 import com.haohao.languagepicker.config.LangRowConfig
+import com.haohao.languagepicker.databinding.ItemLangRowBinding
 import com.haohao.languagepicker.model.LanguageModel
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
