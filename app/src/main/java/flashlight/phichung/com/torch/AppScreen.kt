@@ -39,29 +39,29 @@ fun FlashlightApp(
     ) {
         composable(HomeNavigation.route) {
             HomeScreen(
-                openSkinAction = { ->
+                openSkinAction = {
                     navController.navigate(SkinNavigation.route)
 
                 },
-                openSettingsAction = { ->
+                openSettingsAction = {
                     navController.navigate(SettingsNavigation.route)
                 },
-                openColorAction = { ->
+                openColorAction = {
                     navController.navigate(BrightnessNavigation.route)
 
                 },
-                openCompassAction = { ->
+                openCompassAction = {
                     navController.navigate(CompassNavigation.route)
 
                 },
-                openMorseAction = { ->
+                openMorseAction = {
                     navController.navigate(MorseNavigation.route)
                 },
-                openRemoveAdsAction = { ->
+                openRemoveAdsAction = {
                     navController.navigate(ProNavigation.route)
 
                 },
-                openCameraAction = { ->
+                openCameraAction = {
                     navController.navigate(CameraNavigation.route)
                 })
         }

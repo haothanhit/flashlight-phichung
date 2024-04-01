@@ -19,9 +19,9 @@ import javax.inject.Inject
 
 
 sealed class StatePayment {
-    object Initial : StatePayment()
+    data object Initial : StatePayment()
 
-    object Paid : StatePayment()
+    data object Paid : StatePayment()
 
     class Unpaid(val price: String) : StatePayment()
 }

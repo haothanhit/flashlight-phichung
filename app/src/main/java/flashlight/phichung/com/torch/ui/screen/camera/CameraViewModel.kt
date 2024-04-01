@@ -86,7 +86,7 @@ class CameraViewModel @Inject constructor(
 }
 
 sealed interface CameraUiState {
-    object Initial : CameraUiState
+    data object Initial : CameraUiState
     data class Ready(
         val user: User,
         val lastPicture: File?,

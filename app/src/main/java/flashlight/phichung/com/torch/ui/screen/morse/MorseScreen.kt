@@ -61,7 +61,6 @@ object MorseNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MorseScreen(
     viewModel: MorseViewModel = hiltViewModel<MorseViewModel>(),

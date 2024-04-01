@@ -62,9 +62,9 @@ class PreviewViewModel @Inject constructor(
 }
 
 sealed interface PreviewUiState {
-    object Initial : PreviewUiState
-    object Empty : PreviewUiState
-    object Deleted : PreviewUiState
+    data object Initial : PreviewUiState
+    data object Empty : PreviewUiState
+    data object Deleted : PreviewUiState
 
     data class Ready(val file: File, val isVideo: Boolean) : PreviewUiState
 }

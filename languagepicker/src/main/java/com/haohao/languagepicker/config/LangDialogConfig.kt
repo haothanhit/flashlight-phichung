@@ -66,7 +66,7 @@ data class CPDialogViewIds(
     )
 
 sealed class SizeModeLanguage {
-    object Auto : SizeModeLanguage()
-    object Unchanged : SizeModeLanguage()
-    object Wrap : SizeModeLanguage()
+    data object Auto : SizeModeLanguage()
+    data object Unchanged : SizeModeLanguage()
+    data object Wrap : SizeModeLanguage()
 }

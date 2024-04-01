@@ -137,7 +137,7 @@ internal fun scaleAsState(
     LaunchedEffect(scale) { scale = targetValue }
     return animateFloatAsState(
         targetValue = scale,
-        animationSpec = animationSpec ?: tween(easing = LinearOutSlowInEasing)
+        animationSpec = animationSpec ?: tween(easing = LinearOutSlowInEasing), label = ""
     )
 }
 

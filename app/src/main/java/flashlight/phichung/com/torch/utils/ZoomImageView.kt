@@ -1020,7 +1020,7 @@ class ZoomImageView : AppCompatImageView {
             }
             if (state == State.NONE) {
                 val targetZoom = if (currentZoom == minScale) maxScale else minScale
-                val doubleTap: DoubleTapZoom = DoubleTapZoom(
+                val doubleTap = DoubleTapZoom(
                     targetZoom,
                     e.x,
                     e.y,

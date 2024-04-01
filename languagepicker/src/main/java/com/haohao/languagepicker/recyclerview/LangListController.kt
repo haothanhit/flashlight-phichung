@@ -51,7 +51,7 @@ class LangListController : TypedEpoxyController<LangListControllerData>() {
 
             }
 
-        } catch (ex: Exception) {
+        } catch (_: Exception) {
         }
     }
 }

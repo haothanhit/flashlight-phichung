@@ -519,7 +519,7 @@ class DitDahSoundStream(config: DitDahGeneratorSettings) {
                 return
             }
             // Try to get a symbol from the queue:
-            var didWait: Boolean = false
+            var didWait = false
             var sym: SoundTypes? = mSymbolQueue.poll(1, TimeUnit.MILLISECONDS)
 
             if (sym == null) {

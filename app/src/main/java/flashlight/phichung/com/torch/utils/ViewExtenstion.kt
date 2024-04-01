@@ -47,7 +47,7 @@ fun Activity.getVersionApp(): String {
         assert(info != null)
         return info!!.versionName.toString()
 
-    } catch (ex: Exception) {
+    } catch (_: Exception) {
     }
     return ""
 }

@@ -15,9 +15,9 @@ data class LangViewConfig(
     }
 
     sealed class InitialSelectionLang {
-        object EmptySelection : InitialSelectionLang()
+        data object EmptySelection : InitialSelectionLang()
 
-        object AutoDetectLange : InitialSelectionLang()
+        data object AutoDetectLange : InitialSelectionLang()
 
         class SpecificLang(val langCode: String) : InitialSelectionLang()
     }

@@ -138,89 +138,93 @@ class HomeViewModel @Inject constructor(
             val blinkValue = uiFlashFloatBlinkState.value.toInt()
             Timber.i("blinkValue: " + blinkValue.toString())
 
-            if (blinkValue == 0) { //SOS
-                jobBlink = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
+            when (blinkValue) {
+                0 -> { //SOS
+                    jobBlink = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
 
-                    while (isPowerOn) {
-                        try {
+                        while (isPowerOn) {
+                            try {
 
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
+                                delay(200.toLong())
 
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(600.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(600.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(600.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(600.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(600.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(600.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(200.toLong())
-                            cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
+                                delay(200.toLong())
+                                cameraId?.let { camManager?.setTorchMode(it, true) }   // Turn ON
 
-                            delay(200.toLong())
+                                delay(200.toLong())
 
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
-                            delay(1400.toLong())
-                        } catch (ex: Exception) {
-                            Timber.i("HAOHAO jobBlink" + ex.toString())
+                                delay(1400.toLong())
+                            } catch (ex: Exception) {
+                                Timber.i("HAOHAO jobBlink" + ex.toString())
+                            }
+
                         }
-
                     }
+
                 }
+                1 -> {
+                    camManager?.setTorchMode(cameraId!!, true) // Turn ON
 
-            } else if (blinkValue == 1) {
-                camManager?.setTorchMode(cameraId!!, true) // Turn ON
+                }
+                else -> {
+                    jobBlink = CoroutineScope(Dispatchers.IO).launch {
+                        val delayMs = ((10 - blinkValue) * 100L) // Adjust as needed
 
-            } else {
-                jobBlink = CoroutineScope(Dispatchers.IO).launch {
-                    val delayMs = ((10 - blinkValue) * 100L) // Adjust as needed
-
-                    while (isPowerOn) {
-                        try {
-                            cameraId?.let { camManager?.setTorchMode(it, true) } // Turn ON
-                            delay(delayMs)
-                            cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
-                            delay(delayMs) // Wait for 1 second
-                        } catch (ex: Exception) {
-                            Timber.i("HAOHAO jobBlink" + ex.toString())
+                        while (isPowerOn) {
+                            try {
+                                cameraId?.let { camManager?.setTorchMode(it, true) } // Turn ON
+                                delay(delayMs)
+                                cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
+                                delay(delayMs) // Wait for 1 second
+                            } catch (ex: Exception) {
+                                Timber.i("HAOHAO jobBlink" + ex.toString())
+                            }
                         }
                     }
                 }
@@ -239,7 +243,7 @@ class HomeViewModel @Inject constructor(
             cameraId?.let { camManager?.setTorchMode(it, false) } // Turn OFF
 
             torchCallback?.let { camManager?.unregisterTorchCallback(it) }
-        } catch (ex: Exception) {
+        } catch (_: Exception) {
         }
 
     }

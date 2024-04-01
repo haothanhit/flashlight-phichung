@@ -35,7 +35,7 @@ class GalleryViewModel @Inject constructor(
 }
 
 sealed interface GalleryUiState {
-    object Initial : GalleryUiState
-    object Empty : GalleryUiState
+    data object Initial : GalleryUiState
+    data object Empty : GalleryUiState
     data class Success(val images: List<File>) : GalleryUiState
 }

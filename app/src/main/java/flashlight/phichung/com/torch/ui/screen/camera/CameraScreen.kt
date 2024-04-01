@@ -63,7 +63,6 @@ object CameraNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraScreen(
     viewModel: CameraViewModel = hiltViewModel<CameraViewModel>(),

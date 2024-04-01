@@ -56,7 +56,6 @@ object ProNavigation {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProScreen(
     viewModel: ProViewModel = hiltViewModel<ProViewModel>(),
