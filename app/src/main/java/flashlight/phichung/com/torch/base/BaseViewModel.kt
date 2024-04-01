@@ -9,7 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel(private val contextProvider: CoroutineContextProvider, private val preferencesHelper: CachePreferencesHelper) : ViewModel() {
+abstract class BaseViewModel(
+    private val contextProvider: CoroutineContextProvider,
+    private val preferencesHelper: CachePreferencesHelper
+) : ViewModel() {
 
     private val job: Job = Job()
 
