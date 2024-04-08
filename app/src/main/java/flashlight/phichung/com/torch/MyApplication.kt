@@ -21,6 +21,7 @@ import com.haohao.languagepicker.listLangAppSupport
 import com.haohao.languagepicker.localesLanguageApp
 import com.haohao.languagepicker.setApplicationLocales
 import dagger.hilt.android.HiltAndroidApp
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.ui.activity.SplashActivity
 import flashlight.phichung.com.torch.utils.ReleaseTree
@@ -55,9 +56,9 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
             Timber.plant(ReleaseTree())
         }
 
-        MobileAds.initialize(this) {}
-        RequestConfiguration.Builder()
-            .setTestDeviceIds(Arrays.asList("99D88A4EA0C45D9F001597112E16494F"))
+        AdmobHelp.instance?.init(this) //init ads
+//        RequestConfiguration.Builder()
+//            .setTestDeviceIds(Arrays.asList("99D88A4EA0C45D9F001597112E16494F"))
         initLanguage()
         checkLanguageApp()
 

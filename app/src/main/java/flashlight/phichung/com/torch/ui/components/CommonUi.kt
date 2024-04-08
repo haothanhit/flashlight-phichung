@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.ui.components
 
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.data.CachePreferencesHelper
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
@@ -62,10 +64,19 @@ fun ButtonChild(
     clickAction: () -> Unit = {}
 ) {
 
+    val activity = LocalContext.current as AppCompatActivity
     Box(
         modifier = Modifier
             .size(50.dp)
-            .clickable { clickAction.invoke() }, contentAlignment = Alignment.Center
+            .clickable {
+                AdmobHelp.instance?.showInterstitialAd(activity,
+                    object : AdmobHelp.AdCloseListener {
+                        override fun onAdClosed() {
+                            clickAction.invoke()
+                        }
+
+                    })
+            }, contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(id = icon),

@@ -32,12 +32,16 @@ android {
             resValue ("string", "str_ads_google_app_id", "ca-app-pub-4824353242373249~8219707070")
             resValue ("string", "str_ads_banner", "ca-app-pub-4824353242373249/4433000143")
             resValue ("string", "str_ads_open", "ca-app-pub-4824353242373249/1921781637")
+            resValue ("string", "str_ads_interstitial", "ca-app-pub-4824353242373249/3340457472")
+
         }
         debug {
             isMinifyEnabled = false
             resValue ("string", "str_ads_google_app_id", "ca-app-pub-3940256099942544~3347511713")
             resValue ("string", "str_ads_banner", "ca-app-pub-3940256099942544/6300978111")
             resValue ("string", "str_ads_open", "ca-app-pub-3940256099942544/9257395921")
+            resValue ("string", "str_ads_interstitial", "ca-app-pub-3940256099942544/1033173712")
+
         }
     }
     compileOptions {

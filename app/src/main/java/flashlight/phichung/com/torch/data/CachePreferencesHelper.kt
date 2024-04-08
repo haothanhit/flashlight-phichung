@@ -66,7 +66,7 @@ open class CachePreferencesHelper @Inject constructor(context: Context) {
         set(isOn) = preferences.edit().putBoolean(PREF_KEY_AUTOMATIC_ON, isOn).apply()
 
 
-    var stateRemoveAds: Boolean
+    var stateRemoveAds: Boolean  // true => remove ads (paid)
         get() = preferences.getBoolean(PREF_KEY_REMOVE_ADS, false)
         set(sound) = preferences.edit().putBoolean(PREF_KEY_REMOVE_ADS, sound).apply()
 

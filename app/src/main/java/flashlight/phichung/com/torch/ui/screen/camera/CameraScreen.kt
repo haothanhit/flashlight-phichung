@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.ui.screen.camera
 
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,6 +50,7 @@ import com.haohao.camposer.state.rememberCameraState
 import com.haohao.camposer.state.rememberFlashMode
 import com.haohao.camposer.state.rememberTorch
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
 import flashlight.phichung.com.torch.ui.components.TopAppBarApp
@@ -108,6 +110,8 @@ fun CameraScreenMain(
     openGalleryScreen: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val activity = LocalContext.current as AppCompatActivity
+
     when (val result: CameraUiState = uiState) {
         is CameraUiState.Ready -> {
             val cameraState = rememberCameraState()
@@ -119,7 +123,13 @@ fun CameraScreenMain(
                 lastPicture = result.lastPicture,
                 onTakePicture = { viewModel.takePicture(cameraState) },
                 onGalleryClick = {
-                    openGalleryScreen()
+                    AdmobHelp.instance?.showInterstitialAd(
+                        activity,
+                        object : AdmobHelp.AdCloseListener {
+                            override fun onAdClosed() {
+                                openGalleryScreen()
+                            }
+                        })
                 },
             )
 
@@ -149,6 +159,7 @@ fun CameraSection(
     var zoomRatio by rememberSaveable { mutableFloatStateOf(cameraState.minZoom) }
     var zoomHasChanged by rememberSaveable { mutableStateOf(false) }
     var enableTorch by cameraState.rememberTorch(initialTorch = false)
+
     CameraPreview(
         cameraState = cameraState,
         camSelector = CamSelector.Back,

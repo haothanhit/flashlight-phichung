@@ -1,5 +1,6 @@
 package flashlight.phichung.com.torch.ui.screen.gallery
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,6 +55,7 @@ import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import coil.request.videoFramePercent
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.TextWhiteColor
@@ -124,6 +127,7 @@ private fun GalleryEmpty() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun GallerySection(imageFiles: List<File>, onPreviewClick: (String) -> Unit) {
+    val activity = LocalView.current.context as AppCompatActivity
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Fixed(3),
@@ -141,7 +145,15 @@ private fun GallerySection(imageFiles: List<File>, onPreviewClick: (String) -> U
                     .clip(RoundedCornerShape(6.dp))
                     .animateItemPlacement()
                     .aspectRatio(1F)
-                    .clickable(onClick = { onPreviewClick(image.path) }),
+                    .clickable(onClick = {
+                        AdmobHelp.instance?.showInterstitialAd(
+                            activity,
+                            object : AdmobHelp.AdCloseListener {
+                                override fun onAdClosed() {
+                                    onPreviewClick(image.path)
+                                }
+                            })
+                         }),
                 data = image,
                 contentDescription = image.name,
                 placeholder = {

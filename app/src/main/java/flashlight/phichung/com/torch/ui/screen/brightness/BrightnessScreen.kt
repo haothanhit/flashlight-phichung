@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.ui.screen.brightness
 
 import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.flask.colorpicker.ColorPickerView
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.theme.GrayColor
 import flashlight.phichung.com.torch.ui.theme.IconWhiteColor
@@ -74,6 +76,9 @@ fun BrightnessScreen(
     var stateColorCurrent by remember { mutableStateOf("#191919") }
     val uiIsBlinkState by viewModel.uiIsBlinkState.collectAsState()
 
+    val activity = LocalView.current.context as AppCompatActivity
+
+
 
     if (!stateIsShowUi) {
         Scaffold(
@@ -85,7 +90,15 @@ fun BrightnessScreen(
 
                     },
                     actions = {
-                        IconButton(onClick = { stateIsShowUi = true }) {
+                        IconButton(onClick = {
+                            AdmobHelp.instance?.showInterstitialAd(
+                                activity,
+                                object : AdmobHelp.AdCloseListener {
+                                    override fun onAdClosed() {
+                                        stateIsShowUi = true
+                                    }
+                                })
+                        }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_eyes),
                                 contentDescription = "Button Open eyes",
@@ -128,7 +141,15 @@ fun BrightnessScreen(
                         containerColor = Color.Transparent
                     ),
                     actions = {
-                        IconButton(onClick = { stateIsShowUi = false }) {
+                        IconButton(onClick = {
+                            AdmobHelp.instance?.showInterstitialAd(
+                                activity,
+                                object : AdmobHelp.AdCloseListener {
+                                    override fun onAdClosed() {
+                                        stateIsShowUi = false
+                                    }
+                                })
+                        }) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_close_eyes),
                                 contentDescription = "Button Close eyes",

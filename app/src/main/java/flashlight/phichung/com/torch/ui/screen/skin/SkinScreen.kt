@@ -1,5 +1,6 @@
 package flashlight.phichung.com.torch.ui.screen.skin
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -28,12 +29,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.data.model.Skin
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.TopAppBarApp
@@ -125,6 +128,7 @@ fun SkinScreen(
 
 @Composable
 fun GridItem(skin: Skin, onClick: () -> Unit) {
+    val activity = LocalContext.current as AppCompatActivity
 
     Box(
         modifier = Modifier
@@ -137,7 +141,13 @@ fun GridItem(skin: Skin, onClick: () -> Unit) {
             .padding(5.dp)
             .clip(RoundedCornerShape(10.dp))
             .clickable {
-                onClick()
+                AdmobHelp.instance?.showInterstitialAd(
+                    activity,
+                    object : AdmobHelp.AdCloseListener {
+                        override fun onAdClosed() {
+                            onClick()
+                        }
+                    })
             }
     ) {
         Image(
