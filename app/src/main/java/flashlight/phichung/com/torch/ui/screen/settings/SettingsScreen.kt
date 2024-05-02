@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.ui.screen.settings
 
 import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ import com.haohao.languagepicker.dialog.launchCountryPickerDialog
 import com.haohao.languagepicker.localesLanguageApp
 import com.haohao.languagepicker.setApplicationLocales
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.GrayWhiteColor
@@ -92,7 +94,8 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
     ) {
         var stateSound by remember { mutableStateOf(viewModel.getSoundState()) }
         var stateAutomaticFlashMode by remember { mutableStateOf(viewModel.getAutomaticOnState()) }
-        val activity = LocalContext.current as Activity
+        val activity = LocalContext.current as AppCompatActivity
+
         LazyColumn(modifier = Modifier
             .padding(horizontal = 15.dp)
             .weight(1f),
@@ -112,30 +115,38 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
                         mainText = stringResource(id = R.string.str_settings_language),
                         onClick = {
 
-                            activity.launchCountryPickerDialog(
-                                countryFileReader = LangFileReaderHard,
-                                allowSearch = false,
-                                onCountryClickListener = { languageModel ->
-                                    val langChange = languageModel?.code ?: ""
-                                    Timber.tag("HAOHAO").i("langChange :  " + langChange)
-                                    viewModel.setLanguageApp(langChange)
-                                    val index = localesLanguageApp.indexOfFirst {
-                                        it.toLanguageTag().lowercase() == langChange.lowercase()
-                                    }
-                                    if (index != -1) {
-                                        Timber.tag("HAOHAO").i("index :  " + index)
-                                        setApplicationLocales(
-                                            localesLanguageApp[index].language.toString()
-                                                .lowercase()
+                            AdmobHelp.instance?.showInterstitialAd(activity,
+                                object : AdmobHelp.AdCloseListener {
+                                    override fun onAdClosed() {
+                                        activity.launchCountryPickerDialog(
+                                            countryFileReader = LangFileReaderHard,
+                                            allowSearch = false,
+                                            onCountryClickListener = { languageModel ->
+                                                val langChange = languageModel?.code ?: ""
+                                                Timber.tag("HAOHAO").i("langChange :  " + langChange)
+                                                viewModel.setLanguageApp(langChange)
+                                                val index = localesLanguageApp.indexOfFirst {
+                                                    it.toLanguageTag().lowercase() == langChange.lowercase()
+                                                }
+                                                if (index != -1) {
+                                                    Timber.tag("HAOHAO").i("index :  " + index)
+                                                    setApplicationLocales(
+                                                        localesLanguageApp[index].language.toString()
+                                                            .lowercase()
+                                                    )
+
+
+                                                }
+
+                                            },
+                                            langCodeSelect = viewModel.getLanguageApp()
+
                                         )
-
-
                                     }
 
-                                },
-                                langCodeSelect = viewModel.getLanguageApp()
+                                })
 
-                            )
+
                         },
                         switchVisible = false,
                         textVisible = true,
@@ -153,7 +164,14 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
                         statusSwitch = stateAutomaticFlashMode,
                         onCheckedChange = {
                             //  stateSound = it
-                            viewModel.setAutomaticOnState(it)
+                            AdmobHelp.instance?.showInterstitialAd(activity,
+                                object : AdmobHelp.AdCloseListener {
+                                    override fun onAdClosed() {
+                                        viewModel.setAutomaticOnState(it)
+
+                                    }
+
+                                })
                         }
                     )
                 }
@@ -169,7 +187,14 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
                         statusSwitch = stateSound,
                         onCheckedChange = {
                             //  stateSound = it
-                            viewModel.setSoundState(it)
+                            AdmobHelp.instance?.showInterstitialAd(activity,
+                                object : AdmobHelp.AdCloseListener {
+                                    override fun onAdClosed() {
+                                        viewModel.setSoundState(it)
+
+                                    }
+
+                                })
                         }
 
                     )

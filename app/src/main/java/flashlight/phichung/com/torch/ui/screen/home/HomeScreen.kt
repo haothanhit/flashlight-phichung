@@ -1,5 +1,6 @@
 package flashlight.phichung.com.torch.ui.screen.home
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -38,12 +39,14 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import flashlight.phichung.com.torch.R
+import flashlight.phichung.com.torch.ads.AdmobHelp
 import flashlight.phichung.com.torch.data.model.Skin
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.ButtonChild
@@ -194,6 +197,7 @@ fun SliderFlash(
     val uiBlinkState by viewModel.uiFlashFloatBlinkState.collectAsState()
     var sliderPosition by remember { mutableFloatStateOf(uiBlinkState) }
     val uiPowerState by viewModel.uiPowerState.collectAsState()
+    val activity = LocalContext.current as AppCompatActivity
 
 //    val uiIsBlinkState by viewModel.uiIsBlinkState.collectAsState()
 
@@ -211,6 +215,14 @@ fun SliderFlash(
                 viewModel.toggleBlinkStateWithDelay()
 
 
+            },
+            onValueChangeFinished = {
+                AdmobHelp.instance?.showInterstitialAd(activity,
+                    object : AdmobHelp.AdCloseListener {
+                        override fun onAdClosed() {
+                        }
+
+                    })
             },
 
             colors = SliderDefaults.colors(
@@ -308,6 +320,7 @@ fun ButtonPower(
     skinCurrent: Skin
 ) {
     val uiPowerState by viewModel.uiPowerState.collectAsState()
+    val activity = LocalContext.current as AppCompatActivity
 
 
     Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -327,7 +340,13 @@ fun ButtonPower(
                 )
                 .clip(CircleShape)
                 .clickable {
-                    viewModel.setPowerState(!uiPowerState)
+                    AdmobHelp.instance?.showInterstitialAd(activity,
+                        object : AdmobHelp.AdCloseListener {
+                            override fun onAdClosed() {
+                                viewModel.setPowerState(!uiPowerState)
+                            }
+
+                        })
 //                    viewModel.toggleBlinkStateWithDelay(
 //                        camManager = camManager,
 //                        cameraId = cameraId

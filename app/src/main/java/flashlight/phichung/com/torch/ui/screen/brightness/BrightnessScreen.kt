@@ -39,6 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -239,6 +240,7 @@ fun SliderBrightness(modifier: Modifier = Modifier) {
     val valueCurrent = window?.attributes?.screenBrightness
 
     val brightness = if (valueCurrent == -1f) 0.5f else valueCurrent?.toFloat() ?: 0f
+    val activity = LocalContext.current as AppCompatActivity
 
 
     var sliderPosition by remember { mutableFloatStateOf(brightness) }
@@ -255,6 +257,14 @@ fun SliderBrightness(modifier: Modifier = Modifier) {
                 val layoutParams = window?.attributes // Get Params
                 layoutParams?.screenBrightness = sliderPosition // Set Value
                 window?.attributes = layoutParams // Set params
+            },
+            onValueChangeFinished = {
+                AdmobHelp.instance?.showInterstitialAd(activity,
+                    object : AdmobHelp.AdCloseListener {
+                        override fun onAdClosed() {
+                        }
+
+                    })
             },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
@@ -287,6 +297,7 @@ fun SliderBlink(
     modifier: Modifier = Modifier,
 ) {
     val uiBlinkState by viewModel.uiBlinkFloatState.collectAsState()
+    val activity = LocalContext.current as AppCompatActivity
 
     var sliderPosition by remember { mutableFloatStateOf(uiBlinkState) }
     Column(
@@ -304,7 +315,14 @@ fun SliderBlink(
                 viewModel.toggleBlinkStateWithDelay(sliderPosition)
 
             },
+            onValueChangeFinished = {
+                AdmobHelp.instance?.showInterstitialAd(activity,
+                    object : AdmobHelp.AdCloseListener {
+                        override fun onAdClosed() {
+                        }
 
+                    })
+            },
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.secondary,
                 activeTrackColor = Color.Transparent,

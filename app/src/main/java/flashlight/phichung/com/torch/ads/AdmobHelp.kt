@@ -14,7 +14,7 @@ class AdmobHelp private constructor() {
     private var adCloseListener: AdCloseListener? = null
     private var isReload = false
     private var countShowAdsInterstitial = 0
-    val NUMBER_COUNT_SHOW_ADS=2
+    val NUMBER_COUNT_SHOW_ADS=1
 
     var isAdsInterstitialShowing = false
 
