@@ -5,6 +5,8 @@
     <string name="email_subject_format" translatable="false" formatted="true">[%s Android] - SUPPORT &#38; FEEDBACK</string>
     <string name="degree_format" translatable="false">%d°</string>
 
+    <string name="str_settings_privacy_admob" translatable="false">AdMob privacy settings</string>
+
     <!-- Color -->
     <string name="str_color_title">Color</string>
     <string name="str_color_brightness">Brightness</string>

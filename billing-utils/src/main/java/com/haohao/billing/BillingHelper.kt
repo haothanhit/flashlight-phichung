@@ -427,9 +427,12 @@ class BillingHelper(private val context: Context) {
                     Log("in-APP History already buy products : ${it.products.first()}")
                     purchasedInAppProductList.add(it)
                 }
+
             } else {
                 Log("no in-APP History  item already buy")
+
             }
+            billingClientListener?.onFetchActiveInAppPurchasesHistoryDone()
 
         }
     }

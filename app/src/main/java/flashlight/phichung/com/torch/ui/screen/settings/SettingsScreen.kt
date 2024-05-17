@@ -1,6 +1,7 @@
 package flashlight.phichung.com.torch.ui.screen.settings
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,8 +45,10 @@ import com.haohao.languagepicker.dataGenerator.LangFileReaderHard
 import com.haohao.languagepicker.dialog.launchCountryPickerDialog
 import com.haohao.languagepicker.localesLanguageApp
 import com.haohao.languagepicker.setApplicationLocales
+import flashlight.phichung.com.torch.MyApplication
 import flashlight.phichung.com.torch.R
 import flashlight.phichung.com.torch.ads.AdmobHelp
+import flashlight.phichung.com.torch.ads.GoogleMobileAdsConsentManager
 import flashlight.phichung.com.torch.ui.components.AdmobBanner
 import flashlight.phichung.com.torch.ui.components.TopAppBarApp
 import flashlight.phichung.com.torch.ui.theme.GrayWhiteColor
@@ -95,7 +98,7 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
         var stateSound by remember { mutableStateOf(viewModel.getSoundState()) }
         var stateAutomaticFlashMode by remember { mutableStateOf(viewModel.getAutomaticOnState()) }
         val activity = LocalContext.current as AppCompatActivity
-
+       val googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(MyApplication.instance)
         LazyColumn(modifier = Modifier
             .padding(horizontal = 15.dp)
             .weight(1f),
@@ -214,6 +217,25 @@ fun CustomOptionUI(padding: PaddingValues, viewModel: SettingsViewModel) {
                         color = TextGrayWhiteColor,
                     )
                 }
+
+                if(googleMobileAdsConsentManager.isPrivacyOptionsRequired){
+                    item {
+                        CustomOptionsItem(
+                            icon = R.drawable.ic_privacy_admod,
+                            mainText = stringResource(id = R.string.str_settings_privacy_admob),
+                            onClick = {
+                                googleMobileAdsConsentManager.showPrivacyOptionsForm(activity) { formError ->
+                                    if (formError != null) {
+                                        Toast.makeText(activity, formError.message, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            },
+                            switchVisible = false,
+                            textVisible = false,
+                        )
+                    }
+                }
+
 
                 item {
                     CustomOptionsItem(

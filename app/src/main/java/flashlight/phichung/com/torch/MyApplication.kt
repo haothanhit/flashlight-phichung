@@ -56,7 +56,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
             Timber.plant(ReleaseTree())
         }
 
-        AdmobHelp.instance?.init(this) //init ads
 //        RequestConfiguration.Builder()
 //            .setTestDeviceIds(Arrays.asList("99D88A4EA0C45D9F001597112E16494F"))
         initLanguage()
